@@ -13,7 +13,7 @@ Requires `react` and `react-dom` 18+ in your app.
 ## Usage (React)
 
 ```tsx
-import { Editor } from 'neuphlo-editor/react'
+import { Editor } from "neuphlo-editor/react"
 
 export default function Page() {
   return <Editor content="<p>Hello</p>" />
@@ -23,19 +23,17 @@ export default function Page() {
 The React Editor includes the Neuphlo preset by default. Add more TipTap extensions when needed:
 
 ```tsx
-import Placeholder from '@tiptap/extension-placeholder'
-
-<Editor
+import Placeholder from "@tiptap/extension-placeholder"
+;<Editor
   content="<p>Hello</p>"
-  extensions={[
-    Placeholder.configure({ placeholder: 'Write something…' }),
-  ]}
+  extensions={[Placeholder.configure({ placeholder: "Write something…" })]}
 />
 ```
 
 ### Styling
 
 - Default behavior:
+
   - The component adds the `nph-editor` class by default.
   - Import our minimal stylesheet in your app to activate defaults: `import 'neuphlo-editor/styles.css'` (or `@import 'neuphlo-editor/styles.css';`).
     - Next.js App Router: `app/layout.tsx` or `app/globals.css`
@@ -43,6 +41,7 @@ import Placeholder from '@tiptap/extension-placeholder'
   - The base CSS does not add a border or background; add your own if desired.
 
 - Opt out per instance:
+
   - `<Editor styled={false} />`
 
 - Bring your own styles (Tailwind or CSS):
@@ -84,8 +83,6 @@ Advanced: pass TipTap options directly (everything maps to TipTap’s `EditorPro
 
 Control whether the editor is editable (matches TipTap’s `editable` option). When not editable, helpful attributes are added for styling.
 
-```tsx
-// Read-only
 <Editor editable={false} />
 
 // With default stylesheet + a visual cue
@@ -100,15 +97,16 @@ import 'neuphlo-editor/styles.css'
 ```
 
 Notes:
+
 - `editable` is forwarded to TipTap.
 - When `editable={false}`, the content element receives `aria-disabled="true"` and `data-disabled="true"`.
+
 ```
 
 ## Usage (Core/Headless)
 
 Using TipTap core directly? Compose your editor with the preset, then add your own extensions on top:
 
-```ts
 import { Editor } from '@tiptap/core'
 import { NeuphloPreset } from 'neuphlo-editor'
 import Placeholder from '@tiptap/extension-placeholder'
