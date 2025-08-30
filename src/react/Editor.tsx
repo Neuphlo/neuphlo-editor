@@ -1,39 +1,52 @@
 import * as React from "react"
 import { EditorProvider } from "@tiptap/react"
+import type { EditorProviderProps } from "@tiptap/react"
 import type { Extension, Content } from "@tiptap/core"
 import { NeuphloPreset } from "../preset"
 import { cn } from "./utils/cn"
 
-export type EditorProps = React.HTMLAttributes<HTMLDivElement> & {
-  content?: Content
-  extensions?: Extension[]
-  onUpdate?: Parameters<typeof EditorProvider>[0]["onUpdate"]
-  editorProps?: Parameters<typeof EditorProvider>[0]["editorProps"]
+export type EditorProps = Omit<EditorProviderProps, 'children' | 'slotBefore' | 'slotAfter'> & {
+  /**
+   * Opt-in to package styles by adding class "nph-editor".
+   * Pair with: import 'neuphlo-editor/styles.css'
+   */
   styled?: boolean
   children?: React.ReactNode
 }
 
 export function Editor({
-  content,
+  styled,
+  editorContainerProps,
   extensions = [],
+  content,
   onUpdate,
   editorProps,
-  styled,
+  editable = true,
   children,
-  ...props
+  ...rest
 }: EditorProps) {
-  const editorContainerProps = React.useMemo(() => {
-    const mergedClassName = cn(styled && "nph-editor", props.className)
-    return { ...props, className: mergedClassName }
-  }, [props, styled])
+  const mergedContainerProps = React.useMemo(() => {
+    const mergedClassName = cn(styled && "nph-editor", editorContainerProps?.className)
+    return { ...editorContainerProps, className: mergedClassName }
+  }, [editorContainerProps, styled])
+
+  const mergedEditorProps = React.useMemo(() => {
+    const attrs = {
+      ...editorProps?.attributes,
+      ...(!editable ? { 'aria-disabled': 'true', 'data-disabled': 'true' } : {}),
+    } as Record<string, string>
+    return { ...editorProps, attributes: attrs }
+  }, [editorProps, editable])
 
   return (
     <EditorProvider
       content={content}
       extensions={[...NeuphloPreset, ...(extensions ?? [])]}
       onUpdate={onUpdate}
-      editorProps={editorProps}
-      editorContainerProps={editorContainerProps}
+      editorProps={mergedEditorProps}
+      editable={editable}
+      editorContainerProps={mergedContainerProps}
+      {...rest}
     >
       {children}
     </EditorProvider>

@@ -51,13 +51,41 @@ import 'neuphlo-editor/styles.css'
 .my-editor:focus-within { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.15); }
 ```
 
-Advanced: pass DOM props directly (applied to `EditorContent`) and `editorProps` (forwarded to Tiptap’s editor):
+Advanced: pass TipTap options directly (everything maps to TipTap’s `EditorProvider`), and use `editorContainerProps` for DOM attributes on the content element:
 
 ```tsx
-<Editor id="editor" role="textbox" editorProps={{ attributes: { spellcheck: 'true' } }} />
+<Editor
+  autofocus
+  editable={false}
+  editorProps={{ attributes: { spellcheck: 'true' } }}
+  editorContainerProps={{ id: 'editor', role: 'textbox' }}
+/>
 
 // Alternatively, add the class manually
 <Editor className="nph-editor" />
+
+### Editable
+
+Control whether the editor is editable (matches TipTap’s `editable` option). When not editable, helpful attributes are added for styling.
+
+```tsx
+// Read-only
+<Editor editable={false} />
+
+// With default stylesheet + a visual cue
+import 'neuphlo-editor/styles.css'
+<Editor styled editable={false} className="opacity-60" />
+
+// You can target the state in CSS if you prefer
+.nph-editor[data-disabled="true"] {
+  /* e.g., make it look disabled */
+  opacity: 0.6;
+}
+```
+
+Notes:
+- `editable` is forwarded to TipTap.
+- When `editable={false}`, the content element receives `aria-disabled="true"` and `data-disabled="true"`.
 ```
 
 ## Usage (headless)
