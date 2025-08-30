@@ -53,6 +53,7 @@ Examples:
 ```tsx
 // Default stylesheet (minimal — no border/background by default)
 import 'neuphlo-editor/styles.css'
+
 <Editor />
 
 // Tailwind utilities
@@ -90,6 +91,7 @@ Control whether the editor is editable (matches TipTap’s `editable` option). W
 
 // With default stylesheet + a visual cue
 import 'neuphlo-editor/styles.css'
+
 <Editor editable={false} className="opacity-60" />
 
 // You can target the state in CSS if you prefer
