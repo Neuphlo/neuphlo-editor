@@ -78,12 +78,15 @@ Advanced: pass TipTap options directly (everything maps to TipTap’s `EditorPro
 
 // Alternatively, add the class manually via props
 <Editor className="nph-editor" />
+```
 
 ### Editable
 
 Control whether the editor is editable (matches TipTap’s `editable` option). When not editable, helpful attributes are added for styling.
 
+```tsx
 <Editor editable={false} />
+
 
 // With default stylesheet + a visual cue
 import 'neuphlo-editor/styles.css'
@@ -91,8 +94,8 @@ import 'neuphlo-editor/styles.css'
 
 // You can target the state in CSS if you prefer
 .nph-editor[data-disabled="true"] {
-  /* e.g., make it look disabled */
-  opacity: 0.6;
+/_ e.g., make it look disabled _/
+opacity: 0.6;
 }
 ```
 
