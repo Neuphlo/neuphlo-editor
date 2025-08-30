@@ -105,16 +105,16 @@ Notes:
 
 Using TipTap core directly? Compose your editor with the preset, then add your own extensions on top:
 
-```
-import { Editor } from '@tiptap/core'
-import { NeuphloPreset } from 'neuphlo-editor'
-import Placeholder from '@tiptap/extension-placeholder'
+```ts
+import { Editor } from "@tiptap/core"
+import { NeuphloPreset } from "neuphlo-editor"
+import Placeholder from "@tiptap/extension-placeholder"
 
 const editor = new Editor({
-  content: '<p>Hello</p>',
+  content: "<p>Hello</p>",
   extensions: [
     ...NeuphloPreset,
-    Placeholder.configure({ placeholder: 'Write something…' }),
+    Placeholder.configure({ placeholder: "Write something…" }),
   ],
 })
 ```
