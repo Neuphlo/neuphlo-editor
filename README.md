@@ -35,14 +35,15 @@ import Placeholder from '@tiptap/extension-placeholder'
 
 ### Styling
 
-Choose one of the following:
-
-- Optional stylesheet (packaged, not auto-injected):
-  - Import it from your app entry or global stylesheet: `import 'neuphlo-editor/styles.css'` (or `@import 'neuphlo-editor/styles.css';`).
+- Default behavior:
+  - The component adds the `nph-editor` class by default.
+  - Import our minimal stylesheet in your app to activate defaults: `import 'neuphlo-editor/styles.css'` (or `@import 'neuphlo-editor/styles.css';`).
     - Next.js App Router: `app/layout.tsx` or `app/globals.css`
     - Vite/CRA: `src/main.tsx`/`src/index.tsx`
-  - Opt-in per instance with `<Editor styled />`, or add the class via the `className` prop: `<Editor className="nph-editor" />`.
   - The base CSS does not add a border or background; add your own if desired.
+
+- Opt out per instance:
+  - `<Editor styled={false} />`
 
 - Bring your own styles (Tailwind or CSS):
   - Use `className` to style the content container; use `editorContainerProps` for other DOM props (e.g., `id`, `role`). No styles are injected by the package.
@@ -51,9 +52,9 @@ Choose one of the following:
 Examples:
 
 ```tsx
-// Default stylesheet (opt-in, minimal — no border/background by default)
+// Default stylesheet (minimal — no border/background by default)
 import 'neuphlo-editor/styles.css'
-<Editor styled />
+<Editor />
 
 // Tailwind utilities
 <Editor className="min-h-[200px] border rounded-md p-3 outline-none" />
@@ -89,7 +90,7 @@ Control whether the editor is editable (matches TipTap’s `editable` option). W
 
 // With default stylesheet + a visual cue
 import 'neuphlo-editor/styles.css'
-<Editor styled editable={false} className="opacity-60" />
+<Editor editable={false} className="opacity-60" />
 
 // You can target the state in CSS if you prefer
 .nph-editor[data-disabled="true"] {

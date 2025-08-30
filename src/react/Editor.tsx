@@ -15,7 +15,7 @@ export type EditorProps = Omit<
 }
 
 export function Editor({
-  styled,
+  styled = true,
   className,
   editorContainerProps,
   extensions = [],
