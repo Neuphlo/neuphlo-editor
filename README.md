@@ -20,18 +20,33 @@ export default function Page() {
 }
 ```
 
+The React Editor includes the Neuphlo preset by default. Add more TipTap extensions when needed:
+
+```tsx
+import Placeholder from '@tiptap/extension-placeholder'
+
+<Editor
+  content="<p>Hello</p>"
+  extensions={[
+    Placeholder.configure({ placeholder: 'Write something…' }),
+  ]}
+/>
+```
+
 ### Styling
 
-Pick one of the following:
+Choose one of the following:
 
-- Default stylesheet (opt-in, minimal):
-  - Import once in your app: `import 'neuphlo-editor/styles.css'`
-  - Opt-in per instance with `<Editor styled />` or add `className="nph-editor"` yourself.
+- Optional stylesheet (packaged, not auto-injected):
+  - Import it from your app entry or global stylesheet: `import 'neuphlo-editor/styles.css'` (or `@import 'neuphlo-editor/styles.css';`).
+    - Next.js App Router: `app/layout.tsx` or `app/globals.css`
+    - Vite/CRA: `src/main.tsx`/`src/index.tsx`
+  - Opt-in per instance with `<Editor styled />`, or add the class via the `className` prop: `<Editor className="nph-editor" />`.
   - The base CSS does not add a border or background; add your own if desired.
 
 - Bring your own styles (Tailwind or CSS):
-  - Pass any DOM props directly (e.g., `className`, `id`); no styles are injected.
-  - You can combine your own `className` with the default stylesheet if you want.
+  - Use `className` to style the content container; use `editorContainerProps` for other DOM props (e.g., `id`, `role`). No styles are injected by the package.
+  - You can combine your own classes with the optional stylesheet if you want.
 
 Examples:
 
@@ -51,7 +66,7 @@ import 'neuphlo-editor/styles.css'
 .my-editor:focus-within { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.15); }
 ```
 
-Advanced: pass TipTap options directly (everything maps to TipTap’s `EditorProvider`), and use `editorContainerProps` for DOM attributes on the content element:
+Advanced: pass TipTap options directly (everything maps to TipTap’s `EditorProvider`). Use `className` to style the content container, and `editorContainerProps` for additional DOM attributes:
 
 ```tsx
 <Editor
@@ -61,7 +76,7 @@ Advanced: pass TipTap options directly (everything maps to TipTap’s `EditorPro
   editorContainerProps={{ id: 'editor', role: 'textbox' }}
 />
 
-// Alternatively, add the class manually
+// Alternatively, add the class manually via props
 <Editor className="nph-editor" />
 
 ### Editable
@@ -88,16 +103,20 @@ Notes:
 - When `editable={false}`, the content element receives `aria-disabled="true"` and `data-disabled="true"`.
 ```
 
-## Usage (headless)
+## Usage (Core/Headless)
+
+Using TipTap core directly? Compose your editor with the preset, then add your own extensions on top:
 
 ```ts
+import { Editor } from '@tiptap/core'
 import { NeuphloPreset } from 'neuphlo-editor'
-```
+import Placeholder from '@tiptap/extension-placeholder'
 
-## Development
-
-Build the package:
-
-```bash
-npm run build
+const editor = new Editor({
+  content: '<p>Hello</p>',
+  extensions: [
+    ...NeuphloPreset,
+    Placeholder.configure({ placeholder: 'Write something…' }),
+  ],
+})
 ```
