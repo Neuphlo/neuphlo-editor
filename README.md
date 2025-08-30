@@ -101,10 +101,9 @@ Notes:
 - `editable` is forwarded to TipTap.
 - When `editable={false}`, the content element receives `aria-disabled="true"` and `data-disabled="true"`.
 
-```
-
 ## Usage (Core/Headless)
 
+```
 Using TipTap core directly? Compose your editor with the preset, then add your own extensions on top:
 
 import { Editor } from '@tiptap/core'
