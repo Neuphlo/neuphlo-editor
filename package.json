@@ -16,14 +16,20 @@
       "types": "./dist/react/index.d.ts",
       "import": "./dist/react/index.js",
       "require": "./dist/react/index.cjs"
+    },
+    "./styles.css": {
+      "default": "./dist/styles.css"
     }
   },
   "files": [
     "dist"
   ],
-  "sideEffects": false,
+  "sideEffects": [
+    "dist/styles.css"
+  ],
   "scripts": {
-    "build": "tsup src/index.ts src/react/index.ts --dts --format esm,cjs --clean",
+    "build": "tsup src/index.ts src/react/index.ts --dts --format esm,cjs --clean && npm run build:css",
+    "build:css": "cp src/styles.css dist/styles.css",
     "dev": "tsup --watch",
     "publish:dry": "npm publish --dry-run",
     "prepack": "npm run build",
@@ -48,7 +54,9 @@
     "@tiptap/core": "^2.4.0",
     "@tiptap/pm": "^2.4.0",
     "@tiptap/react": "^2.4.0",
-    "@tiptap/starter-kit": "^2.4.0"
+    "@tiptap/starter-kit": "^2.4.0",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",

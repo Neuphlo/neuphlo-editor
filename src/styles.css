@@ -1,0 +1,119 @@
+.nph-editor {
+  --nph-radius: 8px;
+  --nph-text: #111827;
+  --nph-text-muted: #6b7280;
+  --nph-accent: #2563eb;
+
+  min-height: 160px;
+  border-radius: var(--nph-radius);
+  color: var(--nph-text);
+  padding: 12px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .nph-editor {
+    --nph-text: #fafafa;
+    --nph-text-muted: #a3a3a3;
+    --nph-accent: #60a5fa;
+  }
+}
+
+/* Typography */
+.nph-editor p {
+  margin: 0.75em 0;
+}
+.nph-editor h1,
+.nph-editor h2,
+.nph-editor h3,
+.nph-editor h4 {
+  margin: 1.2em 0 0.5em;
+  line-height: 1.2;
+}
+.nph-editor h1 {
+  font-size: 1.875rem;
+  font-weight: 700;
+}
+.nph-editor h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+.nph-editor h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+.nph-editor h4 {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.nph-editor ul,
+.nph-editor ol {
+  padding-left: 1.25rem;
+  margin: 0.75em 0;
+}
+.nph-editor ul {
+  list-style: disc;
+}
+.nph-editor ol {
+  list-style: decimal;
+}
+.nph-editor li {
+  margin: 0.25em 0;
+}
+
+.nph-editor a {
+  color: var(--nph-accent);
+  text-decoration: underline;
+}
+.nph-editor strong {
+  font-weight: 600;
+}
+.nph-editor em {
+  font-style: italic;
+}
+
+.nph-editor blockquote {
+  margin: 1em 0;
+  padding: 0.75em 1em;
+  color: var(--nph-text-muted);
+}
+
+.nph-editor code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+  font-size: 0.95em;
+  padding: 0.15em 0.35em;
+  border-radius: 4px;
+}
+.nph-editor pre {
+  padding: 0.75em 1em;
+  border-radius: 6px;
+  overflow: auto;
+}
+.nph-editor pre code {
+  padding: 0;
+  background: transparent;
+}
+
+.nph-editor hr {
+  border: none;
+  margin: 1.25em 0;
+}
+
+.nph-editor table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1em 0;
+}
+.nph-editor th,
+.nph-editor td {
+  padding: 0.5em 0.75em;
+  text-align: left;
+}
+.nph-editor th {
+}
+
+.nph-editor img {
+  max-width: 100%;
+  height: auto;
+}

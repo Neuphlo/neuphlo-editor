@@ -22,11 +22,24 @@ export default function Page() {
 
 ### Styling
 
-No styles are injected by this package. Bring your own styles using either Tailwind utilities or plain CSS. Any extra props you pass (like `className`, `id`, `data-*`) are applied to the underlying Tiptap `EditorContent` div.
+Pick one of the following:
+
+- Default stylesheet (opt-in, minimal):
+  - Import once in your app: `import 'neuphlo-editor/styles.css'`
+  - Opt-in per instance with `<Editor styled />` or add `className="nph-editor"` yourself.
+  - The base CSS does not add a border or background; add your own if desired.
+
+- Bring your own styles (Tailwind or CSS):
+  - Pass any DOM props directly (e.g., `className`, `id`); no styles are injected.
+  - You can combine your own `className` with the default stylesheet if you want.
 
 Examples:
 
 ```tsx
+// Default stylesheet (opt-in, minimal — no border/background by default)
+import 'neuphlo-editor/styles.css'
+<Editor styled />
+
 // Tailwind utilities
 <Editor className="min-h-[200px] border rounded-md p-3 outline-none" />
 
@@ -42,6 +55,9 @@ Advanced: pass DOM props directly (applied to `EditorContent`) and `editorProps`
 
 ```tsx
 <Editor id="editor" role="textbox" editorProps={{ attributes: { spellcheck: 'true' } }} />
+
+// Alternatively, add the class manually
+<Editor className="nph-editor" />
 ```
 
 ## Usage (headless)

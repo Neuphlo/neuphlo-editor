@@ -1,7 +1,7 @@
 import type { Extension } from "@tiptap/core"
 import StarterKit from "@tiptap/starter-kit"
 
-export const Preset: Extension[] = [
+export const NeuphloPreset: Extension[] = [
   StarterKit.configure({
     bulletList: { keepMarks: true },
     orderedList: { keepMarks: true },
