@@ -24,8 +24,22 @@
   "sideEffects": false,
   "scripts": {
     "build": "tsup src/index.ts src/react/index.ts --dts --format esm,cjs --clean",
-    "dev": "tsup --watch"
+    "dev": "tsup --watch",
+    "publish:dry": "npm publish --dry-run",
+    "prepack": "npm run build",
+    "prepare": "npm run build"
   },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Neuphlo/neuphlo-editor.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Neuphlo/neuphlo-editor/issues"
+  },
+  "homepage": "https://github.com/Neuphlo/neuphlo-editor#readme",
   "peerDependencies": {
     "react": ">=18",
     "react-dom": ">=18"
