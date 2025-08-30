@@ -103,9 +103,9 @@ Notes:
 
 ## Usage (Core/Headless)
 
-```
 Using TipTap core directly? Compose your editor with the preset, then add your own extensions on top:
 
+```
 import { Editor } from '@tiptap/core'
 import { NeuphloPreset } from 'neuphlo-editor'
 import Placeholder from '@tiptap/extension-placeholder'
