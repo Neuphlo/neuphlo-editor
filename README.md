@@ -24,6 +24,7 @@ The React Editor includes the Neuphlo preset by default. Add more TipTap extensi
 
 ```tsx
 import Placeholder from "@tiptap/extension-placeholder"
+
 ;<Editor
   content="<p>Hello</p>"
   extensions={[Placeholder.configure({ placeholder: "Write something…" })]}
