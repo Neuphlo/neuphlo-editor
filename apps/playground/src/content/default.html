@@ -1,0 +1,62 @@
+<h1>Introducing Neuphlo Editor</h1>
+
+<p>
+  Neuphlo Editor is a Notion‑style WYSIWYG editor for React, built on Tiptap.
+  It ships a small, sensible preset and a typed React wrapper — easy to style
+  and easy to extend.
+  
+</p>
+
+<h2>Installation</h2>
+<pre><code>npm i neuphlo-editor</code></pre>
+
+<h2>Usage</h2>
+<pre><code>import { Editor } from "neuphlo-editor/react";
+
+export default function App() {
+  return &lt;Editor content={"&lt;p&gt;Hello Neuphlo&lt;/p&gt;"} /&gt;;
+}
+</code></pre>
+
+<p>Style it your way with Tailwind or CSS:</p>
+<pre><code>import "neuphlo-editor/styles.css";
+
+&lt;Editor className="min-h-[200px] border rounded-md p-3 outline-none" /&gt;
+</code></pre>
+
+<h2>Features</h2>
+<ul>
+  <li><strong>Slash menu</strong>: Type <code>/</code> to insert blocks and formatting.</li>
+  <li><strong>Headings 1–4</strong>, <strong>bold/italic</strong>, paragraphs.</li>
+  <li><strong>Lists</strong>: bullet and numbered, with kept marks.</li>
+  <li><strong>Blockquote</strong> and <strong>code blocks</strong>.</li>
+  <li><strong>Horizontal rule</strong> and inline <strong>code</strong>.</li>
+  <li><strong>Keyboard first</strong>: familiar shortcuts like <code>Cmd/Ctrl+B</code> and <code>Cmd/Ctrl+I</code>.</li>
+  <li><strong>Themeable</strong>: minimal CSS you can fully override.</li>
+  <li><strong>Composable</strong>: extend with any Tiptap extension.</li>
+  <li><strong>Type‑safe</strong>: built with TypeScript.</li>
+  
+</ul>
+
+<h2>Try It</h2>
+<ul>
+  <li>Type <code>/</code> and choose “Heading”, “List”, or “Code Block”.</li>
+  <li>Use <code>Cmd/Ctrl + B</code> and <code>Cmd/Ctrl + I</code> to toggle formatting.</li>
+  <li>Start a list with <code>-</code> or <code>1.</code>.</li>
+  <li>Paste formatted text — it just works.</li>
+</ul>
+
+<blockquote>
+  Neuphlo keeps the surface area small so you can ship content experiences
+  faster without wrestling complex configs.
+</blockquote>
+
+<h2>Learn More</h2>
+<ul>
+  <li>
+    <a href="https://github.com/Neuphlo/neuphlo-editor" target="_blank" rel="noreferrer noopener">Star us on GitHub</a>
+  </li>
+  <li>
+    <a href="https://www.npmjs.com/package/neuphlo-editor" target="_blank" rel="noreferrer noopener">Install from npm</a>
+  </li>
+</ul>

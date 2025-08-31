@@ -1,0 +1,51 @@
+@import "tailwindcss";
+@import "neuphlo-editor/styles.css";
+
+/* Global light/dark body theming */
+:root {
+  /* Let the browser know both schemes are supported */
+  color-scheme: light dark;
+
+  /* Light defaults */
+  --app-bg: #ffffff;
+  --app-fg: #0f172a; /* slate-900-ish */
+}
+
+/* Respect system preference */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --app-bg: #0b0f19; /* near-slate-950 */
+    --app-fg: #e5e7eb; /* slate-200 */
+  }
+}
+
+/* Optional explicit dark mode toggles */
+:root.dark,
+:root[data-theme="dark"] {
+  --app-bg: #0b0f19;
+  --app-fg: #e5e7eb;
+}
+
+body {
+  margin: 0;
+  background-color: var(--app-bg);
+  color: var(--app-fg);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Ensure the app fills the viewport height */
+#root {
+  min-height: 100dvh;
+}
+
+.body {
+  background: ffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  .body {
+    background: sssss;
+  }
+}
