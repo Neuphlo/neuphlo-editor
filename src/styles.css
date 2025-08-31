@@ -3,8 +3,18 @@
   --nph-text-muted: #6b7280;
   --nph-accent: #2563eb;
 
-  min-height: 160px;
+  /*
+    Keep the component neutral by default. Consumers control spacing.
+    Ensure the container and ProseMirror root introduce no implicit
+    padding or margins.
+  */
   color: var(--nph-text);
+}
+
+/* Remove any implicit padding/margins on the ProseMirror root */
+.nph-editor .ProseMirror {
+  margin: 0;
+  padding: 0;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -16,6 +26,15 @@
 }
 
 /* Typography */
+.nph-editor .ProseMirror > :first-child {
+  /* Avoid top gap so users control outer spacing */
+  margin-top: 0 !important;
+}
+.nph-editor .ProseMirror > :last-child {
+  /* Avoid bottom gap so users control outer spacing */
+  margin-bottom: 0 !important;
+}
+
 .nph-editor p {
   margin: 0.75em 0;
 }

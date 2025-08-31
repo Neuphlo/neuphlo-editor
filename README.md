@@ -39,7 +39,8 @@ import Placeholder from "@tiptap/extension-placeholder"
   - Import our minimal stylesheet in your app to activate defaults: `import 'neuphlo-editor/styles.css'` (or `@import 'neuphlo-editor/styles.css';`).
     - Next.js App Router: `app/layout.tsx` or `app/globals.css`
     - Vite/CRA: `src/main.tsx`/`src/index.tsx`
-  - The base CSS does not add a border or background; add your own if desired.
+  - The base CSS does not add a border, background, padding, or min-height; add your own if desired.
+  - Top/bottom gaps are trimmed: the first and last child inside the editor have their margins collapsed to 0 so the container itself introduces no spacing. You fully control outer spacing.
 
 - Opt out per instance:
 
