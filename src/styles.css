@@ -1,13 +1,10 @@
 .nph-editor {
-  --nph-radius: 8px;
   --nph-text: #111827;
   --nph-text-muted: #6b7280;
   --nph-accent: #2563eb;
 
   min-height: 160px;
-  border-radius: var(--nph-radius);
   color: var(--nph-text);
-  padding: 12px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -116,4 +113,17 @@
 .nph-editor img {
   max-width: 100%;
   height: auto;
+}
+
+.nph-editor:focus,
+.nph-editor:focus-visible,
+.nph-editor:focus-within {
+  outline: none;
+  box-shadow: none;
+}
+
+.nph-editor .ProseMirror:focus,
+.nph-editor .ProseMirror:focus-visible {
+  outline: none;
+  box-shadow: none;
 }
