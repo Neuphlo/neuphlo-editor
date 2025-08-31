@@ -42,10 +42,6 @@ import Placeholder from "@tiptap/extension-placeholder"
   - The base CSS does not add a border, background, padding, or min-height; add your own if desired.
   - Top/bottom gaps are trimmed: the first and last child inside the editor have their margins collapsed to 0 so the container itself introduces no spacing. You fully control outer spacing.
 
-- Opt out per instance:
-
-  - `<Editor styled={false} />`
-
 - Bring your own styles (Tailwind or CSS):
   - Use `className` to style the content container; use `editorContainerProps` for other DOM props (e.g., `id`, `role`). No styles are injected by the package.
   - You can combine your own classes with the optional stylesheet if you want.
@@ -78,9 +74,6 @@ Advanced: pass TipTap options directly (everything maps to TipTap’s `EditorPro
   editorProps={{ attributes: { spellcheck: 'true' } }}
   editorContainerProps={{ id: 'editor', role: 'textbox' }}
 />
-
-// Alternatively, add the class manually via props
-<Editor className="nph-editor" />
 ```
 
 ### Editable

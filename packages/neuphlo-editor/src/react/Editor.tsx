@@ -8,14 +8,12 @@ export type EditorProps = Omit<
   EditorProviderProps,
   "children" | "slotBefore" | "slotAfter" | "editorContainerProps"
 > & {
-  styled?: boolean
   className?: string
   editorContainerProps?: Omit<React.HTMLAttributes<HTMLDivElement>, "className">
   children?: React.ReactNode
 }
 
 export function Editor({
-  styled = true,
   className,
   editorContainerProps,
   extensions = [],
@@ -28,7 +26,7 @@ export function Editor({
 }: EditorProps) {
   const mergedContainerProps = {
     ...editorContainerProps,
-    className: cn(styled && "nph-editor", className),
+    className: cn("nph-editor", className),
   }
 
   const mergedEditorProps = {
