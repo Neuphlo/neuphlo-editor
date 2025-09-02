@@ -14,7 +14,7 @@
 /* Respect system preference */
 @media (prefers-color-scheme: dark) {
   :root {
-    --app-bg: #0b0f19; /* near-slate-950 */
+    --app-bg: #0a0a0b; /* near-slate-950 */
     --app-fg: #e5e7eb; /* slate-200 */
   }
 }
@@ -22,7 +22,7 @@
 /* Optional explicit dark mode toggles */
 :root.dark,
 :root[data-theme="dark"] {
-  --app-bg: #0b0f19;
+  --app-bg: #0a0a0b;
   --app-fg: #e5e7eb;
 }
 
