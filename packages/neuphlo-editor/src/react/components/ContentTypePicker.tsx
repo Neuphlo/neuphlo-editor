@@ -50,10 +50,7 @@ export const ContentTypePicker = ({ options }: ContentTypePickerProps) => {
   return (
     <Dropdown.Root modal={false}>
       <Dropdown.Trigger asChild>
-        <Toolbar.Button
-          buttonSize="small"
-          active={activeItem?.id !== "paragraph" && !!activeItem?.type}
-        >
+        <Toolbar.Button buttonSize="small">
           <Icon
             name={
               (activeItem?.type === "option" && activeItem.icon) ||
