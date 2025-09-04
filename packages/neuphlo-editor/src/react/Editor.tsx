@@ -10,7 +10,10 @@ export type EditorProps = Omit<
   "children" | "slotBefore" | "slotAfter" | "editorContainerProps"
 > & {
   className?: string
-  editorContainerProps?: Omit<React.HTMLAttributes<HTMLDivElement>, "className">
+  editorContainerProps?: Omit<
+    React.HTMLAttributes<HTMLDivElement>,
+    "className" | "children"
+  >
   showSelectionMenu?: boolean
   selectionMenu?: React.ReactNode
   children?: React.ReactNode
