@@ -16,8 +16,15 @@ export const useTextmenuContentTypes = (editor: Editor) => {
           ctx.editor
             .chain()
             .focus()
-            .lift("taskItem")
-            .liftListItem("listItem")
+            .command(({ commands }) => {
+              try {
+                commands.lift("taskItem")
+              } catch {}
+              try {
+                commands.liftListItem("listItem")
+              } catch {}
+              return true
+            })
             .setParagraph()
             .run(),
         id: "paragraph",
@@ -36,8 +43,15 @@ export const useTextmenuContentTypes = (editor: Editor) => {
           ctx.editor
             .chain()
             .focus()
-            .lift("taskItem")
-            .liftListItem("listItem")
+            .command(({ commands }) => {
+              try {
+                commands.lift("taskItem")
+              } catch {}
+              try {
+                commands.liftListItem("listItem")
+              } catch {}
+              return true
+            })
             .setHeading({ level: 1 })
             .run(),
         id: "heading1",
@@ -52,8 +66,15 @@ export const useTextmenuContentTypes = (editor: Editor) => {
           ctx.editor
             .chain()
             .focus()
-            .lift("taskItem")
-            .liftListItem("listItem")
+            .command(({ commands }) => {
+              try {
+                commands.lift("taskItem")
+              } catch {}
+              try {
+                commands.liftListItem("listItem")
+              } catch {}
+              return true
+            })
             .setHeading({ level: 2 })
             .run(),
         id: "heading2",
@@ -68,8 +89,15 @@ export const useTextmenuContentTypes = (editor: Editor) => {
           ctx.editor
             .chain()
             .focus()
-            .lift("taskItem")
-            .liftListItem("listItem")
+            .command(({ commands }) => {
+              try {
+                commands.lift("taskItem")
+              } catch {}
+              try {
+                commands.liftListItem("listItem")
+              } catch {}
+              return true
+            })
             .setHeading({ level: 3 })
             .run(),
         id: "heading3",
