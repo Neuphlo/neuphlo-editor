@@ -6,7 +6,7 @@
     "apps/*"
   ],
   "scripts": {
-    "build": "npm run -ws build",
+    "build": "npm run --workspaces build",
     "dev": "concurrently -c auto -n pkg,app \"npm:dev -w neuphlo-editor\" \"npm:dev -w playground\"",
     "publish:dry": "npm -w neuphlo-editor run publish:dry",
     "publish:package": "npm publish -w neuphlo-editor"
