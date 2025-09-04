@@ -1,6 +1,6 @@
 {
   "name": "neuphlo-editor",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "private": false,
   "type": "module",
   "main": "dist/index.cjs",
@@ -53,10 +53,11 @@
     "@radix-ui/react-tooltip": "^1.2.8"
   },
   "dependencies": {
-    "@tiptap/core": "^2.4.0",
-    "@tiptap/pm": "^2.4.0",
-    "@tiptap/react": "^2.4.0",
-    "@tiptap/starter-kit": "^2.4.0",
+    "@floating-ui/dom": "^1.7.4",
+    "@tiptap/core": "^3.0.0",
+    "@tiptap/pm": "^3.0.0",
+    "@tiptap/react": "^3.0.0",
+    "@tiptap/starter-kit": "^3.0.0",
     "clsx": "^2.1.1",
     "tailwind-merge": "^3.3.1"
   },

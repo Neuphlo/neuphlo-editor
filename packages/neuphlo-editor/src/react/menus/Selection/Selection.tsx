@@ -1,4 +1,5 @@
-import { BubbleMenu, useCurrentEditor } from "@tiptap/react"
+import { useCurrentEditor } from "@tiptap/react"
+import { BubbleMenu } from "@tiptap/react/menus"
 import { memo } from "react"
 
 // Components
@@ -26,7 +27,7 @@ export function Selection() {
   return (
     <BubbleMenu
       editor={editor}
-      tippyOptions={{ placement: "top", duration: 120, interactive: true, hideOnClick: false }}
+      options={{ placement: "top" }}
       shouldShow={({ editor, from, to }) => {
         if (from === to) return false
         if (editor.isActive("codeBlock")) return false
