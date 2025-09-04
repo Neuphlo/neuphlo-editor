@@ -1,4 +1,4 @@
-# Neuphlo Monorepo
+# Neuphlo Editor
 
 This repo is an npm workspaces monorepo with:
 
