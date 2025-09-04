@@ -1,13 +1,13 @@
-import { defineConfig } from 'tsup'
+import { defineConfig } from "tsup"
 
 export default defineConfig((options) => ({
-  entry: ['src/index.ts', 'src/react/index.ts'],
-  format: ['esm', 'cjs'],
+  entry: ["src/index.ts", "src/react/index.ts"],
+  format: ["esm", "cjs"],
   dts: true,
-  // Avoid unlink/clean races while watching
   clean: !options.watch,
   sourcemap: true,
-  target: 'es2020',
+  target: "es2020",
   treeshake: true,
-  onSuccess: 'cp src/styles.css dist/styles.css',
+  external: ["@radix-ui/react-dropdown-menu", "@radix-ui/react-tooltip"],
+  onSuccess: "cp src/styles.css dist/styles.css",
 }))

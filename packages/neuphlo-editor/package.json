@@ -48,7 +48,9 @@
   "homepage": "https://github.com/Neuphlo/neuphlo-editor#readme",
   "peerDependencies": {
     "react": ">=18",
-    "react-dom": ">=18"
+    "react-dom": ">=18",
+    "@radix-ui/react-dropdown-menu": "^2.1.16",
+    "@radix-ui/react-tooltip": "^1.2.8"
   },
   "dependencies": {
     "@tiptap/core": "^2.4.0",

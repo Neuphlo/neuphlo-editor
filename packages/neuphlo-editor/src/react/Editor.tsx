@@ -3,6 +3,7 @@ import { EditorProvider } from "@tiptap/react"
 import type { EditorProviderProps } from "@tiptap/react"
 import { Preset } from "../preset"
 import { cn } from "./utils/cn"
+import { Selection } from "./menus/Selection"
 
 export type EditorProps = Omit<
   EditorProviderProps,
@@ -10,6 +11,8 @@ export type EditorProps = Omit<
 > & {
   className?: string
   editorContainerProps?: Omit<React.HTMLAttributes<HTMLDivElement>, "className">
+  showSelectionMenu?: boolean
+  selectionMenu?: React.ReactNode
   children?: React.ReactNode
 }
 
@@ -21,6 +24,8 @@ export function Editor({
   onUpdate,
   editorProps,
   editable = true,
+  showSelectionMenu = true,
+  selectionMenu,
   children,
   ...rest
 }: EditorProps) {
@@ -49,6 +54,7 @@ export function Editor({
       editorContainerProps={mergedContainerProps}
       {...rest}
     >
+      {showSelectionMenu && (selectionMenu ?? <Selection />)}
       {children}
     </EditorProvider>
   )

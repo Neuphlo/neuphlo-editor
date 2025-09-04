@@ -1,0 +1,144 @@
+@import "./styles.css";
+@import "tailwindcss";
+
+/* Component UI (compiled with Tailwind) */
+@layer components {
+  /* Bubble menu container */
+  .nph-bubble {
+    @apply flex items-center gap-1 rounded-xl border p-1 shadow-lg bg-white dark:bg-black;
+  }
+
+  /* Toolbar */
+  .nph-toolbar {
+    @apply inline-flex h-full leading-none gap-0.5 text-neutral-900 dark:text-white;
+  }
+  .nph-toolbar--vertical {
+    @apply flex-col p-2;
+  }
+  .nph-toolbar--horizontal {
+    @apply flex-row p-1 items-center;
+  }
+  .nph-toolbar-divider {
+    @apply bg-neutral-200 dark:bg-neutral-800;
+  }
+  .nph-toolbar-divider--horizontal {
+    @apply w-full min-w-[1.5rem] h-[1px] my-1 first:mt-0 last:mt-0;
+  }
+  .nph-toolbar-divider--vertical {
+    @apply h-full min-h-[1.5rem] w-[1px] mx-1 first:ml-0 last:mr-0;
+  }
+  .nph-toolbar-button {
+    @apply gap-1 min-w-[2rem] px-2 w-auto;
+  }
+
+  /* Surface */
+  .nph-surface {
+    @apply bg-white rounded-lg dark:bg-black;
+  }
+  .nph-surface--shadow {
+    @apply shadow-sm;
+  }
+  .nph-surface--border {
+    @apply border border-neutral-200 dark:border-neutral-800;
+  }
+
+  /* Buttons */
+  .nph-btn {
+    @apply flex group items-center justify-center border border-transparent gap-2 text-sm font-semibold rounded-md disabled:opacity-50 whitespace-nowrap;
+  }
+  .nph-btn--primary {
+    @apply text-white bg-black border-black dark:text-black dark:bg-white dark:border-white;
+  }
+  .nph-btn--primary:not(:disabled):not(.nph-btn--active):hover {
+    @apply bg-neutral-800 dark:bg-neutral-200;
+  }
+  .nph-btn--primary:not(:disabled):not(.nph-btn--active):active {
+    @apply bg-neutral-900 dark:bg-neutral-300;
+  }
+  .nph-btn--primary.nph-btn--active {
+    @apply bg-neutral-900 dark:bg-neutral-300;
+  }
+
+  .nph-btn--secondary {
+    @apply text-neutral-900 dark:text-white;
+  }
+  .nph-btn--secondary:not(:disabled):not(.nph-btn--active):hover {
+    @apply bg-neutral-100 dark:bg-neutral-900;
+  }
+  .nph-btn--secondary:not(:disabled):not(.nph-btn--active):active {
+    @apply bg-neutral-200 dark:bg-neutral-800;
+  }
+  .nph-btn--secondary.nph-btn--active {
+    @apply bg-neutral-200 dark:bg-neutral-800;
+  }
+
+  .nph-btn--tertiary {
+    @apply bg-neutral-50 text-neutral-900 dark:bg-neutral-900 dark:text-white dark:border-neutral-900;
+  }
+  .nph-btn--tertiary:not(:disabled):not(.nph-btn--active):hover {
+    @apply bg-neutral-100 dark:bg-neutral-800;
+  }
+  .nph-btn--tertiary:not(:disabled):not(.nph-btn--active):active {
+    @apply bg-neutral-200 dark:bg-neutral-700;
+  }
+  .nph-btn--tertiary.nph-btn--active {
+    @apply bg-neutral-200 dark:bg-neutral-800;
+  }
+
+  .nph-btn--ghost {
+    @apply bg-transparent border-transparent text-neutral-500 dark:text-neutral-400;
+  }
+  .nph-btn--ghost:not(:disabled):not(.nph-btn--active):hover {
+    @apply bg-black/5 text-neutral-700 dark:bg-white/10 dark:text-neutral-300;
+  }
+  .nph-btn--ghost:not(:disabled):not(.nph-btn--active):active {
+    @apply bg-black/10 text-neutral-800 dark:text-neutral-200;
+  }
+  .nph-btn--ghost.nph-btn--active {
+    @apply bg-black/10 text-neutral-800 dark:bg-white/20 dark:text-neutral-200;
+  }
+
+  .nph-btn--md { @apply py-2 px-3; }
+  .nph-btn--sm { @apply py-1 px-2; }
+  .nph-btn--icon { @apply w-8 h-8; }
+  .nph-btn--icon-sm { @apply w-6 h-6; }
+
+  /* Tooltip */
+  .nph-tooltip {
+    @apply flex items-center gap-2 px-2.5 py-1 bg-white border border-neutral-100 rounded-lg shadow-sm z-[999];
+  }
+  .nph-tooltip-title { @apply text-xs font-medium text-neutral-500; }
+  .nph-tooltip-shortcut { @apply flex items-center gap-0.5; }
+  .nph-kbd {
+    @apply inline-flex items-center justify-center w-5 h-5 p-1 text-[0.625rem] rounded-sm font-semibold leading-none border border-neutral-200 text-neutral-500 border-b-2;
+  }
+
+  /* Dropdown */
+  .nph-dropdown-title {
+    @apply text-[.65rem] font-semibold mb-1 uppercase text-neutral-500 dark:text-neutral-400 px-1.5;
+  }
+  .nph-dropdown-button {
+    @apply flex items-center gap-2 p-1.5 text-sm font-medium text-neutral-500 dark:text-neutral-400 text-left bg-transparent w-full rounded-sm;
+  }
+  .nph-dropdown-button:not([disabled]):not([data-active=true]):hover {
+    @apply bg-neutral-100 text-neutral-800 dark:bg-neutral-900 dark:text-neutral-200;
+  }
+  .nph-dropdown-button[data-active=true] {
+    @apply bg-neutral-100 text-neutral-800 dark:bg-neutral-900 dark:text-neutral-200;
+  }
+  .nph-dropdown-button[disabled] {
+    @apply text-neutral-400 cursor-not-allowed dark:text-neutral-600;
+  }
+
+  /* Menus */
+  .nph-menu-panel {
+    @apply flex flex-col gap-1 px-2 py-4;
+  }
+  .nph-category-gap { @apply mt-2 first:mt-0; }
+
+  /* Icons and spacing helpers */
+  .nph-icon { @apply w-4 h-4; }
+  .nph-icon-xs { @apply w-2 h-2; }
+  .nph-mr-1 { @apply mr-1; }
+}
+
