@@ -29,6 +29,7 @@ export function Editor({
   editable = true,
   showSelectionMenu = true,
   selectionMenu,
+  immediatelyRender = false,
   children,
   ...rest
 }: EditorProps) {
@@ -55,6 +56,7 @@ export function Editor({
       editorProps={mergedEditorProps}
       editable={editable}
       editorContainerProps={mergedContainerProps}
+      immediatelyRender={immediatelyRender}
       {...rest}
     >
       {showSelectionMenu && (selectionMenu ?? <Selection />)}
