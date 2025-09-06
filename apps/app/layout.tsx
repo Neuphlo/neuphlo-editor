@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 import "./globals.css"
-import "neuphlo-editor/styles.css"
+import "../../packages/neuphlo-editor/src/styles.css"
 
 import { ThemeProvider } from "@/components/theme-provider"
 import Navigation from "./_components/Navigation"

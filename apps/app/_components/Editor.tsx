@@ -5,11 +5,11 @@ import dynamic from "next/dynamic"
 
 // Componments
 import { Card } from "@/components/ui/card"
-import { EditorProps } from "neuphlo-editor/react"
+import { EditorProps } from "../../../packages/neuphlo-editor/src/react"
 
 const NeuphloEditor = dynamic(
   () =>
-    import("neuphlo-editor/react").then((mod) => ({
+    import("../../../packages/neuphlo-editor/src/react").then((mod) => ({
       default: mod.Editor,
     })),
   {
