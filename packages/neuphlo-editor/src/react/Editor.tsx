@@ -1,9 +1,9 @@
 import * as React from "react"
 import { EditorProvider } from "@tiptap/react"
 import type { EditorProviderProps } from "@tiptap/react"
-import { Preset } from "../preset"
 import { cn } from "./utils/cn"
 import { Selection } from "./menus/Selection"
+import { Extensions } from "./extensions/extension-kit"
 
 export type EditorProps = Omit<
   EditorProviderProps,
@@ -51,7 +51,7 @@ export function Editor({
   return (
     <EditorProvider
       content={content}
-      extensions={[...Preset, ...(extensions ?? [])]}
+      extensions={[...Extensions(), ...(extensions ?? [])]}
       onUpdate={onUpdate}
       editorProps={mergedEditorProps}
       editable={editable}

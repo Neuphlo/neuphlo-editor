@@ -1,10 +1,10 @@
-import type { Extension } from "@tiptap/core"
-import StarterKit from "@tiptap/starter-kit"
+import { StarterKit, CodeBlock } from "."
 
-export const Preset: Extension[] = [
+export const Extensions = () => [
   StarterKit.configure({
     bulletList: { keepMarks: true },
     orderedList: { keepMarks: true },
     heading: { levels: [1, 2, 3, 4] },
   }),
+  CodeBlock,
 ]
