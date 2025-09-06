@@ -1,4 +1,4 @@
-import { Icon } from "./ui/Icon"
+import { Icon, type IconName } from "./ui/Icon"
 import { useMemo } from "react"
 import * as Dropdown from "@radix-ui/react-dropdown-menu"
 import { Toolbar } from "../components/ui/Toolbar"
@@ -7,7 +7,6 @@ import {
   DropdownButton,
   DropdownCategoryTitle,
 } from "../components/ui/Dropdown"
-import { icons } from "@tabler/icons-react"
 
 export type ContentTypePickerOption = {
   label: string
@@ -16,7 +15,7 @@ export type ContentTypePickerOption = {
   disabled: () => boolean
   isActive: () => boolean
   onClick: () => void
-  icon: keyof typeof icons
+  icon: IconName
 }
 
 export type ContentTypePickerCategory = {

@@ -6,6 +6,8 @@ export default defineConfig((options) => ({
   dts: true,
   clean: !options.watch,
   sourcemap: false,
+  splitting: false,
+  minify: !options.watch,
   target: "es2020",
   treeshake: true,
   external: ["@radix-ui/react-dropdown-menu", "@radix-ui/react-tooltip"],
