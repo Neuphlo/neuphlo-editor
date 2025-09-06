@@ -10,7 +10,12 @@ import { ContentTypePicker } from "../../components/ContentTypePicker"
 import { useTextmenuContentTypes } from "./hooks/useTextmenuContentTypes"
 import { useTextmenuCommands } from "./hooks/useTextmenuCommands"
 import { useTextmenuStates } from "./hooks/useTextmenuStates"
-import { IconBold, IconItalic } from "@tabler/icons-react"
+import {
+  IconBold,
+  IconCode,
+  IconItalic,
+  IconSourceCode,
+} from "@tabler/icons-react"
 
 const MemoButton = memo(Toolbar.Button)
 const MemoContentTypePicker = memo(ContentTypePicker)
@@ -28,9 +33,8 @@ export function Selection() {
     <BubbleMenu
       editor={editor}
       options={{ placement: "top" }}
-      shouldShow={({ editor, from, to }) => {
+      shouldShow={({ from, to }) => {
         if (from === to) return false
-        if (editor.isActive("codeBlock")) return false
         return true
       }}
       className="nph-bubble"
@@ -54,6 +58,23 @@ export function Selection() {
           active={states.isItalic}
         >
           <IconItalic className="nph-icon" />
+        </MemoButton>
+
+        <MemoButton
+          tooltip="Code"
+          tooltipShortcut={["Mod", "E"]}
+          onClick={commands.onCode}
+          active={states.isCode}
+        >
+          <IconCode className="size-4" />
+        </MemoButton>
+
+        <MemoButton
+          tooltip="Code block"
+          onClick={commands.onCodeBlock}
+          active={states.isCodeBlock}
+        >
+          <IconSourceCode className="size-4" />
         </MemoButton>
       </Toolbar.Wrapper>
     </BubbleMenu>

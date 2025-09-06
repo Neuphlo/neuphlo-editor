@@ -1,11 +1,7 @@
 import { Editor } from "@tiptap/react"
 import { useCallback } from "react"
 
-export const useTextmenuCommands = (
-  editor: Editor,
-  sourceId?: string,
-  sourceType?: "page" | "flow"
-) => {
+export const useTextmenuCommands = (editor: Editor) => {
   const onBold = useCallback(
     () => editor.chain().focus().toggleBold().run(),
     [editor]
@@ -100,10 +96,6 @@ export const useTextmenuCommands = (
 
     // Create the title with source information
     let title = firstLine
-    if (sourceId && sourceType) {
-      // Include the source type (page or flow) in the title
-      title = `Created from ${sourceType}: ${sourceId}`
-    }
 
     // Use the entire selected text as content
     const content = `<p>${selectedText
@@ -111,7 +103,7 @@ export const useTextmenuCommands = (
       .replace(/\n/g, "<br />")}</p>`
 
     return { title, content }
-  }, [editor, sourceId, sourceType])
+  }, [editor])
 
   return {
     onBold,
