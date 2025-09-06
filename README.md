@@ -1,27 +1,15 @@
-# Neuphlo Editor
+# Neuphlo Monorepo
 
-This repo is the `neuphlo-editor` package (TipTap preset + React wrapper).
+This repository uses npm workspaces.
 
-## Prerequisites
+- Packages: `packages/*` (library packages)
+- Apps: `apps` (Next.js app)
 
-- Node 18+ (recommended) and npm 8+
-- React 19+ in your app
+Current packages:
+- `packages/neuphlo-editor` — TipTap preset + React wrapper
 
-## Install & Run (local dev)
+Common scripts:
+- `npm run build` — Builds all workspaces
+- `npm run dev` — Starts the library watcher and the Next.js app together
 
-- Install dependencies: `npm install`
-- Start local dev (watch): `npm run dev`
-  - The package builds in watch mode via `tsup`.
-
-## Where Things Live
-
-- Source: `src`
-  - Build output: `dist`
-  - Exports: JS (ESM/CJS), types, and `styles.css`
-
-## Using In Your App
-
-- Install the package in your app, then import:
-  - `import { Editor } from 'neuphlo-editor/react'`
-  - `import 'neuphlo-editor/styles.css'`
-  - Or bring your own styles and set `className` on the component.
+After this restructure, run `npm install` at the repo root to refresh the lockfile and hoist dependencies.

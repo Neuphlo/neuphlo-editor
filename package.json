@@ -1,71 +1,16 @@
 {
-  "name": "neuphlo-editor",
-  "version": "0.3.8",
-  "private": false,
-  "type": "module",
-  "main": "dist/index.cjs",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
-    },
-    "./react": {
-      "types": "./dist/react/index.d.ts",
-      "import": "./dist/react/index.js",
-      "require": "./dist/react/index.cjs"
-    },
-    "./styles.css": {
-      "default": "./dist/styles.css"
-    }
-  },
-  "files": [
-    "dist"
-  ],
-  "sideEffects": [
-    "dist/styles.css"
+  "name": "neuphlo",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "apps"
   ],
   "scripts": {
-    "build": "tsup src/index.ts src/react/index.ts --dts --format esm,cjs --clean && npm run build:css",
-    "build:css": "cp src/styles.css dist/styles.css",
-    "dev": "tsup --watch",
-    "publish:dry": "npm publish --dry-run",
-    "prepack": "npm run build"
-  },
-  "publishConfig": {
-    "access": "public"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Neuphlo/neuphlo-editor.git"
-  },
-  "bugs": {
-    "url": "https://github.com/Neuphlo/neuphlo-editor/issues"
-  },
-  "homepage": "https://github.com/Neuphlo/neuphlo-editor#readme",
-  "peerDependencies": {
-    "react": ">=19",
-    "react-dom": ">=19",
-    "@radix-ui/react-dropdown-menu": "^2.1.16",
-    "@radix-ui/react-tooltip": "^1.2.8"
-  },
-  "dependencies": {
-    "@floating-ui/dom": "^1.7.4",
-    "@tiptap/core": "^3.0.0",
-    "@tiptap/pm": "^3.0.0",
-    "@tiptap/react": "^3.0.0",
-    "@tiptap/starter-kit": "^3.0.0",
-    "@tabler/icons-react": "^3.34.1",
-    "clsx": "^2.1.1",
-    "tailwind-merge": "^3.3.1"
+    "build": "npm run --workspaces build",
+    "dev": "concurrently -n lib,app -c blue,green \"npm -w neuphlo-editor run dev\" \"npm -w neuphlo-editor-tester run dev\"",
+    "clean": "npm run --workspaces --if-present clean || true"
   },
   "devDependencies": {
-    "@types/node": "^22.0.0",
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1",
-    "tsup": "^8.1.0",
-    "typescript": "^5.6.2"
+    "concurrently": "^9.2.1"
   }
 }
