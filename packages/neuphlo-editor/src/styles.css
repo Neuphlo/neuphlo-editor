@@ -1,0 +1,5 @@
+.nph-editor { min-height: 240px; line-height: 1.6; }
+.nph-editor h1, .nph-editor h2, .nph-editor h3 { line-height: 1.25; margin: 1.25em 0 0.5em; }
+.nph-editor p { margin: 0.5em 0; }
+.nph-editor ul, .nph-editor ol { margin-left: 1.25em; }
+.nph-editor code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
