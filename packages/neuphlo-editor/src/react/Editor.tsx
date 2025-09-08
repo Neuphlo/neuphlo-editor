@@ -16,8 +16,6 @@ export function Editor({
     <div className={className}>
       <EditorProvider
         immediatelyRender={false}
-        slotBefore={null}
-        slotAfter={null}
         editable={editable}
         content={content}
         extensions={[StarterKit.configure({})]}
