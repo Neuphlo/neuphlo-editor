@@ -1,7 +1,7 @@
 "use client"
 
-import { Editor } from "neuphlo-editor/react"
 import Content from "@/components/content/example-content"
+import { Editor } from "./_components/Editor"
 
 export default function Home() {
   return (

@@ -5,11 +5,10 @@ import dynamic from "next/dynamic"
 
 // Componments
 import { Card } from "@/components/ui/card"
-import { EditorProps } from "../../../packages/neuphlo-editor/src/react"
 
 const NeuphloEditor = dynamic(
   () =>
-    import("../../../packages/neuphlo-editor/src/react").then((mod) => ({
+    import("../../../../../packages/neuphlo-editor/src/react").then((mod) => ({
       default: mod.Editor,
     })),
   {
@@ -17,7 +16,7 @@ const NeuphloEditor = dynamic(
   }
 )
 
-export default function Editor({ content }: EditorProps) {
+export default function Editor({ content }: any) {
   return (
     <Card className="p-6">
       <NeuphloEditor content={content} />
