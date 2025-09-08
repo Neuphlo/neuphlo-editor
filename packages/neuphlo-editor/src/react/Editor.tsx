@@ -22,7 +22,7 @@ export function Editor({
         content={content}
         extensions={[StarterKit.configure({})]}
         editorProps={{
-          attributes: { class: "nph-editor prose max-w-none outline-none" },
+          attributes: { class: "nph-editor max-w-none outline-none" },
         }}
       />
     </div>

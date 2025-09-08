@@ -2,6 +2,7 @@
 
 // Next
 import dynamic from "next/dynamic"
+import type { EditorProps } from "../../../../../packages/neuphlo-editor/src/react"
 
 // Componments
 import { Card } from "@/components/ui/card"
@@ -12,11 +13,11 @@ const NeuphloEditor = dynamic(
       default: mod.Editor,
     })),
   {
-    loading: () => <Card className="p-6">Loading...</Card>,
+    loading: () => <div></div>,
   }
 )
 
-export default function Editor({ content }: any) {
+export default function Editor({ content }: EditorProps) {
   return (
     <Card className="p-6">
       <NeuphloEditor content={content} />

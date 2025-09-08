@@ -14,14 +14,12 @@ const exampleContent = /* html */ `
 
 export default function App() {
   return &lt;Editor content={"&lt;p&gt;Hello Neuphlo&lt;/p&gt;"} /&gt;;
-}
-  </code></pre>
+}</code></pre>
 
   <p>Style it your way with Tailwind or CSS:</p>
   <pre><code>import "neuphlo-editor/styles.css";
 
-&lt;Editor className="min-h-[200px] border rounded-md p-3 outline-none" /&gt;
-  </code></pre>
+&lt;Editor className="min-h-[200px] border rounded-md p-3 outline-none" /&gt;</code></pre>
 
   <h2>Features</h2>
   <ul>
@@ -49,10 +47,6 @@ export default function App() {
     Neuphlo keeps the surface area small so you can ship content experiences
     faster without wrestling complex configs.
   </blockquote>
-
-  <p>
-    Learn more: <strong>Star us on GitHub</strong> · <strong>Install from npm</strong>
-  </p>
 `
 
 export default exampleContent

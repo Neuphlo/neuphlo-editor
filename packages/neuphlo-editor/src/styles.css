@@ -1,5 +1,186 @@
-.nph-editor { min-height: 240px; line-height: 1.6; }
-.nph-editor h1, .nph-editor h2, .nph-editor h3 { line-height: 1.25; margin: 1.25em 0 0.5em; }
-.nph-editor p { margin: 0.5em 0; }
-.nph-editor ul, .nph-editor ol { margin-left: 1.25em; }
-.nph-editor code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+/* Neuphlo Editor default styles (TipTap-friendly) */
+.nph-editor,
+.ProseMirror.nph-editor {
+  min-height: 240px;
+  line-height: 1.65;
+  color: inherit;
+  caret-color: currentColor;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  word-break: break-word;
+}
+
+/* Trim outer spacing */
+.nph-editor > *:first-child,
+.ProseMirror.nph-editor > *:first-child { margin-top: 0; }
+.nph-editor > *:last-child,
+.ProseMirror.nph-editor > *:last-child { margin-bottom: 0; }
+
+/* Paragraphs */
+.nph-editor p,
+.ProseMirror.nph-editor p { margin: 0.75em 0; }
+
+/* Headings */
+.nph-editor h1,
+.nph-editor h2,
+.nph-editor h3,
+.nph-editor h4,
+.nph-editor h5,
+.nph-editor h6,
+.ProseMirror.nph-editor h1,
+.ProseMirror.nph-editor h2,
+.ProseMirror.nph-editor h3,
+.ProseMirror.nph-editor h4,
+.ProseMirror.nph-editor h5,
+.ProseMirror.nph-editor h6 {
+  line-height: 1.2;
+  font-weight: 700;
+  margin-top: 2.5rem;
+  margin-bottom: 0.75rem;
+  text-wrap: pretty;
+}
+.nph-editor h1,
+.nph-editor h2,
+.ProseMirror.nph-editor h1,
+.ProseMirror.nph-editor h2 {
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+}
+.nph-editor h1,
+.ProseMirror.nph-editor h1 { font-size: 1.5rem; }
+.nph-editor h2,
+.ProseMirror.nph-editor h2 { font-size: 1.25rem; }
+.nph-editor h3,
+.ProseMirror.nph-editor h3 { font-size: 1.125rem; }
+.nph-editor h4,
+.nph-editor h5,
+.nph-editor h6,
+.ProseMirror.nph-editor h4,
+.ProseMirror.nph-editor h5,
+.ProseMirror.nph-editor h6 { font-size: 1rem; }
+
+/* Lists */
+.nph-editor ul,
+.nph-editor ol,
+.ProseMirror.nph-editor ul,
+.ProseMirror.nph-editor ol {
+  padding-left: 1.25rem;
+  margin: 1.25rem 1rem 1.25rem 0.4rem;
+}
+.nph-editor ul,
+.ProseMirror.nph-editor ul { list-style: disc outside; }
+.nph-editor ul ul,
+.ProseMirror.nph-editor ul ul { list-style: circle outside; }
+.nph-editor ul ul ul,
+.ProseMirror.nph-editor ul ul ul { list-style: square outside; }
+.nph-editor ol,
+.ProseMirror.nph-editor ol { list-style: decimal outside; }
+.nph-editor li p,
+.ProseMirror.nph-editor li p { margin-top: 0.25em; margin-bottom: 0.25em; }
+
+/* Blockquote */
+.nph-editor blockquote,
+.ProseMirror.nph-editor blockquote {
+  border-left: 3px solid var(--border, rgba(0, 0, 0, 0.12));
+  margin: 1.5rem 0;
+  padding-left: 1rem;
+  color: var(--muted-foreground, #6b7280);
+}
+
+/* Code (inline) */
+.nph-editor code,
+.ProseMirror.nph-editor code {
+  background-color: var(--muted, rgba(127, 127, 127, 0.12));
+  border-radius: 0.375rem;
+  color: inherit;
+  font-size: 0.875em;
+  padding: 0.15em 0.35em;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+/* Code blocks */
+.nph-editor pre,
+.ProseMirror.nph-editor pre {
+  background: var(--muted, #f4f4f5);
+  border-radius: 0.5rem;
+  color: var(--foreground, #111827);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  margin: 1.5rem 0;
+  padding: 0.75rem 1rem;
+  overflow-x: auto;
+}
+.nph-editor pre code,
+.ProseMirror.nph-editor pre code {
+  background: none;
+  color: inherit;
+  font-size: 0.85em;
+  padding: 0;
+}
+
+/* Horizontal rule */
+.nph-editor hr,
+.ProseMirror.nph-editor hr {
+  border: none;
+  border-top: 1px solid var(--border, rgba(0, 0, 0, 0.12));
+  margin: 2rem 0;
+}
+
+/* Links */
+.nph-editor a,
+.ProseMirror.nph-editor a {
+  color: var(--primary, #2563eb);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* Images */
+.nph-editor img,
+.ProseMirror.nph-editor img { max-width: 100%; height: auto; }
+
+/* Tables */
+.nph-editor table,
+.ProseMirror.nph-editor table {
+  width: 100%;
+  table-layout: auto;
+  border-collapse: collapse;
+  margin: 1.25rem 0;
+}
+.nph-editor th,
+.nph-editor td,
+.ProseMirror.nph-editor th,
+.ProseMirror.nph-editor td {
+  border: 1px solid var(--border, rgba(0, 0, 0, 0.12));
+  padding: 0.5rem 0.75rem;
+  vertical-align: top;
+}
+.nph-editor th,
+.ProseMirror.nph-editor th {
+  background: var(--muted, #f4f4f5);
+  font-weight: 600;
+}
+
+/* Task list (if enabled) */
+.nph-editor ul[data-type="taskList"],
+.ProseMirror.nph-editor ul[data-type="taskList"] { list-style: none; padding-left: 0; }
+.nph-editor ul[data-type="taskList"] li,
+.ProseMirror.nph-editor ul[data-type="taskList"] li { display: flex; align-items: flex-start; gap: 0.5rem; }
+.nph-editor ul[data-type="taskList"] li > label,
+.ProseMirror.nph-editor ul[data-type="taskList"] li > label { margin-right: 0.5rem; user-select: none; }
+.nph-editor ul[data-type="taskList"] li input[type="checkbox"],
+.ProseMirror.nph-editor ul[data-type="taskList"] li input[type="checkbox"] { margin: 0.25rem 0.5rem 0 0; }
+
+/* ProseMirror helpers */
+.nph-editor .ProseMirror-gapcursor,
+.ProseMirror.nph-editor .ProseMirror-gapcursor { display: none; }
+.nph-editor .ProseMirror-selectednode,
+.ProseMirror.nph-editor .ProseMirror-selectednode { outline: 2px solid var(--ring, rgba(59, 130, 246, 0.5)); }
+
+/* Placeholder (requires Placeholder extension) */
+.nph-editor p.is-editor-empty:first-child::before,
+.ProseMirror.nph-editor p.is-editor-empty:first-child::before {
+  color: var(--muted-foreground, #6b7280);
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}

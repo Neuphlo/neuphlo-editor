@@ -21,15 +21,16 @@
     "./styles.css": "./dist/styles.css"
   },
   "sideEffects": [
-    "./styles.css"
+    "**/*.css"
   ],
   "files": [
     "dist",
     "README.md"
   ],
   "scripts": {
-    "build": "tsup src/index.ts src/react/index.ts --format esm,cjs --dts --sourcemap",
+    "build": "tsup src/index.ts src/react/index.ts --format esm,cjs --dts --sourcemap && pnpm run copy:css",
     "dev": "tsup src/index.ts src/react/index.ts --format esm,cjs --dts --sourcemap --watch",
+    "copy:css": "mkdir -p dist && cp src/styles.css dist/styles.css",
     "typecheck": "tsc -p tsconfig.json",
     "lint": "eslint . --ext .ts,.tsx"
   },
