@@ -1,6 +1,6 @@
 import { EditorRoot, EditorContent } from "../headless"
 import ExtensionKit from "../headless/extensions/extension-kit"
-import { TextMenu } from "./menus"
+import { SlashMenu, TextMenu } from "./menus"
 
 export type NeuphloEditorProps = {
   content?: string
@@ -8,6 +8,7 @@ export type NeuphloEditorProps = {
   editable?: boolean
   immediatelyRender?: boolean
   showTextMenu?: boolean
+  showSlashMenu?: boolean
   bubbleMenuOptions?: Record<string, unknown>
   extensions?: any[]
 }
@@ -18,6 +19,7 @@ export function Editor({
   editable = true,
   immediatelyRender = false,
   showTextMenu = true,
+  showSlashMenu = true,
   extensions,
 }: NeuphloEditorProps) {
   return (
@@ -29,10 +31,13 @@ export function Editor({
           content={content}
           extensions={[...ExtensionKit(), ...(extensions ?? [])]}
           editorProps={{
-            attributes: { class: "nph-editor max-w-none outline-none" },
+            attributes: {
+              class: "nph-editor max-w-none outline-none",
+            },
           }}
         >
           {showTextMenu ? <TextMenu /> : null}
+          {showSlashMenu ? <SlashMenu /> : null}
         </EditorContent>
       </EditorRoot>
     </div>

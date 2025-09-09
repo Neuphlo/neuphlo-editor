@@ -16,3 +16,12 @@ export {
 export { EditorCommandItem } from "./components/editor-command-item"
 
 export { Placeholder, StarterKit } from "./extensions"
+export {
+  Command as SlashCommand,
+  renderItems as renderSlashCommandItems,
+  createSuggestionItems,
+  handleCommandNavigation,
+} from "./extensions/slash-command"
+// Path without extension to satisfy TS/tsup
+// (the file is at ./extensions/slash-command.tsx)
+// eslint-disable-next-line

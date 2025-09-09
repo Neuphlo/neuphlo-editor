@@ -10,6 +10,12 @@
     "typecheck": "turbo run typecheck",
     "lint": "turbo run lint"
   },
+  "overrides": {
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "@types/react": "19.1.12",
+    "@types/react-dom": "19.1.5"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",

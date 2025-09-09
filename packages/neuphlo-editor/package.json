@@ -48,21 +48,26 @@
     "@tiptap/pm": ">=3",
     "@tiptap/react": ">=3",
     "@tiptap/suggestion": ">=3",
-    "react": ">=18",
-    "react-dom": ">=18"
+    "react": "^18.2.0 || ^19.0.0",
+    "react-dom": "^18.2.0 || ^19.0.0",
+    "@types/react": "^18.2.0 || ^19.0.0",
+    "@types/react-dom": "^18.2.0 || ^19.0.0"
   },
+  "peerDependenciesMeta": {},
   "devDependencies": {
     "@tiptap/suggestion": "^3.4.2",
     "@types/node": "^20.0.0",
-    "@types/react": "^18.3.0",
-    "@types/react-dom": "^18.3.0",
+    "@types/react": "^19.1.12",
+    "@types/react-dom": "^19.1.5",
     "tsup": "^8.0.0",
-    "typescript": "^5.6.0"
+    "typescript": "^5.9.2"
   },
   "dependencies": {
     "@tiptap/core": "^3.4.2",
     "@tiptap/extension-placeholder": "^3.4.2",
     "@tiptap/starter-kit": "^3.4.1",
-    "cmdk": "^1.1.1"
+    "cmdk": "^1.1.1",
+    "jotai": "^2.11.0",
+    "tunnel-rat": "^0.1.2"
   }
 }
