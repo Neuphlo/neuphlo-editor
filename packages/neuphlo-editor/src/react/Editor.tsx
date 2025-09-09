@@ -1,6 +1,5 @@
-import StarterKit from "@tiptap/starter-kit"
 import { EditorRoot, EditorContent } from "../headless"
-import { defaultExtensions } from "../headless/extensions"
+import ExtensionKit from "../headless/extensions/extension-kit"
 import { TextMenu } from "./menus"
 
 export type NeuphloEditorProps = {
@@ -28,13 +27,7 @@ export function Editor({
           immediatelyRender={immediatelyRender}
           editable={editable}
           content={content}
-          extensions={
-            [
-              StarterKit.configure({}),
-              ...defaultExtensions,
-              ...(extensions ?? []),
-            ] as any
-          }
+          extensions={[...ExtensionKit(), ...(extensions ?? [])]}
           editorProps={{
             attributes: { class: "nph-editor max-w-none outline-none" },
           }}

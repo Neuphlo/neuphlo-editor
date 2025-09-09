@@ -15,11 +15,4 @@ export {
 } from "./components/editor-command"
 export { EditorCommandItem } from "./components/editor-command-item"
 
-export {
-  Command as SlashCommand,
-  renderItems as renderSlashCommandItems,
-  createSuggestionItems,
-  handleCommandNavigation,
-} from "./extensions/slash-command"
-export type { SuggestionItem } from "./extensions/slash-command"
-export { Placeholder } from "./extensions"
+export { Placeholder, StarterKit } from "./extensions"
