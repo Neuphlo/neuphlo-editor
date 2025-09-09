@@ -9,3 +9,9 @@ export {
 
 export { EditorBubble } from "./components/editor-bubble";
 export { EditorBubbleItem } from "./components/editor-bubble-item";
+export {
+  EditorCommand,
+  EditorCommandList,
+  EditorCommandOut,
+} from "./components/editor-command";
+export { EditorCommandItem } from "./components/editor-command-item";
