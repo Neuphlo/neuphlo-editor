@@ -184,3 +184,130 @@
   height: 0;
   pointer-events: none;
 }
+
+/* Bubble menu */
+.bubble-menu {
+  /* Themed surface */
+  background-color: var(--background, #ffffff);
+  color: var(--foreground, #111827);
+  border: 1px solid var(--border, rgba(0, 0, 0, 0.08));
+  border-radius: 0.7rem;
+  box-shadow: var(--shadow, 0 4px 16px rgba(0, 0, 0, 0.08));
+
+  /* Layout */
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  font-size: 0.875rem; /* ~text-sm */
+}
+
+/* Base buttons for headless UI */
+.nph-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  border-radius: 0.375rem; /* rounded-md */
+  font-size: 0.875rem; /* text-sm */
+  font-weight: 500; /* font-medium */
+  transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+  outline: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  background: transparent;
+  color: inherit;
+  border: none;
+}
+
+.nph-btn:focus-visible {
+  outline: 2px solid var(--ring, rgba(59, 130, 246, 0.5));
+  outline-offset: 2px; /* ring-offset */
+}
+
+.nph-btn:disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* Ghost variant */
+.nph-btn-ghost {
+  background: transparent;
+}
+.nph-btn-ghost:hover {
+  background-color: var(--muted, rgba(127, 127, 127, 0.12));
+}
+
+/* Size: sm */
+.nph-btn-sm {
+  height: 2.25rem; /* h-9 */
+  padding: 0 0.75rem; /* px-3 */
+}
+
+/* Size: xs (more compact than sm) */
+.nph-btn-xs {
+  height: 1.75rem; /* ~28px */
+  padding: 0 0.5rem; /* 8px */
+  font-size: 0.8125rem; /* ~13px */
+}
+
+/* Icon variant: square buttons with equal width/height */
+.nph-btn-icon {
+  width: 1.75rem; /* match xs height */
+  min-width: 1.75rem;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* Keep generic styling for bubble menu buttons if custom classes not applied */
+.bubble-menu button {
+  background: transparent;
+  color: inherit;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.25rem 0.4rem;
+  cursor: pointer;
+}
+
+.bubble-menu button:hover {
+  background-color: var(--muted, rgba(127, 127, 127, 0.12));
+}
+
+.bubble-menu button.is-active,
+.bubble-menu button[aria-pressed="true"],
+.nph-btn.is-active,
+.nph-btn[aria-pressed="true"] {
+  /* Subtle, neutral active state */
+  background-color: var(
+    --accent,
+    rgba(0, 0, 0, 0.08)
+  );
+  color: inherit;
+}
+
+.bubble-menu button.is-active:hover,
+.bubble-menu button[aria-pressed="true"]:hover,
+.nph-btn.is-active:hover,
+.nph-btn[aria-pressed="true"]:hover {
+  background-color: var(
+    --accent-hover,
+    rgba(0, 0, 0, 0.12)
+  );
+}
+
+@media (prefers-color-scheme: dark) {
+  .bubble-menu button.is-active,
+  .bubble-menu button[aria-pressed="true"] {
+    background-color: var(
+      --accent,
+      rgba(255, 255, 255, 0.14)
+    );
+  }
+  .bubble-menu button.is-active:hover,
+  .bubble-menu button[aria-pressed="true"]:hover {
+    background-color: var(
+      --accent-hover,
+      rgba(255, 255, 255, 0.18)
+    );
+  }
+}
