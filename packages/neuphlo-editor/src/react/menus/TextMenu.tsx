@@ -1,5 +1,10 @@
 import { useCurrentEditor } from "@tiptap/react"
 import { EditorBubble } from "../../headless"
+import {
+  IconBold,
+  IconItalic,
+  IconStrikethrough,
+} from "@tabler/icons-react"
 
 export type TextMenuProps = {
   className?: string
@@ -23,7 +28,7 @@ export function TextMenu({ className, options }: TextMenuProps) {
           aria-pressed={editor.isActive("bold")}
           aria-label="Toggle bold"
         >
-          B
+          <IconBold size={16} />
         </button>
         <button
           type="button"
@@ -33,7 +38,7 @@ export function TextMenu({ className, options }: TextMenuProps) {
           aria-pressed={editor.isActive("italic")}
           aria-label="Toggle italic"
         >
-          I
+          <IconItalic size={16} />
         </button>
         <button
           type="button"
@@ -43,7 +48,7 @@ export function TextMenu({ className, options }: TextMenuProps) {
           aria-pressed={editor.isActive("strike")}
           aria-label="Toggle strike"
         >
-          S
+          <IconStrikethrough size={16} />
         </button>
       </div>
     </EditorBubble>

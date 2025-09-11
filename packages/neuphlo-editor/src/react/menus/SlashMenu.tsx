@@ -4,6 +4,18 @@ import {
   EditorCommandList,
   EditorCommandItem,
 } from "../../headless"
+import {
+  IconBold,
+  IconItalic,
+  IconStrikethrough,
+  IconH1,
+  IconH2,
+  IconH3,
+  IconH4,
+  IconList,
+  IconListNumbers,
+  IconBlockquote,
+} from "@tabler/icons-react"
 
 export type SlashMenuProps = {
   className?: string
@@ -36,7 +48,10 @@ export function SlashMenu({ className }: SlashMenuProps) {
             (editor as any).chain().focus().deleteRange(range).toggleBold().run()
           }
         >
-          Bold
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+            <IconBold size={16} />
+            <span>Bold</span>
+          </span>
         </EditorCommandItem>
         <EditorCommandItem
           value="italic"
@@ -50,7 +65,10 @@ export function SlashMenu({ className }: SlashMenuProps) {
               .run()
           }
         >
-          Italic
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+            <IconItalic size={16} />
+            <span>Italic</span>
+          </span>
         </EditorCommandItem>
         <EditorCommandItem
           value="strike"
@@ -64,7 +82,10 @@ export function SlashMenu({ className }: SlashMenuProps) {
               .run()
           }
         >
-          Strike
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+            <IconStrikethrough size={16} />
+            <span>Strike</span>
+          </span>
         </EditorCommandItem>
         <EditorCommandItem
           value="heading1 h1"
@@ -78,7 +99,10 @@ export function SlashMenu({ className }: SlashMenuProps) {
               .run()
           }
         >
-          Heading 1
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+            <IconH1 size={16} />
+            <span>Heading 1</span>
+          </span>
         </EditorCommandItem>
         <EditorCommandItem
           value="heading2 h2"
@@ -92,7 +116,10 @@ export function SlashMenu({ className }: SlashMenuProps) {
               .run()
           }
         >
-          Heading 2
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+            <IconH2 size={16} />
+            <span>Heading 2</span>
+          </span>
         </EditorCommandItem>
         <EditorCommandItem
           value="heading3 h3"
@@ -106,7 +133,10 @@ export function SlashMenu({ className }: SlashMenuProps) {
               .run()
           }
         >
-          Heading 3
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+            <IconH3 size={16} />
+            <span>Heading 3</span>
+          </span>
         </EditorCommandItem>
         <EditorCommandItem
           value="heading4 h4"
@@ -120,7 +150,10 @@ export function SlashMenu({ className }: SlashMenuProps) {
               .run()
           }
         >
-          Heading 4
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+            <IconH4 size={16} />
+            <span>Heading 4</span>
+          </span>
         </EditorCommandItem>
         <EditorCommandItem
           value="bullet list ul"
@@ -134,7 +167,10 @@ export function SlashMenu({ className }: SlashMenuProps) {
               .run()
           }
         >
-          Bullet list
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+            <IconList size={16} />
+            <span>Bullet list</span>
+          </span>
         </EditorCommandItem>
         <EditorCommandItem
           value="ordered list ol"
@@ -148,7 +184,10 @@ export function SlashMenu({ className }: SlashMenuProps) {
               .run()
           }
         >
-          Ordered list
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+            <IconListNumbers size={16} />
+            <span>Ordered list</span>
+          </span>
         </EditorCommandItem>
         <EditorCommandItem
           value="quote blockquote"
@@ -162,7 +201,10 @@ export function SlashMenu({ className }: SlashMenuProps) {
               .run()
           }
         >
-          Quote
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+            <IconBlockquote size={16} />
+            <span>Quote</span>
+          </span>
         </EditorCommandItem>
       </EditorCommandList>
     </EditorCommand>
