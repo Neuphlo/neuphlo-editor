@@ -8,8 +8,5 @@
     "noEmit": false
   },
   "include": ["src"],
-  "exclude": [
-    // Exclude the example folder (not part of the published build)
-    "src/example/**"
-  ]
+  "exclude": ["src/example/**", "src/headless/extensions/SlashCommand/**"]
 }

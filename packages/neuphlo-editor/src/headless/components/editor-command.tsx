@@ -1,12 +1,14 @@
 import { useAtom, useSetAtom } from "jotai"
-import { useEffect, forwardRef, createContext } from "react"
+import { useEffect, forwardRef } from "react"
 import { Command } from "cmdk"
 import { queryAtom, rangeAtom } from "../utils/atoms"
 import { novelStore } from "../utils/store"
 import type { FC } from "react"
 import type { Range } from "@tiptap/core"
+import tunnel from "tunnel-rat"
 
-export const EditorCommandTunnelContext: any = createContext({} as any)
+// Single tunnel instance shared between the inline SlashMenu and the floating renderer
+const commandTunnel: any = (tunnel as any)()
 
 interface EditorCommandOutProps {
   readonly query: string
@@ -53,11 +55,7 @@ export const EditorCommandOut: FC<EditorCommandOutProps> = ({
     }
   }, [])
 
-  return (
-    <EditorCommandTunnelContext.Consumer>
-      {(tunnelInstance: any) => <tunnelInstance.Out />}
-    </EditorCommandTunnelContext.Consumer>
-  )
+  return <commandTunnel.Out />
 }
 
 const CommandAny: any = Command
@@ -66,28 +64,24 @@ export const EditorCommand = forwardRef<HTMLDivElement, any>(
     const [query, setQuery] = useAtom(queryAtom)
 
     return (
-      <EditorCommandTunnelContext.Consumer>
-        {(tunnelInstance: any) => (
-          <tunnelInstance.In>
-            <CommandAny
-              ref={ref}
-              onKeyDown={(e: any) => {
-                e.stopPropagation()
-              }}
-              id="slash-command"
-              className={className}
-              {...rest}
-            >
-              <CommandAny.Input
-                value={query}
-                onValueChange={setQuery}
-                style={{ display: "none" }}
-              />
-              {children}
-            </CommandAny>
-          </tunnelInstance.In>
-        )}
-      </EditorCommandTunnelContext.Consumer>
+      <commandTunnel.In>
+        <CommandAny
+          ref={ref}
+          onKeyDown={(e: any) => {
+            e.stopPropagation()
+          }}
+          id="slash-command"
+          className={className}
+          {...rest}
+        >
+          <CommandAny.Input
+            value={query}
+            onValueChange={setQuery}
+            style={{ display: "none" }}
+          />
+          {children}
+        </CommandAny>
+      </commandTunnel.In>
     )
   }
 )

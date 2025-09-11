@@ -1,4 +1,4 @@
-import { EditorRoot, EditorContent } from "../headless"
+import { EditorRoot, EditorContent, handleCommandNavigation } from "../headless"
 import ExtensionKit from "../headless/extensions/extension-kit"
 import { SlashMenu, TextMenu } from "./menus"
 
@@ -33,6 +33,9 @@ export function Editor({
           editorProps={{
             attributes: {
               class: "nph-editor max-w-none outline-none",
+            },
+            handleKeyDown: (view, event) => {
+              return !!handleCommandNavigation?.(event as any)
             },
           }}
         >

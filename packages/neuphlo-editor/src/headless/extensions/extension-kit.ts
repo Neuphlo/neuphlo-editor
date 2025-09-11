@@ -1,4 +1,8 @@
 import { StarterKit, Placeholder } from "."
+import {
+  Command as SlashCommand,
+  renderItems as renderSlashItems,
+} from "./slash-command"
 
 export const ExtensionKit = () => [
   StarterKit.configure({}),
@@ -10,6 +14,12 @@ export const ExtensionKit = () => [
       return "Press '/' for commands"
     },
     includeChildren: true,
+  }),
+  SlashCommand.configure({
+    suggestion: {
+      char: "/",
+      render: renderSlashItems,
+    },
   }),
 ]
 

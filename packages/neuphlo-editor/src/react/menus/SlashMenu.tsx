@@ -14,68 +14,152 @@ export function SlashMenu({ className }: SlashMenuProps) {
   if (!editor) return null
 
   return (
-    <EditorCommand className={className}>
-      <EditorCommandList>
+    <EditorCommand
+      className={className ?? "nph-command"}
+      style={{
+        background: "var(--background, #ffffff)",
+        color: "var(--foreground, #111827)",
+        border: "1px solid var(--border, rgba(0,0,0,0.08))",
+        borderRadius: "8px",
+        padding: "4px",
+        boxShadow: "0 4px 16px rgba(0,0,0,0.08)",
+      }}
+    >
+      <EditorCommandList
+        className="nph-command__list"
+        style={{ display: "flex", flexDirection: "column", gap: 2 }}
+      >
         <EditorCommandItem
-          onSelect={() => (editor as any).chain().focus().toggleBold().run()}
+          value="bold"
+          className="nph-command__item"
+          onCommand={({ editor, range }: { editor: any; range: { from: number; to: number } }) =>
+            (editor as any).chain().focus().deleteRange(range).toggleBold().run()
+          }
         >
           Bold
         </EditorCommandItem>
         <EditorCommandItem
-          onSelect={() => (editor as any).chain().focus().toggleItalic().run()}
+          value="italic"
+          className="nph-command__item"
+          onCommand={({ editor, range }: { editor: any; range: { from: number; to: number } }) =>
+            (editor as any)
+              .chain()
+              .focus()
+              .deleteRange(range)
+              .toggleItalic()
+              .run()
+          }
         >
           Italic
         </EditorCommandItem>
         <EditorCommandItem
-          onSelect={() => (editor as any).chain().focus().toggleStrike().run()}
+          value="strike"
+          className="nph-command__item"
+          onCommand={({ editor, range }: { editor: any; range: { from: number; to: number } }) =>
+            (editor as any)
+              .chain()
+              .focus()
+              .deleteRange(range)
+              .toggleStrike()
+              .run()
+          }
         >
           Strike
         </EditorCommandItem>
         <EditorCommandItem
-          onSelect={() =>
-            (editor as any).chain().focus().toggleHeading({ level: 1 }).run()
+          value="heading1 h1"
+          className="nph-command__item"
+          onCommand={({ editor, range }: { editor: any; range: { from: number; to: number } }) =>
+            (editor as any)
+              .chain()
+              .focus()
+              .deleteRange(range)
+              .toggleHeading({ level: 1 })
+              .run()
           }
         >
           Heading 1
         </EditorCommandItem>
         <EditorCommandItem
-          onSelect={() =>
-            (editor as any).chain().focus().toggleHeading({ level: 2 }).run()
+          value="heading2 h2"
+          className="nph-command__item"
+          onCommand={({ editor, range }: { editor: any; range: { from: number; to: number } }) =>
+            (editor as any)
+              .chain()
+              .focus()
+              .deleteRange(range)
+              .toggleHeading({ level: 2 })
+              .run()
           }
         >
           Heading 2
         </EditorCommandItem>
         <EditorCommandItem
-          onSelect={() =>
-            (editor as any).chain().focus().toggleHeading({ level: 3 }).run()
+          value="heading3 h3"
+          className="nph-command__item"
+          onCommand={({ editor, range }: { editor: any; range: { from: number; to: number } }) =>
+            (editor as any)
+              .chain()
+              .focus()
+              .deleteRange(range)
+              .toggleHeading({ level: 3 })
+              .run()
           }
         >
           Heading 3
         </EditorCommandItem>
         <EditorCommandItem
-          onSelect={() =>
-            (editor as any).chain().focus().toggleHeading({ level: 4 }).run()
+          value="heading4 h4"
+          className="nph-command__item"
+          onCommand={({ editor, range }: { editor: any; range: { from: number; to: number } }) =>
+            (editor as any)
+              .chain()
+              .focus()
+              .deleteRange(range)
+              .toggleHeading({ level: 4 })
+              .run()
           }
         >
           Heading 4
         </EditorCommandItem>
         <EditorCommandItem
-          onSelect={() =>
-            (editor as any).chain().focus().toggleBulletList().run()
+          value="bullet list ul"
+          className="nph-command__item"
+          onCommand={({ editor, range }: { editor: any; range: { from: number; to: number } }) =>
+            (editor as any)
+              .chain()
+              .focus()
+              .deleteRange(range)
+              .toggleBulletList()
+              .run()
           }
         >
           Bullet list
         </EditorCommandItem>
         <EditorCommandItem
-          onSelect={() =>
-            (editor as any).chain().focus().toggleOrderedList().run()
+          value="ordered list ol"
+          className="nph-command__item"
+          onCommand={({ editor, range }: { editor: any; range: { from: number; to: number } }) =>
+            (editor as any)
+              .chain()
+              .focus()
+              .deleteRange(range)
+              .toggleOrderedList()
+              .run()
           }
         >
           Ordered list
         </EditorCommandItem>
         <EditorCommandItem
-          onSelect={() =>
-            (editor as any).chain().focus().toggleBlockquote().run()
+          value="quote blockquote"
+          className="nph-command__item"
+          onCommand={({ editor, range }: { editor: any; range: { from: number; to: number } }) =>
+            (editor as any)
+              .chain()
+              .focus()
+              .deleteRange(range)
+              .toggleBlockquote()
+              .run()
           }
         >
           Quote
