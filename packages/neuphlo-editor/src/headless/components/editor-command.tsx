@@ -7,7 +7,6 @@ import type { FC } from "react"
 import type { Range } from "@tiptap/core"
 import tunnel from "tunnel-rat"
 
-// Single tunnel instance shared between the inline SlashMenu and the floating renderer
 const commandTunnel: any = (tunnel as any)()
 
 interface EditorCommandOutProps {

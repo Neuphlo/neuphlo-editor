@@ -22,7 +22,6 @@ export const Command = Extension.create({
       Suggestion({
         editor: this.editor,
         char: base.char ?? "/",
-        // Provide a no-op items source so the plugin opens
         items: base.items ?? (() => ["/"] as any),
         command: (ctx: any) => {
           if (typeof ctx?.props?.command === "function") {
@@ -57,14 +56,22 @@ export const renderItems = (elementRef?: RefObject<Element> | null) => {
   }
 
   return {
-    onStart: (props: { editor: any; clientRect: (() => DOMRect | null) | null; query?: string; range?: any }) => {
+    onStart: (props: {
+      editor: any
+      clientRect: (() => DOMRect | null) | null
+      query?: string
+      range?: any
+    }) => {
       const { selection } = props.editor.state
       const parentNode = selection.$from.node(selection.$from.depth)
       const blockType = parentNode.type.name
       if (blockType === "codeBlock") return false
 
       component = new ReactRenderer(EditorCommandOut, {
-        props: { query: (props as any).query ?? "", range: (props as any).range },
+        props: {
+          query: (props as any).query ?? "",
+          range: (props as any).range,
+        },
         editor: props.editor,
       })
 
@@ -75,7 +82,8 @@ export const renderItems = (elementRef?: RefObject<Element> | null) => {
       ;(elementRef?.current ?? document.body).appendChild(container)
       container.appendChild(component.element)
 
-      const rect = typeof props.clientRect === "function" ? props.clientRect() : null
+      const rect =
+        typeof props.clientRect === "function" ? props.clientRect() : null
       if (rect) updatePosition(rect)
     },
     onUpdate: (props: {
@@ -84,8 +92,12 @@ export const renderItems = (elementRef?: RefObject<Element> | null) => {
       query?: string
       range?: any
     }) => {
-      component?.updateProps({ query: (props as any).query ?? "", range: (props as any).range })
-      const rect = typeof props.clientRect === "function" ? props.clientRect() : null
+      component?.updateProps({
+        query: (props as any).query ?? "",
+        range: (props as any).range,
+      })
+      const rect =
+        typeof props.clientRect === "function" ? props.clientRect() : null
       if (rect) updatePosition(rect)
     },
     onKeyDown: ({ event }: { event: KeyboardEvent }) => {
@@ -106,7 +118,10 @@ export interface SuggestionItem {
   description: string
   icon: ReactNode
   searchTerms?: string[]
-  command?: (props: { editor: any; range: { from: number; to: number } }) => void
+  command?: (props: {
+    editor: any
+    range: { from: number; to: number }
+  }) => void
 }
 
 export const createSuggestionItems = (items: SuggestionItem[]) => items

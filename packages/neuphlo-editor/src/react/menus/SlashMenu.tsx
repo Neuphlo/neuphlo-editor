@@ -15,6 +15,8 @@ import {
   IconList,
   IconListNumbers,
   IconBlockquote,
+  IconCode,
+  IconSourceCode,
 } from "@tabler/icons-react"
 
 export type SlashMenuProps = {
@@ -279,6 +281,58 @@ export function SlashMenu({ className }: SlashMenuProps) {
           >
             <IconBlockquote size={16} />
             <span>Quote</span>
+          </span>
+        </EditorCommandItem>
+
+        <EditorCommandItem
+          value="code inline"
+          className="nph-command__item"
+          onCommand={({
+            editor,
+            range,
+          }: {
+            editor: any
+            range: { from: number; to: number }
+          }) =>
+            (editor as any)
+              .chain()
+              .focus()
+              .deleteRange(range)
+              .toggleCode()
+              .run()
+          }
+        >
+          <span
+            style={{ display: "inline-flex", alignItems: "center", gap: 8 }}
+          >
+            <IconCode size={16} />
+            <span>Code</span>
+          </span>
+        </EditorCommandItem>
+
+        <EditorCommandItem
+          value="code block codeblock"
+          className="nph-command__item"
+          onCommand={({
+            editor,
+            range,
+          }: {
+            editor: any
+            range: { from: number; to: number }
+          }) =>
+            (editor as any)
+              .chain()
+              .focus()
+              .deleteRange(range)
+              .toggleCodeBlock()
+              .run()
+          }
+        >
+          <span
+            style={{ display: "inline-flex", alignItems: "center", gap: 8 }}
+          >
+            <IconSourceCode size={16} />
+            <span>Code Block</span>
           </span>
         </EditorCommandItem>
       </EditorCommandList>

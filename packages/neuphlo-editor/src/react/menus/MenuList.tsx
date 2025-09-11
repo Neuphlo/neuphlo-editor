@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import {
   IconTypography,
   IconH1,
@@ -8,8 +8,10 @@ import {
   IconList,
   IconListNumbers,
   IconBlockquote,
+  IconCode,
+  IconChevronDown,
+  IconSourceCode,
 } from "@tabler/icons-react"
-import { IconChevronDown } from "@tabler/icons-react"
 
 export type MenuListProps = {
   editor: any
@@ -38,6 +40,8 @@ export function MenuList({
     if (editor.isActive("bulletList")) return "Bullet list"
     if (editor.isActive("orderedList")) return "Ordered list"
     if (editor.isActive("blockquote")) return "Quote"
+    if (editor.isActive("code")) return "Code"
+    if (editor.isActive("codeBlock")) return "Code Block"
     return "Paragraph"
   }, [editor])
 
@@ -191,6 +195,28 @@ export function MenuList({
             >
               <IconBlockquote size={16} />
               <span>Quote</span>
+            </button>
+
+            <button
+              type="button"
+              className="nph-command__item"
+              onClick={handle(() =>
+                (editor as any).chain().focus().toggleCode().run()
+              )}
+            >
+              <IconCode size={16} />
+              <span>Code</span>
+            </button>
+
+            <button
+              type="button"
+              className="nph-command__item"
+              onClick={handle(() =>
+                (editor as any).chain().focus().toggleCodeBlock().run()
+              )}
+            >
+              <IconSourceCode size={16} />
+              <span>Code Block</span>
             </button>
           </div>
         </div>
