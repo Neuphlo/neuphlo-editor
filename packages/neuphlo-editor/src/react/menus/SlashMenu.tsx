@@ -26,9 +26,7 @@ export function SlashMenu({ className }: SlashMenuProps) {
   if (!editor) return null
 
   return (
-    <EditorCommand
-      className={className ?? "nph-command"}
-    >
+    <EditorCommand className={className ?? "nph-command"}>
       <EditorCommandList
         className="nph-command__list"
         style={{ display: "flex", flexDirection: "column", gap: 2 }}
@@ -36,11 +34,24 @@ export function SlashMenu({ className }: SlashMenuProps) {
         <EditorCommandItem
           value="bold"
           className="nph-command__item"
-          onCommand={({ editor, range }: { editor: any; range: { from: number; to: number } }) =>
-            (editor as any).chain().focus().deleteRange(range).toggleBold().run()
+          onCommand={({
+            editor,
+            range,
+          }: {
+            editor: any
+            range: { from: number; to: number }
+          }) =>
+            (editor as any)
+              .chain()
+              .focus()
+              .deleteRange(range)
+              .toggleBold()
+              .run()
           }
         >
-          <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+          <span
+            style={{ display: "inline-flex", alignItems: "center", gap: 8 }}
+          >
             <IconBold size={16} />
             <span>Bold</span>
           </span>
@@ -48,7 +59,13 @@ export function SlashMenu({ className }: SlashMenuProps) {
         <EditorCommandItem
           value="italic"
           className="nph-command__item"
-          onCommand={({ editor, range }: { editor: any; range: { from: number; to: number } }) =>
+          onCommand={({
+            editor,
+            range,
+          }: {
+            editor: any
+            range: { from: number; to: number }
+          }) =>
             (editor as any)
               .chain()
               .focus()
@@ -57,7 +74,9 @@ export function SlashMenu({ className }: SlashMenuProps) {
               .run()
           }
         >
-          <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+          <span
+            style={{ display: "inline-flex", alignItems: "center", gap: 8 }}
+          >
             <IconItalic size={16} />
             <span>Italic</span>
           </span>
@@ -65,7 +84,13 @@ export function SlashMenu({ className }: SlashMenuProps) {
         <EditorCommandItem
           value="strike"
           className="nph-command__item"
-          onCommand={({ editor, range }: { editor: any; range: { from: number; to: number } }) =>
+          onCommand={({
+            editor,
+            range,
+          }: {
+            editor: any
+            range: { from: number; to: number }
+          }) =>
             (editor as any)
               .chain()
               .focus()
@@ -74,7 +99,9 @@ export function SlashMenu({ className }: SlashMenuProps) {
               .run()
           }
         >
-          <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+          <span
+            style={{ display: "inline-flex", alignItems: "center", gap: 8 }}
+          >
             <IconStrikethrough size={16} />
             <span>Strike</span>
           </span>
@@ -82,7 +109,13 @@ export function SlashMenu({ className }: SlashMenuProps) {
         <EditorCommandItem
           value="heading1 h1"
           className="nph-command__item"
-          onCommand={({ editor, range }: { editor: any; range: { from: number; to: number } }) =>
+          onCommand={({
+            editor,
+            range,
+          }: {
+            editor: any
+            range: { from: number; to: number }
+          }) =>
             (editor as any)
               .chain()
               .focus()
@@ -91,7 +124,9 @@ export function SlashMenu({ className }: SlashMenuProps) {
               .run()
           }
         >
-          <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+          <span
+            style={{ display: "inline-flex", alignItems: "center", gap: 8 }}
+          >
             <IconH1 size={16} />
             <span>Heading 1</span>
           </span>
@@ -99,7 +134,13 @@ export function SlashMenu({ className }: SlashMenuProps) {
         <EditorCommandItem
           value="heading2 h2"
           className="nph-command__item"
-          onCommand={({ editor, range }: { editor: any; range: { from: number; to: number } }) =>
+          onCommand={({
+            editor,
+            range,
+          }: {
+            editor: any
+            range: { from: number; to: number }
+          }) =>
             (editor as any)
               .chain()
               .focus()
@@ -108,7 +149,9 @@ export function SlashMenu({ className }: SlashMenuProps) {
               .run()
           }
         >
-          <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+          <span
+            style={{ display: "inline-flex", alignItems: "center", gap: 8 }}
+          >
             <IconH2 size={16} />
             <span>Heading 2</span>
           </span>
@@ -116,7 +159,13 @@ export function SlashMenu({ className }: SlashMenuProps) {
         <EditorCommandItem
           value="heading3 h3"
           className="nph-command__item"
-          onCommand={({ editor, range }: { editor: any; range: { from: number; to: number } }) =>
+          onCommand={({
+            editor,
+            range,
+          }: {
+            editor: any
+            range: { from: number; to: number }
+          }) =>
             (editor as any)
               .chain()
               .focus()
@@ -125,7 +174,9 @@ export function SlashMenu({ className }: SlashMenuProps) {
               .run()
           }
         >
-          <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+          <span
+            style={{ display: "inline-flex", alignItems: "center", gap: 8 }}
+          >
             <IconH3 size={16} />
             <span>Heading 3</span>
           </span>
@@ -133,7 +184,13 @@ export function SlashMenu({ className }: SlashMenuProps) {
         <EditorCommandItem
           value="heading4 h4"
           className="nph-command__item"
-          onCommand={({ editor, range }: { editor: any; range: { from: number; to: number } }) =>
+          onCommand={({
+            editor,
+            range,
+          }: {
+            editor: any
+            range: { from: number; to: number }
+          }) =>
             (editor as any)
               .chain()
               .focus()
@@ -142,7 +199,9 @@ export function SlashMenu({ className }: SlashMenuProps) {
               .run()
           }
         >
-          <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+          <span
+            style={{ display: "inline-flex", alignItems: "center", gap: 8 }}
+          >
             <IconH4 size={16} />
             <span>Heading 4</span>
           </span>
@@ -150,7 +209,13 @@ export function SlashMenu({ className }: SlashMenuProps) {
         <EditorCommandItem
           value="bullet list ul"
           className="nph-command__item"
-          onCommand={({ editor, range }: { editor: any; range: { from: number; to: number } }) =>
+          onCommand={({
+            editor,
+            range,
+          }: {
+            editor: any
+            range: { from: number; to: number }
+          }) =>
             (editor as any)
               .chain()
               .focus()
@@ -159,7 +224,9 @@ export function SlashMenu({ className }: SlashMenuProps) {
               .run()
           }
         >
-          <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+          <span
+            style={{ display: "inline-flex", alignItems: "center", gap: 8 }}
+          >
             <IconList size={16} />
             <span>Bullet list</span>
           </span>
@@ -167,7 +234,13 @@ export function SlashMenu({ className }: SlashMenuProps) {
         <EditorCommandItem
           value="ordered list ol"
           className="nph-command__item"
-          onCommand={({ editor, range }: { editor: any; range: { from: number; to: number } }) =>
+          onCommand={({
+            editor,
+            range,
+          }: {
+            editor: any
+            range: { from: number; to: number }
+          }) =>
             (editor as any)
               .chain()
               .focus()
@@ -176,7 +249,9 @@ export function SlashMenu({ className }: SlashMenuProps) {
               .run()
           }
         >
-          <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+          <span
+            style={{ display: "inline-flex", alignItems: "center", gap: 8 }}
+          >
             <IconListNumbers size={16} />
             <span>Ordered list</span>
           </span>
@@ -184,7 +259,13 @@ export function SlashMenu({ className }: SlashMenuProps) {
         <EditorCommandItem
           value="quote blockquote"
           className="nph-command__item"
-          onCommand={({ editor, range }: { editor: any; range: { from: number; to: number } }) =>
+          onCommand={({
+            editor,
+            range,
+          }: {
+            editor: any
+            range: { from: number; to: number }
+          }) =>
             (editor as any)
               .chain()
               .focus()
@@ -193,7 +274,9 @@ export function SlashMenu({ className }: SlashMenuProps) {
               .run()
           }
         >
-          <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+          <span
+            style={{ display: "inline-flex", alignItems: "center", gap: 8 }}
+          >
             <IconBlockquote size={16} />
             <span>Quote</span>
           </span>

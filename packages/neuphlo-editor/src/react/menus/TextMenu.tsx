@@ -5,6 +5,7 @@ import {
   IconItalic,
   IconStrikethrough,
 } from "@tabler/icons-react"
+import { MenuList } from "./MenuList"
 
 export type TextMenuProps = {
   className?: string
@@ -20,6 +21,7 @@ export function TextMenu({ className, options }: TextMenuProps) {
       options={{ placement: "bottom", offset: 8, ...(options ?? {}) }}
     >
       <div className={className ? `bubble-menu ${className}` : "bubble-menu"}>
+        <MenuList editor={editor} />
         <button
           type="button"
           onMouseDown={(e) => e.preventDefault()}

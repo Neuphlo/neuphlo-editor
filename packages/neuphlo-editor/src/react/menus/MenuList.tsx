@@ -1,0 +1,202 @@
+import React, { useCallback, useEffect, useMemo, useState } from "react"
+import {
+  IconTypography,
+  IconH1,
+  IconH2,
+  IconH3,
+  IconH4,
+  IconList,
+  IconListNumbers,
+  IconBlockquote,
+} from "@tabler/icons-react"
+import { IconChevronDown } from "@tabler/icons-react"
+
+export type MenuListProps = {
+  editor: any
+  className?: string
+  style?: React.CSSProperties
+  onSelect?: () => void
+  buttonClassName?: string
+}
+
+export function MenuList({
+  editor,
+  className,
+  style,
+  onSelect,
+  buttonClassName,
+}: MenuListProps) {
+  const [open, setOpen] = useState(false)
+  const [label, setLabel] = useState("Paragraph")
+
+  const computeLabel = useCallback(() => {
+    if (!editor) return "Paragraph"
+    if (editor.isActive("heading", { level: 1 })) return "Heading 1"
+    if (editor.isActive("heading", { level: 2 })) return "Heading 2"
+    if (editor.isActive("heading", { level: 3 })) return "Heading 3"
+    if (editor.isActive("heading", { level: 4 })) return "Heading 4"
+    if (editor.isActive("bulletList")) return "Bullet list"
+    if (editor.isActive("orderedList")) return "Ordered list"
+    if (editor.isActive("blockquote")) return "Quote"
+    return "Paragraph"
+  }, [editor])
+
+  useEffect(() => {
+    setLabel(computeLabel())
+    if (!editor) return
+    const update = () => setLabel(computeLabel())
+    editor.on("selectionUpdate", update)
+    editor.on("transaction", update)
+    editor.on("update", update)
+    return () => {
+      editor.off("selectionUpdate", update)
+      editor.off("transaction", update)
+      editor.off("update", update)
+    }
+  }, [editor, computeLabel])
+
+  const handle = (fn: () => void) => () => {
+    fn()
+    onSelect?.()
+    setOpen(false)
+  }
+
+  return (
+    <div className="nph-dropdown">
+      <button
+        type="button"
+        onMouseDown={(e) => e.preventDefault()}
+        onClick={() => setOpen((v) => !v)}
+        className={
+          buttonClassName ??
+          `nph-btn nph-btn-ghost nph-btn-xs${open ? " is-active" : ""}`
+        }
+        aria-expanded={open}
+        aria-label="Change block type"
+      >
+        <span style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
+          <span style={{ fontSize: 12 }}>{label}</span>
+          <IconChevronDown size={16} />
+        </span>
+      </button>
+
+      {open ? (
+        <div
+          className="nph-dropdown__panel nph-command"
+          onMouseDown={(e) => e.preventDefault()}
+        >
+          <div
+            className={className ? className : "nph-command__list"}
+            style={{ maxHeight: 240, ...(style ?? {}) }}
+          >
+            <button
+              type="button"
+              className="nph-command__item"
+              onClick={handle(() =>
+                (editor as any).chain().focus().setParagraph().run()
+              )}
+            >
+              <IconTypography size={16} />
+              <span>Paragraph</span>
+            </button>
+
+            <button
+              type="button"
+              className="nph-command__item"
+              onClick={handle(() =>
+                (editor as any)
+                  .chain()
+                  .focus()
+                  .toggleHeading({ level: 1 })
+                  .run()
+              )}
+            >
+              <IconH1 size={16} />
+              <span>Heading 1</span>
+            </button>
+
+            <button
+              type="button"
+              className="nph-command__item"
+              onClick={handle(() =>
+                (editor as any)
+                  .chain()
+                  .focus()
+                  .toggleHeading({ level: 2 })
+                  .run()
+              )}
+            >
+              <IconH2 size={16} />
+              <span>Heading 2</span>
+            </button>
+
+            <button
+              type="button"
+              className="nph-command__item"
+              onClick={handle(() =>
+                (editor as any)
+                  .chain()
+                  .focus()
+                  .toggleHeading({ level: 3 })
+                  .run()
+              )}
+            >
+              <IconH3 size={16} />
+              <span>Heading 3</span>
+            </button>
+
+            <button
+              type="button"
+              className="nph-command__item"
+              onClick={handle(() =>
+                (editor as any)
+                  .chain()
+                  .focus()
+                  .toggleHeading({ level: 4 })
+                  .run()
+              )}
+            >
+              <IconH4 size={16} />
+              <span>Heading 4</span>
+            </button>
+
+            <button
+              type="button"
+              className="nph-command__item"
+              onClick={handle(() =>
+                (editor as any).chain().focus().toggleBulletList().run()
+              )}
+            >
+              <IconList size={16} />
+              <span>Bullet list</span>
+            </button>
+
+            <button
+              type="button"
+              className="nph-command__item"
+              onClick={handle(() =>
+                (editor as any).chain().focus().toggleOrderedList().run()
+              )}
+            >
+              <IconListNumbers size={16} />
+              <span>Ordered list</span>
+            </button>
+
+            <button
+              type="button"
+              className="nph-command__item"
+              onClick={handle(() =>
+                (editor as any).chain().focus().toggleBlockquote().run()
+              )}
+            >
+              <IconBlockquote size={16} />
+              <span>Quote</span>
+            </button>
+          </div>
+        </div>
+      ) : null}
+    </div>
+  )
+}
+
+export default MenuList
