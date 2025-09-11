@@ -223,7 +223,8 @@
   overflow: auto;
   /* Show only the thumb (pill), hide track */
   scrollbar-width: thin; /* Firefox */
-  scrollbar-color: var(--muted-foreground, rgba(127, 127, 127, 0.45)) transparent;
+  /* Light default (overridden in dark mode below) */
+  scrollbar-color: #e5e7eb transparent; /* thumb track */
 }
 
 /* WebKit: keep a small thumb, hide the track */
@@ -236,11 +237,23 @@
   background: transparent;
 }
 .nph-command__list::-webkit-scrollbar-thumb {
-  background-color: rgba(127, 127, 127, 0.45);
+  background-color: #e5e7eb; /* light gray */
   border-radius: 9999px; /* pill */
 }
 .nph-command__list:hover::-webkit-scrollbar-thumb {
-  background-color: rgba(127, 127, 127, 0.6);
+  background-color: #d1d5db; /* slightly darker on hover */
+}
+
+@media (prefers-color-scheme: dark) {
+  .nph-command__list {
+    scrollbar-color: #4b5563 transparent; /* darker gray thumb */
+  }
+  .nph-command__list::-webkit-scrollbar-thumb {
+    background-color: #4b5563; /* dark gray */
+  }
+  .nph-command__list:hover::-webkit-scrollbar-thumb {
+    background-color: #6b7280; /* lighter on hover */
+  }
 }
 
 .nph-command__item {
