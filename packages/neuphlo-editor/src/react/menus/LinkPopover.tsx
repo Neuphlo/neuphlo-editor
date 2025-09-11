@@ -24,6 +24,7 @@ export function LinkPopover({
   const [open, setOpen] = useState(false)
   const [url, setUrl] = useState<string>("")
   const inputRef = useRef<HTMLInputElement | null>(null)
+  const rootRef = useRef<HTMLDivElement | null>(null)
 
   const isInCode =
     !!editor?.isActive?.("code") || !!editor?.isActive?.("codeBlock")
@@ -53,9 +54,9 @@ export function LinkPopover({
     const update = () => {
       const next = editor.getAttributes("link")?.href ?? ""
       setUrl(next)
-      if (autoOpenOnLinkActive && editor.isFocused && editor.isActive("link")) {
-        setOpen(true)
-      }
+      const linkActive = editor.isActive("link")
+      if (autoOpenOnLinkActive && editor.isFocused && linkActive) setOpen(true)
+      if (!linkActive) setOpen(false)
     }
     update()
     editor.on("selectionUpdate", update)
@@ -93,8 +94,24 @@ export function LinkPopover({
     setOpen(false)
   }
 
+  // Close when clicking outside of the popover/button container
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (!open) return
+      const el = rootRef.current
+      if (!el) return
+      if (!el.contains(e.target as Node)) setOpen(false)
+    }
+    document.addEventListener("pointerdown", handler)
+    return () => document.removeEventListener("pointerdown", handler)
+  }, [open])
+
   return (
-    <div className="nph-dropdown" style={{ position: "relative" }}>
+    <div
+      ref={rootRef}
+      className="nph-dropdown"
+      style={{ position: "relative" }}
+    >
       <button
         type="button"
         onMouseDown={(e) => e.preventDefault()}

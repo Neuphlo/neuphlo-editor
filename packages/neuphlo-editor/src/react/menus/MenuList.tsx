@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect, useRef, useState } from "react"
 import {
   IconTypography,
   IconH1,
@@ -30,6 +30,7 @@ export function MenuList({
 }: MenuListProps) {
   const [open, setOpen] = useState(false)
   const [label, setLabel] = useState("Paragraph")
+  const rootRef = useRef<HTMLDivElement | null>(null)
 
   const computeLabel = useCallback(() => {
     if (!editor) return "Paragraph"
@@ -59,6 +60,28 @@ export function MenuList({
     }
   }, [editor, computeLabel])
 
+  useEffect(() => {
+    if (!editor) return
+    const close = () => setOpen(false)
+    editor.on("selectionUpdate", close)
+    editor.on("blur", close)
+    return () => {
+      editor.off("selectionUpdate", close)
+      editor.off("blur", close)
+    }
+  }, [editor])
+
+  useEffect(() => {
+    const handlePointerDown = (e: MouseEvent) => {
+      if (!open) return
+      const el = rootRef.current
+      if (!el) return
+      if (!el.contains(e.target as Node)) setOpen(false)
+    }
+    document.addEventListener("pointerdown", handlePointerDown)
+    return () => document.removeEventListener("pointerdown", handlePointerDown)
+  }, [open])
+
   const handle = (fn: () => void) => () => {
     fn()
     onSelect?.()
@@ -68,12 +91,15 @@ export function MenuList({
   const isActive = useCallback((name: string) => label === name, [label])
 
   return (
-    <div className="nph-dropdown">
+    <div ref={rootRef} className="nph-dropdown">
       <button
         type="button"
         onMouseDown={(e) => e.preventDefault()}
         onClick={() => setOpen((v) => !v)}
-        className={buttonClassName ?? `nph-btn nph-btn-ghost nph-btn-xs`}
+        className={
+          buttonClassName ??
+          `nph-btn nph-btn-ghost nph-btn-xs${open || label !== "Paragraph" ? " is-active" : ""}`
+        }
         aria-expanded={open}
         aria-label="Change block type"
       >
