@@ -1,4 +1,9 @@
-import { EditorRoot, EditorContent, handleCommandNavigation } from "../headless"
+import {
+  EditorRoot,
+  EditorContent,
+  handleCommandNavigation,
+  type EditorContentProps,
+} from "../headless"
 import ExtensionKit from "../headless/extensions/extension-kit"
 import { SlashMenu, TextMenu } from "./menus"
 
@@ -11,6 +16,8 @@ export type NeuphloEditorProps = {
   showSlashMenu?: boolean
   bubbleMenuOptions?: Record<string, unknown>
   extensions?: any[]
+  onUpdate?: EditorContentProps["onUpdate"]
+  onCreate?: EditorContentProps["onCreate"]
 }
 
 export function Editor({
@@ -21,11 +28,15 @@ export function Editor({
   showTextMenu = true,
   showSlashMenu = true,
   extensions,
+  onUpdate,
+  onCreate,
 }: NeuphloEditorProps) {
   return (
     <div className={className}>
       <EditorRoot>
         <EditorContent
+          onUpdate={onUpdate}
+          onCreate={onCreate}
           immediatelyRender={immediatelyRender}
           editable={editable}
           content={content}
