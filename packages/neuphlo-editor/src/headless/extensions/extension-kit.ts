@@ -1,4 +1,4 @@
-import { StarterKit, Placeholder, CodeBlock } from "."
+import { StarterKit, Placeholder, CodeBlock, Link } from "."
 import {
   Command as SlashCommand,
   renderItems as renderSlashItems,
@@ -7,6 +7,7 @@ import {
 export const ExtensionKit = () => [
   StarterKit.configure({}),
   CodeBlock,
+  Link,
   Placeholder.configure({
     placeholder: ({ node }: any) => {
       if (node.type.name === "heading") {

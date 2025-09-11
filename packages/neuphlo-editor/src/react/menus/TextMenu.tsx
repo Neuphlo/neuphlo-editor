@@ -8,6 +8,7 @@ import {
   IconArrowBackUp,
 } from "@tabler/icons-react"
 import { MenuList } from "./MenuList"
+import { LinkPopover } from "./LinkPopover"
 
 export type TextMenuProps = {
   className?: string
@@ -30,6 +31,25 @@ export function TextMenu({ className, options }: TextMenuProps) {
       editor.off("update", update)
     }
   }, [editor])
+
+  const hasAnyMarksInSelection = () => {
+    const anyEditor: any = editor
+    const state = anyEditor.state
+    const sel: any = state.selection
+    let has = false
+    state.doc.nodesBetween(sel.from, sel.to, (node: any) => {
+      if (node.isText && node.marks && node.marks.length > 0) {
+        has = true
+        return false
+      }
+      return undefined
+    })
+    if (!has && sel.empty) {
+      const marks = state.storedMarks || sel.$from.marks()
+      if (marks && marks.length > 0) has = true
+    }
+    return has
+  }
 
   return (
     <EditorBubble
@@ -80,6 +100,8 @@ export function TextMenu({ className, options }: TextMenuProps) {
           <IconStrikethrough size={16} />
         </button>
 
+        <LinkPopover editor={editor} hideWhenUnavailable={false} />
+
         {(() => {
           const isHeading =
             editor.isActive("heading", { level: 1 }) ||
@@ -90,11 +112,7 @@ export function TextMenu({ className, options }: TextMenuProps) {
             editor.isActive("bulletList") || editor.isActive("orderedList")
           const isBlockquote = editor.isActive("blockquote")
           const isCodeBlock = editor.isActive("codeBlock")
-          const hasInlineMarks =
-            editor.isActive("bold") ||
-            editor.isActive("italic") ||
-            editor.isActive("strike") ||
-            editor.isActive("code")
+          const hasInlineMarks = hasAnyMarksInSelection()
 
           const isPlainParagraph =
             editor.isActive("paragraph") &&
@@ -108,33 +126,15 @@ export function TextMenu({ className, options }: TextMenuProps) {
             <button
               type="button"
               onMouseDown={(e) => e.preventDefault()}
-              onClick={() => {
-                const chain = (editor as any).chain().focus()
-                if (editor.isActive("bulletList")) {
-                  chain.toggleBulletList()
-                } else if (editor.isActive("orderedList")) {
-                  chain.toggleOrderedList()
-                } else if (editor.isActive("blockquote")) {
-                  chain.toggleBlockquote()
-                } else if (editor.isActive("codeBlock")) {
-                  chain.toggleCodeBlock()
-                } else if (editor.isActive("heading", { level: 1 })) {
-                  chain.toggleHeading({ level: 1 })
-                } else if (editor.isActive("heading", { level: 2 })) {
-                  chain.toggleHeading({ level: 2 })
-                } else if (editor.isActive("heading", { level: 3 })) {
-                  chain.toggleHeading({ level: 3 })
-                } else if (editor.isActive("heading", { level: 4 })) {
-                  chain.toggleHeading({ level: 4 })
-                } else {
-                  chain.setParagraph()
-                }
-                if (editor.isActive("bold")) chain.unsetMark("bold")
-                if (editor.isActive("italic")) chain.unsetMark("italic")
-                if (editor.isActive("strike")) chain.unsetMark("strike")
-                if (editor.isActive("code")) chain.unsetMark("code")
-                chain.run()
-              }}
+              onClick={() =>
+                (editor as any)
+                  .chain()
+                  .focus()
+                  .clearNodes()
+                  .setParagraph()
+                  .unsetAllMarks()
+                  .run()
+              }
               className="nph-btn nph-btn-ghost nph-btn-xs nph-btn-icon"
               aria-label="Revert to paragraph"
               title="Revert to paragraph"
