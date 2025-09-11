@@ -104,7 +104,7 @@ export function TextMenu({ className, options }: TextMenuProps) {
             !isCodeBlock &&
             !hasInlineMarks
 
-          return !isPlainParagraph ? (
+          return (
             <button
               type="button"
               onMouseDown={(e) => e.preventDefault()}
@@ -138,10 +138,12 @@ export function TextMenu({ className, options }: TextMenuProps) {
               className="nph-btn nph-btn-ghost nph-btn-xs nph-btn-icon"
               aria-label="Revert to paragraph"
               title="Revert to paragraph"
+              disabled={isPlainParagraph}
+              aria-disabled={isPlainParagraph}
             >
               <IconArrowBackUp size={16} />
             </button>
-          ) : null
+          )
         })()}
       </div>
     </EditorBubble>
