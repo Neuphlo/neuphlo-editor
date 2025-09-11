@@ -65,16 +65,15 @@ export function MenuList({
     setOpen(false)
   }
 
+  const isActive = useCallback((name: string) => label === name, [label])
+
   return (
     <div className="nph-dropdown">
       <button
         type="button"
         onMouseDown={(e) => e.preventDefault()}
         onClick={() => setOpen((v) => !v)}
-        className={
-          buttonClassName ??
-          `nph-btn nph-btn-ghost nph-btn-xs${open ? " is-active" : ""}`
-        }
+        className={buttonClassName ?? `nph-btn nph-btn-ghost nph-btn-xs`}
         aria-expanded={open}
         aria-label="Change block type"
       >
@@ -95,7 +94,8 @@ export function MenuList({
           >
             <button
               type="button"
-              className="nph-command__item"
+              className={`nph-command__item${isActive("Paragraph") ? " is-active" : ""}`}
+              aria-selected={isActive("Paragraph")}
               onClick={handle(() =>
                 (editor as any).chain().focus().setParagraph().run()
               )}
@@ -106,7 +106,8 @@ export function MenuList({
 
             <button
               type="button"
-              className="nph-command__item"
+              className={`nph-command__item${isActive("Heading 1") ? " is-active" : ""}`}
+              aria-selected={isActive("Heading 1")}
               onClick={handle(() =>
                 (editor as any)
                   .chain()
@@ -121,7 +122,8 @@ export function MenuList({
 
             <button
               type="button"
-              className="nph-command__item"
+              className={`nph-command__item${isActive("Heading 2") ? " is-active" : ""}`}
+              aria-selected={isActive("Heading 2")}
               onClick={handle(() =>
                 (editor as any)
                   .chain()
@@ -136,7 +138,8 @@ export function MenuList({
 
             <button
               type="button"
-              className="nph-command__item"
+              className={`nph-command__item${isActive("Heading 3") ? " is-active" : ""}`}
+              aria-selected={isActive("Heading 3")}
               onClick={handle(() =>
                 (editor as any)
                   .chain()
@@ -151,7 +154,8 @@ export function MenuList({
 
             <button
               type="button"
-              className="nph-command__item"
+              className={`nph-command__item${isActive("Heading 4") ? " is-active" : ""}`}
+              aria-selected={isActive("Heading 4")}
               onClick={handle(() =>
                 (editor as any)
                   .chain()
@@ -166,7 +170,8 @@ export function MenuList({
 
             <button
               type="button"
-              className="nph-command__item"
+              className={`nph-command__item${isActive("Bullet list") ? " is-active" : ""}`}
+              aria-selected={isActive("Bullet list")}
               onClick={handle(() =>
                 (editor as any).chain().focus().toggleBulletList().run()
               )}
@@ -177,7 +182,8 @@ export function MenuList({
 
             <button
               type="button"
-              className="nph-command__item"
+              className={`nph-command__item${isActive("Ordered list") ? " is-active" : ""}`}
+              aria-selected={isActive("Ordered list")}
               onClick={handle(() =>
                 (editor as any).chain().focus().toggleOrderedList().run()
               )}
@@ -188,7 +194,8 @@ export function MenuList({
 
             <button
               type="button"
-              className="nph-command__item"
+              className={`nph-command__item${isActive("Quote") ? " is-active" : ""}`}
+              aria-selected={isActive("Quote")}
               onClick={handle(() =>
                 (editor as any).chain().focus().toggleBlockquote().run()
               )}
@@ -199,7 +206,8 @@ export function MenuList({
 
             <button
               type="button"
-              className="nph-command__item"
+              className={`nph-command__item${isActive("Code") ? " is-active" : ""}`}
+              aria-selected={isActive("Code")}
               onClick={handle(() =>
                 (editor as any).chain().focus().toggleCode().run()
               )}
@@ -210,7 +218,8 @@ export function MenuList({
 
             <button
               type="button"
-              className="nph-command__item"
+              className={`nph-command__item${isActive("Code Block") ? " is-active" : ""}`}
+              aria-selected={isActive("Code Block")}
               onClick={handle(() =>
                 (editor as any).chain().focus().toggleCodeBlock().run()
               )}
