@@ -7,17 +7,17 @@ const exampleContent = /* html */ `
   </p>
 
   <h2>Installation</h2>
-  <pre><code>npm i neuphlo-editor</code></pre>
+  <pre><code class="language-js">npm i neuphlo-editor</code></pre>
 
   <h2>Usage</h2>
-  <pre><code>import { Editor } from "neuphlo-editor/react";
+  <pre><code class="language-js">import { Editor } from "neuphlo-editor/react";
 
 export default function App() {
   return &lt;Editor content={"&lt;p&gt;Hello Neuphlo&lt;/p&gt;"} /&gt;;
 }</code></pre>
 
   <p>Style it your way with Tailwind or CSS:</p>
-  <pre><code>import "neuphlo-editor/styles.css";
+  <pre><code class="language-js">import "neuphlo-editor/styles.css";
 
 &lt;Editor className="min-h-[200px] border rounded-md p-3 outline-none" /&gt;</code></pre>
 
