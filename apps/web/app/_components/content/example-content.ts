@@ -16,10 +16,8 @@ export default function App() {
   return &lt;Editor content={"&lt;p&gt;Hello Neuphlo&lt;/p&gt;"} /&gt;;
 }</code></pre>
 
-  <p>Style it your way with Tailwind or CSS:</p>
-  <pre><code class="language-js">import "neuphlo-editor/styles.css";
-
-&lt;Editor className="min-h-[200px] border rounded-md p-3 outline-none" /&gt;</code></pre>
+  <p>Style it your way with Tailwind or CSS (styles are auto‑included when importing <code>neuphlo-editor/react</code>):</p>
+  <pre><code class="language-js">&lt;Editor className="min-h-[200px] border rounded-md p-3 outline-none" /&gt;</code></pre>
 
   <h2>Features</h2>
   <ul>

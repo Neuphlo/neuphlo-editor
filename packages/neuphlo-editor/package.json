@@ -1,6 +1,6 @@
 {
   "name": "neuphlo-editor",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "private": false,
   "description": "A lightweight React wrapper around Tiptap with sensible defaults.",
   "type": "module",
@@ -28,7 +28,8 @@
       "import": "./dist/headless/index.js",
       "require": "./dist/headless/index.cjs"
     },
-    "./styles.css": "./dist/styles.css"
+    "./styles.css": "./dist/styles.css",
+    "./react.css": "./dist/react/index.css"
   },
   "sideEffects": [
     "**/*.css"
@@ -41,6 +42,8 @@
     "build": "tsup src/index.ts src/react/index.ts src/react/core.ts src/headless/index.ts --format esm,cjs --dts --sourcemap && pnpm run copy:css",
     "dev": "tsup src/index.ts src/react/index.ts src/react/core.ts src/headless/index.ts --format esm,cjs --dts --sourcemap --watch",
     "copy:css": "mkdir -p dist && cp src/styles.css dist/styles.css",
+    "prepack": "pnpm run build",
+    "prepare": "pnpm run build",
     "typecheck": "tsc -p tsconfig.json",
     "lint": "eslint . --ext .ts,.tsx"
   },
