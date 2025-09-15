@@ -1,6 +1,6 @@
 /* Neuphlo Editor default styles (TipTap-friendly) */
-/* Include a default highlight.js theme for code token colors */
-@import "highlight.js/styles/github.css";
+/* Note: Highlight.js theme is now optional. Import
+   'neuphlo-editor/highlight.css' or your preferred theme separately. */
 .nph-editor,
 .ProseMirror.nph-editor {
   min-height: 240px;
