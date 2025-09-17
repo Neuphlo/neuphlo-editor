@@ -1,5 +1,5 @@
 import { useCurrentEditor } from "@tiptap/react"
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { EditorBubble } from "../../headless"
 import {
   IconBold,
@@ -20,6 +20,7 @@ export function TextMenu({ className, options }: TextMenuProps) {
   if (!editor) return null
 
   const [, setTick] = useState(0)
+
   useEffect(() => {
     const update = () => setTick((v) => v + 1)
     editor.on("selectionUpdate", update)
@@ -51,10 +52,42 @@ export function TextMenu({ className, options }: TextMenuProps) {
     return has
   }
 
+  const bubbleOptions = useMemo(() => {
+    const merged: Record<string, unknown> = {
+      ...(options ?? {}),
+    }
+
+    if (merged.placement === undefined) {
+      merged.placement = "bottom"
+    }
+
+    const container =
+      (editor.view?.dom?.parentElement?.closest(
+        "[data-editor-bounds]"
+      ) as Element | null) ??
+      (editor.view?.dom?.closest("[data-editor-bounds]") as Element | null) ??
+      (editor.view?.dom?.parentElement as Element | null) ??
+      (editor.view?.dom as Element | null) ??
+      (typeof document !== "undefined" ? document.body : null)
+
+    if (merged.offset === undefined) {
+      merged.offset = 8
+    }
+
+    if (merged.shift === undefined) {
+      const boundary = container
+      merged.shift = {
+        crossAxis: true,
+        padding: 8,
+        boundary: boundary ?? undefined,
+      }
+    }
+
+    return merged
+  }, [options, editor])
+
   return (
-    <EditorBubble
-      options={{ placement: "bottom", offset: 8, ...(options ?? {}) }}
-    >
+    <EditorBubble options={bubbleOptions}>
       <div className={className ? `bubble-menu ${className}` : "bubble-menu"}>
         <MenuList editor={editor} />
         <button

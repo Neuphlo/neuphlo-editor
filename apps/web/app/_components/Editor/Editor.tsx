@@ -59,7 +59,7 @@ export default function Editor({ content }: EditorProps) {
     setTimeout(() => (isClearingRef.current = false), 0)
   }
   return (
-    <Card className="relative p-6">
+    <Card data-editor-bounds className="relative p-6">
       <button
         type="button"
         onClick={handleClear}
