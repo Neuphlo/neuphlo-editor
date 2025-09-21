@@ -1,6 +1,7 @@
 import { useCurrentEditor } from "@tiptap/react"
 import { useEffect, useMemo, useState } from "react"
 import { EditorBubble } from "../../headless"
+import type { EditorBubbleProps } from "../../headless/components/editor-bubble"
 import {
   IconBold,
   IconItalic,
@@ -10,12 +11,15 @@ import {
 import { MenuList } from "./MenuList"
 import { LinkPopover } from "./LinkPopover"
 
+type BubbleOverrides = Omit<EditorBubbleProps, "children" | "className">
+
 export type TextMenuProps = {
   className?: string
-  options?: Record<string, unknown>
+  options?: BubbleOverrides["options"]
+  bubbleProps?: BubbleOverrides
 }
 
-export function TextMenu({ className, options }: TextMenuProps) {
+export function TextMenu({ className, options, bubbleProps }: TextMenuProps) {
   const { editor } = useCurrentEditor()
   if (!editor) return null
 
@@ -52,42 +56,58 @@ export function TextMenu({ className, options }: TextMenuProps) {
     return has
   }
 
+  const editorDom = editor.view?.dom ?? null
+
+  const container = useMemo(() => {
+    if (!editorDom) return null
+
+    const parent = editorDom.parentElement
+    const withinParent = parent?.closest?.("[data-editor-bounds]")
+    if (withinParent) return withinParent as HTMLElement
+
+    const withinSelf = editorDom.closest?.("[data-editor-bounds]")
+    if (withinSelf) return withinSelf as HTMLElement
+
+    return parent ?? editorDom
+  }, [editorDom])
+
+  const rawOptions = bubbleProps?.options ?? options
+
   const bubbleOptions = useMemo(() => {
-    const merged: Record<string, unknown> = {
-      ...(options ?? {}),
-    }
+    const merged = {
+      ...(rawOptions ?? {}),
+    } as NonNullable<BubbleOverrides["options"]>
 
     if (merged.placement === undefined) {
       merged.placement = "bottom"
     }
-
-    const container =
-      (editor.view?.dom?.parentElement?.closest(
-        "[data-editor-bounds]"
-      ) as Element | null) ??
-      (editor.view?.dom?.closest("[data-editor-bounds]") as Element | null) ??
-      (editor.view?.dom?.parentElement as Element | null) ??
-      (editor.view?.dom as Element | null) ??
-      (typeof document !== "undefined" ? document.body : null)
 
     if (merged.offset === undefined) {
       merged.offset = 8
     }
 
     if (merged.shift === undefined) {
-      const boundary = container
+      const boundary = container ?? undefined
       merged.shift = {
         crossAxis: true,
         padding: 8,
-        boundary: boundary ?? undefined,
+        boundary,
       }
     }
 
     return merged
-  }, [options, editor])
+  }, [rawOptions, container])
+
+  const resolvedBubbleProps: BubbleOverrides = {
+    ...(bubbleProps ?? {}),
+    options: bubbleOptions,
+    appendTo:
+      bubbleProps?.appendTo ??
+      (container instanceof HTMLElement ? container : undefined),
+  }
 
   return (
-    <EditorBubble options={bubbleOptions}>
+    <EditorBubble {...resolvedBubbleProps}>
       <div className={className ? `bubble-menu ${className}` : "bubble-menu"}>
         <MenuList editor={editor} />
         <button
