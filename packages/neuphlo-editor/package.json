@@ -1,6 +1,6 @@
 {
   "name": "neuphlo-editor",
-  "version": "0.4.4",
+  "version": "0.4.3",
   "private": false,
   "description": "A lightweight React wrapper around Tiptap with sensible defaults.",
   "type": "module",
