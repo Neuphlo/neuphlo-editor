@@ -4,11 +4,8 @@ import {
   handleCommandNavigation,
   type EditorContentProps,
 } from "../headless"
-import type { EditorBubbleProps } from "../headless/components/editor-bubble"
 import ExtensionKit from "../headless/extensions/extension-kit"
 import { SlashMenu, TextMenu } from "./menus"
-
-type BubbleOverrides = Omit<EditorBubbleProps, "children" | "className">
 
 export type NeuphloEditorProps = {
   content?: string
@@ -17,8 +14,6 @@ export type NeuphloEditorProps = {
   immediatelyRender?: boolean
   showTextMenu?: boolean
   showSlashMenu?: boolean
-  bubbleMenuOptions?: BubbleOverrides["options"]
-  bubbleMenuProps?: BubbleOverrides
   extensions?: any[]
   onUpdate?: EditorContentProps["onUpdate"]
   onCreate?: EditorContentProps["onCreate"]
@@ -31,8 +26,6 @@ export function Editor({
   immediatelyRender = false,
   showTextMenu = true,
   showSlashMenu = true,
-  bubbleMenuOptions,
-  bubbleMenuProps,
   extensions,
   onUpdate,
   onCreate,
@@ -56,12 +49,7 @@ export function Editor({
             },
           }}
         >
-          {showTextMenu ? (
-            <TextMenu
-              options={bubbleMenuOptions}
-              bubbleProps={bubbleMenuProps}
-            />
-          ) : null}
+          {showTextMenu ? <TextMenu /> : null}
           {showSlashMenu ? <SlashMenu /> : null}
         </EditorContent>
       </EditorRoot>

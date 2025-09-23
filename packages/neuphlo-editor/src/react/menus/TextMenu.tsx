@@ -1,7 +1,5 @@
-import { useCurrentEditor } from "@tiptap/react"
-import { useEffect, useMemo, useState } from "react"
-import { EditorBubble } from "../../headless"
-import type { EditorBubbleProps } from "../../headless/components/editor-bubble"
+import { useCurrentEditor, useEditorState } from "@tiptap/react"
+import { BubbleMenu } from "@tiptap/react/menus"
 import {
   IconBold,
   IconItalic,
@@ -11,31 +9,34 @@ import {
 import { MenuList } from "./MenuList"
 import { LinkPopover } from "./LinkPopover"
 
-type BubbleOverrides = Omit<EditorBubbleProps, "children" | "className">
-
 export type TextMenuProps = {
   className?: string
-  options?: BubbleOverrides["options"]
-  bubbleProps?: BubbleOverrides
 }
 
-export function TextMenu({ className, options, bubbleProps }: TextMenuProps) {
+export function TextMenu({ className }: TextMenuProps) {
   const { editor } = useCurrentEditor()
-  if (!editor) return null
 
-  const [, setTick] = useState(0)
+  const editorState = useEditorState({
+    editor,
+    selector: (ctx) => {
+      if (!ctx.editor) return null
+      return {
+        isBold: ctx.editor.isActive("bold"),
+        isItalic: ctx.editor.isActive("italic"),
+        isStrike: ctx.editor.isActive("strike"),
+        isCode: ctx.editor.isActive("code"),
+        isCodeBlock: ctx.editor.isActive("codeBlock"),
+        isParagraph: ctx.editor.isActive("paragraph"),
+        isHeading: ctx.editor.isActive("heading"),
+        isList:
+          ctx.editor.isActive("bulletList") ||
+          ctx.editor.isActive("orderedList"),
+        isBlockquote: ctx.editor.isActive("blockquote"),
+      }
+    },
+  })
 
-  useEffect(() => {
-    const update = () => setTick((v) => v + 1)
-    editor.on("selectionUpdate", update)
-    editor.on("transaction", update)
-    editor.on("update", update)
-    return () => {
-      editor.off("selectionUpdate", update)
-      editor.off("transaction", update)
-      editor.off("update", update)
-    }
-  }, [editor])
+  if (!editor || !editorState) return null
 
   const hasAnyMarksInSelection = () => {
     const anyEditor: any = editor
@@ -56,70 +57,23 @@ export function TextMenu({ className, options, bubbleProps }: TextMenuProps) {
     return has
   }
 
-  const editorDom = editor.view?.dom ?? null
-
-  const container = useMemo(() => {
-    if (!editorDom) return null
-
-    const parent = editorDom.parentElement
-    const withinParent = parent?.closest?.("[data-editor-bounds]")
-    if (withinParent) return withinParent as HTMLElement
-
-    const withinSelf = editorDom.closest?.("[data-editor-bounds]")
-    if (withinSelf) return withinSelf as HTMLElement
-
-    return parent ?? editorDom
-  }, [editorDom])
-
-  const rawOptions = bubbleProps?.options ?? options
-
-  const bubbleOptions = useMemo(() => {
-    const merged = {
-      ...(rawOptions ?? {}),
-    } as NonNullable<BubbleOverrides["options"]>
-
-    if (merged.placement === undefined) {
-      merged.placement = "bottom"
-    }
-
-    if (merged.offset === undefined) {
-      merged.offset = 8
-    }
-
-    if (merged.shift === undefined) {
-      const boundary = container ?? undefined
-      merged.shift = {
-        crossAxis: true,
-        padding: 8,
-        boundary,
-      }
-    }
-
-    return merged
-  }, [rawOptions, container])
-
-  const resolvedBubbleProps: BubbleOverrides = {
-    ...(bubbleProps ?? {}),
-    options: bubbleOptions,
-    appendTo:
-      bubbleProps?.appendTo ??
-      (container instanceof HTMLElement ? container : undefined),
-  }
-
   return (
-    <EditorBubble {...resolvedBubbleProps}>
+    <BubbleMenu
+      editor={editor}
+      shouldShow={({ from, to }) => {
+        return from !== to
+      }}
+    >
       <div className={className ? `bubble-menu ${className}` : "bubble-menu"}>
         <MenuList editor={editor} />
         <button
           type="button"
           onMouseDown={(e) => e.preventDefault()}
-          onClick={() => (editor as any).chain().focus().toggleBold().run()}
-          className={`nph-btn nph-btn-ghost nph-btn-xs nph-btn-icon${editor.isActive("bold") ? " is-active" : ""}`}
-          disabled={editor.isActive("code") || editor.isActive("codeBlock")}
-          aria-disabled={
-            editor.isActive("code") || editor.isActive("codeBlock")
-          }
-          aria-pressed={editor.isActive("bold")}
+          onClick={() => editor.chain().focus().toggleBold().run()}
+          className={`nph-btn nph-btn-ghost nph-btn-xs nph-btn-icon${editorState.isBold ? " is-active" : ""}`}
+          disabled={editorState.isCode || editorState.isCodeBlock}
+          aria-disabled={editorState.isCode || editorState.isCodeBlock}
+          aria-pressed={editorState.isBold}
           aria-label="Toggle bold"
         >
           <IconBold size={16} />
@@ -127,13 +81,11 @@ export function TextMenu({ className, options, bubbleProps }: TextMenuProps) {
         <button
           type="button"
           onMouseDown={(e) => e.preventDefault()}
-          onClick={() => (editor as any).chain().focus().toggleItalic().run()}
-          className={`nph-btn nph-btn-ghost nph-btn-xs nph-btn-icon${editor.isActive("italic") ? " is-active" : ""}`}
-          disabled={editor.isActive("code") || editor.isActive("codeBlock")}
-          aria-disabled={
-            editor.isActive("code") || editor.isActive("codeBlock")
-          }
-          aria-pressed={editor.isActive("italic")}
+          onClick={() => editor.chain().focus().toggleItalic().run()}
+          className={`nph-btn nph-btn-ghost nph-btn-xs nph-btn-icon${editorState.isItalic ? " is-active" : ""}`}
+          disabled={editorState.isCode || editorState.isCodeBlock}
+          aria-disabled={editorState.isCode || editorState.isCodeBlock}
+          aria-pressed={editorState.isItalic}
           aria-label="Toggle italic"
         >
           <IconItalic size={16} />
@@ -141,13 +93,11 @@ export function TextMenu({ className, options, bubbleProps }: TextMenuProps) {
         <button
           type="button"
           onMouseDown={(e) => e.preventDefault()}
-          onClick={() => (editor as any).chain().focus().toggleStrike().run()}
-          className={`nph-btn nph-btn-ghost nph-btn-xs nph-btn-icon${editor.isActive("strike") ? " is-active" : ""}`}
-          disabled={editor.isActive("code") || editor.isActive("codeBlock")}
-          aria-disabled={
-            editor.isActive("code") || editor.isActive("codeBlock")
-          }
-          aria-pressed={editor.isActive("strike")}
+          onClick={() => editor.chain().focus().toggleStrike().run()}
+          className={`nph-btn nph-btn-ghost nph-btn-xs nph-btn-icon${editorState.isStrike ? " is-active" : ""}`}
+          disabled={editorState.isCode || editorState.isCodeBlock}
+          aria-disabled={editorState.isCode || editorState.isCodeBlock}
+          aria-pressed={editorState.isStrike}
           aria-label="Toggle strike"
         >
           <IconStrikethrough size={16} />
@@ -156,23 +106,14 @@ export function TextMenu({ className, options, bubbleProps }: TextMenuProps) {
         <LinkPopover editor={editor} hideWhenUnavailable={false} />
 
         {(() => {
-          const isHeading =
-            editor.isActive("heading", { level: 1 }) ||
-            editor.isActive("heading", { level: 2 }) ||
-            editor.isActive("heading", { level: 3 }) ||
-            editor.isActive("heading", { level: 4 })
-          const isList =
-            editor.isActive("bulletList") || editor.isActive("orderedList")
-          const isBlockquote = editor.isActive("blockquote")
-          const isCodeBlock = editor.isActive("codeBlock")
           const hasInlineMarks = hasAnyMarksInSelection()
 
           const isPlainParagraph =
-            editor.isActive("paragraph") &&
-            !isHeading &&
-            !isList &&
-            !isBlockquote &&
-            !isCodeBlock &&
+            editorState.isParagraph &&
+            !editorState.isHeading &&
+            !editorState.isList &&
+            !editorState.isBlockquote &&
+            !editorState.isCodeBlock &&
             !hasInlineMarks
 
           return (
@@ -180,7 +121,7 @@ export function TextMenu({ className, options, bubbleProps }: TextMenuProps) {
               type="button"
               onMouseDown={(e) => e.preventDefault()}
               onClick={() =>
-                (editor as any)
+                editor
                   .chain()
                   .focus()
                   .clearNodes()
@@ -199,7 +140,7 @@ export function TextMenu({ className, options, bubbleProps }: TextMenuProps) {
           )
         })()}
       </div>
-    </EditorBubble>
+    </BubbleMenu>
   )
 }
 
