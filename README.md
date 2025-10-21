@@ -207,7 +207,7 @@ None currently. Please [report issues](https://github.com/yourusername/neuphlo-e
 
 ## 📄 License
 
-MIT © [Your Name]
+MIT © NEUPHLO
 
 See [LICENSE](./LICENSE) for more information.
 
