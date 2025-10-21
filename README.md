@@ -84,7 +84,7 @@ Full documentation is available in the [package README](./packages/neuphlo-edito
 ### Key Topics
 
 - [API Reference](./packages/neuphlo-editor/README.md#api-reference)
-- [Image Upload Examples](./packages/neuphlo-editor/README.md#upload-handler-examples) (S3, Cloudinary, Custom)
+- [Image Upload Examples](./packages/neuphlo-editor/README.md#upload-handler-examples) (S3, Cloudinary, Convex, Custom)
 - [Styling Guide](./packages/neuphlo-editor/README.md#styling)
 - [Advanced Usage](./packages/neuphlo-editor/README.md#advanced-usage)
 - [TypeScript Support](./packages/neuphlo-editor/README.md#typescript)

@@ -141,6 +141,58 @@ const handleImageUpload = async (file: File): Promise<string> => {
 }
 ```
 
+### Convex
+
+```tsx
+import { useMutation } from 'convex/react'
+import { api } from '../convex/_generated/api'
+
+function MyEditor() {
+  const generateUploadUrl = useMutation(api.files.generateUploadUrl)
+
+  const handleImageUpload = async (file: File): Promise<string> => {
+    // Step 1: Get a short-lived upload URL
+    const uploadUrl = await generateUploadUrl()
+
+    // Step 2: POST the file to the URL
+    const result = await fetch(uploadUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': file.type },
+      body: file,
+    })
+
+    const { storageId } = await result.json()
+
+    // Step 3: Save the storage ID to your database (optional)
+    // await saveImage({ storageId, name: file.name })
+
+    // Step 4: Return the public URL
+    // You can use getUrl mutation or construct the URL
+    const imageUrl = `${process.env.NEXT_PUBLIC_CONVEX_URL}/api/storage/${storageId}`
+    return imageUrl
+  }
+
+  return <Editor uploadImage={handleImageUpload} />
+}
+```
+
+**Convex backend (convex/files.ts):**
+
+```tsx
+import { mutation } from './_generated/server'
+
+export const generateUploadUrl = mutation(async (ctx) => {
+  return await ctx.storage.generateUploadUrl()
+})
+
+export const getUrl = mutation({
+  args: { storageId: v.string() },
+  handler: async (ctx, { storageId }) => {
+    return await ctx.storage.getUrl(storageId)
+  },
+})
+```
+
 ### Custom Backend
 
 ```tsx
