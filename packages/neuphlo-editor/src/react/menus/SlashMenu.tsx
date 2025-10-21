@@ -17,6 +17,7 @@ import {
   IconBlockquote,
   IconCode,
   IconSourceCode,
+  IconPhoto,
 } from "@tabler/icons-react"
 
 export type SlashMenuProps = {
@@ -333,6 +334,28 @@ export function SlashMenu({ className }: SlashMenuProps) {
           >
             <IconSourceCode size={16} />
             <span>Code Block</span>
+          </span>
+        </EditorCommandItem>
+
+        <EditorCommandItem
+          value="image photo picture"
+          className="nph-command__item"
+          onCommand={({
+            editor,
+            range,
+          }: {
+            editor: any
+            range: { from: number; to: number }
+          }) => {
+            ;(editor as any).chain().focus().deleteRange(range).run()
+            ;(editor as any).chain().focus().uploadImage().run()
+          }}
+        >
+          <span
+            style={{ display: "inline-flex", alignItems: "center", gap: 8 }}
+          >
+            <IconPhoto size={16} />
+            <span>Image</span>
           </span>
         </EditorCommandItem>
       </EditorCommandList>

@@ -177,6 +177,29 @@
 .ProseMirror.nph-editor img {
   max-width: 100%;
   height: auto;
+  display: block;
+}
+
+/* Image alignment */
+.nph-editor img[data-align="left"],
+.ProseMirror.nph-editor img[data-align="left"] {
+  float: left;
+  margin-right: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.nph-editor img[data-align="center"],
+.ProseMirror.nph-editor img[data-align="center"] {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.nph-editor img[data-align="right"],
+.ProseMirror.nph-editor img[data-align="right"] {
+  float: right;
+  margin-left: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 /* Tables */

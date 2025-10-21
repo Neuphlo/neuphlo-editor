@@ -5,7 +5,7 @@ import {
   type EditorContentProps,
 } from "../headless"
 import ExtensionKit from "../headless/extensions/extension-kit"
-import { SlashMenu, TextMenu } from "./menus"
+import { SlashMenu, TextMenu, ImageMenu } from "./menus"
 
 export type NeuphloEditorProps = {
   content?: string
@@ -14,9 +14,11 @@ export type NeuphloEditorProps = {
   immediatelyRender?: boolean
   showTextMenu?: boolean
   showSlashMenu?: boolean
+  showImageMenu?: boolean
   extensions?: any[]
   onUpdate?: EditorContentProps["onUpdate"]
   onCreate?: EditorContentProps["onCreate"]
+  uploadImage?: (file: File) => Promise<string>
 }
 
 export function Editor({
@@ -26,9 +28,11 @@ export function Editor({
   immediatelyRender = false,
   showTextMenu = true,
   showSlashMenu = true,
+  showImageMenu = true,
   extensions,
   onUpdate,
   onCreate,
+  uploadImage,
 }: NeuphloEditorProps) {
   return (
     <div className={className}>
@@ -39,7 +43,7 @@ export function Editor({
           immediatelyRender={immediatelyRender}
           editable={editable}
           content={content}
-          extensions={[...ExtensionKit(), ...(extensions ?? [])]}
+          extensions={[...ExtensionKit({ uploadImage }), ...(extensions ?? [])]}
           editorProps={{
             attributes: {
               class: "nph-editor max-w-none outline-none",
@@ -50,6 +54,7 @@ export function Editor({
           }}
         >
           {showTextMenu ? <TextMenu /> : null}
+          {showImageMenu ? <ImageMenu /> : null}
           {showSlashMenu ? <SlashMenu /> : null}
         </EditorContent>
       </EditorRoot>

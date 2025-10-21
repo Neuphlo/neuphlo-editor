@@ -1,8 +1,8 @@
 {
   "name": "neuphlo-editor",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "private": false,
-  "description": "A lightweight React wrapper around Tiptap with sensible defaults.",
+  "description": "A lightweight React wrapper around Tiptap with sensible defaults and image upload support.",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -70,6 +70,7 @@
     "@tabler/icons-react": "^3.34.1",
     "@tiptap/core": "^3.4.2",
     "@tiptap/extension-code-block-lowlight": "^3.4.2",
+    "@tiptap/extension-image": "^3.7.2",
     "@tiptap/extension-link": "^3.4.2",
     "@tiptap/extension-placeholder": "^3.4.2",
     "@tiptap/starter-kit": "^3.4.1",

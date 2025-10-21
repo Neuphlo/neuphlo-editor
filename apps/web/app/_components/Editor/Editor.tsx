@@ -58,6 +58,30 @@ export default function Editor({ content }: EditorProps) {
     editorRef.current?.commands.clearContent(false)
     setTimeout(() => (isClearingRef.current = false), 0)
   }
+
+  // Example upload function - replace with your actual upload logic
+  const handleImageUpload = async (file: File): Promise<string> => {
+    // Example: Upload to a server
+    // const formData = new FormData()
+    // formData.append('file', file)
+    // const response = await fetch('/api/upload', { method: 'POST', body: formData })
+    // const data = await response.json()
+    // return data.url
+
+    // For demo purposes, return a placeholder image URL based on file type
+    return new Promise((resolve) => {
+      // Simulate upload delay
+      setTimeout(() => {
+        // You can also use FileReader to create a data URL for local preview
+        const reader = new FileReader()
+        reader.onload = (e) => {
+          resolve(e.target?.result as string)
+        }
+        reader.readAsDataURL(file)
+      }, 500)
+    })
+  }
+
   return (
     <Card className="relative p-6">
       <button
@@ -73,6 +97,7 @@ export default function Editor({ content }: EditorProps) {
         content={initialContent}
         onUpdate={handleUpdate}
         onCreate={handleCreate}
+        uploadImage={handleImageUpload}
       />
     </Card>
   )

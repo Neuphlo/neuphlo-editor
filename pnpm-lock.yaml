@@ -53,7 +53,7 @@ importers:
         version: 0.542.0(react@19.1.0)
       neuphlo-editor:
         specifier: workspace:*
-        version: link:../..
+        version: link:../../packages/neuphlo-editor
       next:
         specifier: 15.5.2
         version: 15.5.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -121,6 +121,9 @@ importers:
       '@tiptap/extension-code-block-lowlight':
         specifier: ^3.4.2
         version: 3.4.2(@tiptap/core@3.4.2(@tiptap/pm@3.4.1))(@tiptap/extension-code-block@3.4.1(@tiptap/core@3.4.2(@tiptap/pm@3.4.1))(@tiptap/pm@3.4.1))(@tiptap/pm@3.4.1)(highlight.js@11.11.1)(lowlight@3.3.0)
+      '@tiptap/extension-image':
+        specifier: ^3.7.2
+        version: 3.7.2(@tiptap/core@3.4.2(@tiptap/pm@3.4.1))
       '@tiptap/extension-link':
         specifier: ^3.4.2
         version: 3.4.2(@tiptap/core@3.4.2(@tiptap/pm@3.4.1))(@tiptap/pm@3.4.1)
@@ -1187,6 +1190,11 @@ packages:
     peerDependencies:
       '@tiptap/core': ^3.4.1
       '@tiptap/pm': ^3.4.1
+
+  '@tiptap/extension-image@3.7.2':
+    resolution: {integrity: sha512-GlFdoZULF9mEG3tMRqB1DDlyA75NIRHS5NKuoicQTAX9OegiZfTPYRmVOpLNaTunTt8mFL6Wx2Z9x5ZN2WdNBg==}
+    peerDependencies:
+      '@tiptap/core': ^3.7.2
 
   '@tiptap/extension-italic@3.4.1':
     resolution: {integrity: sha512-4SAGv1N1Ywsql4te4SxR/W8DwEHtDanks9DjBjqezum2BP1HdtlpBBkh26LjbhS6I+XZqrz9CFDqjuvfXQI89Q==}
@@ -3992,6 +4000,10 @@ snapshots:
     dependencies:
       '@tiptap/core': 3.4.2(@tiptap/pm@3.4.1)
       '@tiptap/pm': 3.4.1
+
+  '@tiptap/extension-image@3.7.2(@tiptap/core@3.4.2(@tiptap/pm@3.4.1))':
+    dependencies:
+      '@tiptap/core': 3.4.2(@tiptap/pm@3.4.1)
 
   '@tiptap/extension-italic@3.4.1(@tiptap/core@3.4.2(@tiptap/pm@3.4.1))':
     dependencies:
