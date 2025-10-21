@@ -70,9 +70,19 @@ export function ImageMenu({ className }: ImageMenuProps) {
   return (
     <BubbleMenu
       editor={editor}
-      shouldShow={({ editor: e }) => {
-        return e.isActive("image")
+      shouldShow={({ editor: e, state }) => {
+        // Only show when an image node is selected
+        if (!e.isActive("image")) return false
+
+        // Check if we have a node selection (clicking on image)
+        const { selection } = state
+        const isNodeSelection = selection.constructor.name === "NodeSelection"
+
+        // Only show for node selections (when clicking directly on the image)
+        // This prevents showing when there's a text selection that includes an image
+        return isNodeSelection
       }}
+      updateDelay={0}
     >
       <div className={className ? `bubble-menu ${className}` : "bubble-menu"}>
         <div

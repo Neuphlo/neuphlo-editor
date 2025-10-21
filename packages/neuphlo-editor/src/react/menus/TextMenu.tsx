@@ -60,8 +60,29 @@ export function TextMenu({ className }: TextMenuProps) {
   return (
     <BubbleMenu
       editor={editor}
-      shouldShow={({ from, to }) => {
-        return from !== to
+      shouldShow={({ editor: e, state, from, to, view }) => {
+        // Don't show if an image is active anywhere
+        if (e.isActive("image")) return false
+
+        // Don't show for node selections
+        const { selection } = state
+        if (selection.constructor.name === "NodeSelection") return false
+
+        // Don't show if selection is empty
+        if (from === to) return false
+
+        // Check if the selection contains an image node
+        let hasImage = false
+        state.doc.nodesBetween(from, to, (node) => {
+          if (node.type.name === "image") {
+            hasImage = true
+            return false
+          }
+        })
+        if (hasImage) return false
+
+        // Show only for text selections
+        return true
       }}
     >
       <div className={className ? `bubble-menu ${className}` : "bubble-menu"}>
