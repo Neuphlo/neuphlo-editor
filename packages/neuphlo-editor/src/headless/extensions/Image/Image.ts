@@ -53,9 +53,12 @@ export const Image = TiptapImage.extend<ImageOptions>({
         },
       },
       align: {
-        default: "left",
-        parseHTML: (element) => element.getAttribute("data-align") || "left",
+        default: null,
+        parseHTML: (element) => element.getAttribute("data-align"),
         renderHTML: (attributes) => {
+          if (!attributes.align) {
+            return {}
+          }
           return {
             "data-align": attributes.align,
           }
