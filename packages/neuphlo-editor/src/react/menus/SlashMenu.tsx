@@ -338,7 +338,7 @@ export function SlashMenu({ className }: SlashMenuProps) {
         </EditorCommandItem>
 
         <EditorCommandItem
-          value="image photo picture"
+          value="image photo picture block"
           className="nph-command__item"
           onCommand={({
             editor,
@@ -347,8 +347,12 @@ export function SlashMenu({ className }: SlashMenuProps) {
             editor: any
             range: { from: number; to: number }
           }) => {
-            ;(editor as any).chain().focus().deleteRange(range).run()
-            ;(editor as any).chain().focus().uploadImage().run()
+            ;(editor as any)
+              .chain()
+              .focus()
+              .deleteRange(range)
+              .setImageBlock({ src: "" })
+              .run()
           }}
         >
           <span

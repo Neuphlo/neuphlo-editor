@@ -172,58 +172,6 @@
   text-underline-offset: 2px;
 }
 
-/* Images */
-.nph-editor img,
-.ProseMirror.nph-editor img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-  border: 1px solid var(--border, rgba(0, 0, 0, 0.12));
-  border-radius: 0.5rem;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
-}
-
-/* Image alignment */
-.nph-editor img[data-align="left"],
-.ProseMirror.nph-editor img[data-align="left"] {
-  float: left;
-  margin-right: 1rem;
-  margin-bottom: 0.5rem;
-  clear: left;
-}
-
-.nph-editor img[data-align="center"],
-.ProseMirror.nph-editor img[data-align="center"] {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  clear: both;
-}
-
-.nph-editor img[data-align="right"],
-.ProseMirror.nph-editor img[data-align="right"] {
-  float: right;
-  margin-left: 1rem;
-  margin-bottom: 0.5rem;
-  clear: right;
-}
-
-/* Clear floats after headings to prevent layout issues */
-.nph-editor h1,
-.nph-editor h2,
-.nph-editor h3,
-.nph-editor h4,
-.nph-editor h5,
-.nph-editor h6,
-.ProseMirror.nph-editor h1,
-.ProseMirror.nph-editor h2,
-.ProseMirror.nph-editor h3,
-.ProseMirror.nph-editor h4,
-.ProseMirror.nph-editor h5,
-.ProseMirror.nph-editor h6 {
-  clear: both;
-}
-
 /* Tables */
 .nph-editor table,
 .ProseMirror.nph-editor table {
@@ -276,6 +224,8 @@
 .nph-editor .ProseMirror-selectednode,
 .ProseMirror.nph-editor .ProseMirror-selectednode {
   outline: 2px solid var(--ring, rgba(59, 130, 246, 0.5));
+  outline-offset: 2px;
+  border-radius: 12px;
 }
 
 /* Placeholder (requires Placeholder extension) */
@@ -559,4 +509,214 @@
   .bubble-menu button[aria-pressed="true"]:hover {
     background-color: var(--accent-hover, rgba(255, 255, 255, 0.18));
   }
+}
+
+/* Animations */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Image Block */
+.nph-image-block {
+  display: block;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  border: 1px solid var(--border, #e5e7eb);
+  max-width: 100%;
+  height: auto;
+  cursor: pointer;
+  transition: box-shadow 0.2s ease;
+}
+
+.nph-image-block:hover {
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+/* Image Block Loading */
+.nph-image-block-loading {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border, #e5e7eb);
+  background-color: var(--muted, #f9fafb);
+}
+
+.nph-image-block-loading__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.nph-image-block-loading__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.nph-image-block-loading__spinner {
+  animation: spin 1s linear infinite;
+  color: var(--muted-foreground, #6b7280);
+}
+
+.nph-image-block-loading__text {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted-foreground, #6b7280);
+  margin: 0;
+}
+
+.nph-image-block-loading__placeholder {
+  height: 192px;
+  width: 100%;
+  background-color: var(--muted, #f3f4f6);
+  border-radius: 8px;
+}
+
+/* Image Uploader */
+.nph-image-uploader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 32px;
+  border-radius: 8px;
+  background-color: transparent !important;
+  border: 2px dashed var(--border, #e5e7eb);
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.nph-image-uploader--dragging {
+  background-color: var(--muted, rgba(0, 0, 0, 0.05));
+  border-color: var(--muted-foreground, #6b7280);
+}
+
+.nph-image-uploader__icon {
+  margin-bottom: 16px;
+  color: var(--muted-foreground, #6b7280);
+}
+
+.nph-image-uploader__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.nph-image-uploader__text {
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  color: var(--muted-foreground, #6b7280);
+}
+
+.nph-image-uploader__button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nph-image-uploader__input {
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  opacity: 0;
+  position: absolute;
+}
+
+/* Dark mode - supports both media query and class-based approaches */
+@media (prefers-color-scheme: dark) {
+  .nph-image-block {
+    border-color: var(--border, #374151);
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.3), 0 1px 2px -1px rgb(0 0 0 / 0.3);
+  }
+
+  .nph-image-block:hover {
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.4);
+  }
+
+  .nph-image-block-loading {
+    border-color: var(--border, #374151);
+    background-color: var(--muted, #1f2937);
+  }
+
+  .nph-image-block-loading__overlay {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+
+  .nph-image-block-loading__spinner,
+  .nph-image-block-loading__text {
+    color: var(--muted-foreground, #9ca3af);
+  }
+
+  .nph-image-block-loading__placeholder {
+    background-color: var(--muted, #374151);
+  }
+
+  .nph-image-uploader {
+    border-color: var(--border, #374151);
+  }
+
+  .nph-image-uploader--dragging {
+    background-color: var(--muted, rgba(255, 255, 255, 0.05));
+    border-color: var(--border, #6b7280);
+  }
+
+  .nph-image-uploader__icon,
+  .nph-image-uploader__text {
+    color: var(--muted-foreground, #9ca3af);
+  }
+}
+
+/* Class-based dark mode (for frameworks like Next.js with next-themes) */
+.dark .nph-image-block {
+  border-color: var(--border, #374151);
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.3), 0 1px 2px -1px rgb(0 0 0 / 0.3);
+}
+
+.dark .nph-image-block:hover {
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.4);
+}
+
+.dark .nph-image-block-loading {
+  border-color: var(--border, #374151);
+  background-color: var(--muted, #1f2937);
+}
+
+.dark .nph-image-block-loading__overlay {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.dark .nph-image-block-loading__spinner,
+.dark .nph-image-block-loading__text {
+  color: var(--muted-foreground, #9ca3af);
+}
+
+.dark .nph-image-block-loading__placeholder {
+  background-color: var(--muted, #374151);
+}
+
+.dark .nph-image-uploader {
+  border-color: var(--border, #374151);
+}
+
+.dark .nph-image-uploader--dragging {
+  background-color: var(--muted, rgba(255, 255, 255, 0.05));
+  border-color: var(--border, #6b7280);
+}
+
+.dark .nph-image-uploader__icon,
+.dark .nph-image-uploader__text {
+  color: var(--muted-foreground, #9ca3af);
 }

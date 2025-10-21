@@ -61,8 +61,8 @@ export function TextMenu({ className }: TextMenuProps) {
     <BubbleMenu
       editor={editor}
       shouldShow={({ editor: e, state, from, to, view }) => {
-        // Don't show if an image is active anywhere
-        if (e.isActive("image")) return false
+        // Don't show if imageBlock is active
+        if (e.isActive("imageBlock")) return false
 
         // Don't show for node selections
         const { selection } = state
@@ -71,10 +71,10 @@ export function TextMenu({ className }: TextMenuProps) {
         // Don't show if selection is empty
         if (from === to) return false
 
-        // Check if the selection contains an image node
+        // Check if the selection contains an imageBlock node
         let hasImage = false
         state.doc.nodesBetween(from, to, (node) => {
-          if (node.type.name === "image") {
+          if (node.type.name === "imageBlock") {
             hasImage = true
             return false
           }
