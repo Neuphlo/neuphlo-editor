@@ -186,6 +186,7 @@
   float: left;
   margin-right: 1rem;
   margin-bottom: 0.5rem;
+  clear: left;
 }
 
 .nph-editor img[data-align="center"],
@@ -193,6 +194,7 @@
   display: block;
   margin-left: auto;
   margin-right: auto;
+  clear: both;
 }
 
 .nph-editor img[data-align="right"],
@@ -200,6 +202,23 @@
   float: right;
   margin-left: 1rem;
   margin-bottom: 0.5rem;
+  clear: right;
+}
+
+/* Clear floats after headings to prevent layout issues */
+.nph-editor h1,
+.nph-editor h2,
+.nph-editor h3,
+.nph-editor h4,
+.nph-editor h5,
+.nph-editor h6,
+.ProseMirror.nph-editor h1,
+.ProseMirror.nph-editor h2,
+.ProseMirror.nph-editor h3,
+.ProseMirror.nph-editor h4,
+.ProseMirror.nph-editor h5,
+.ProseMirror.nph-editor h6 {
+  clear: both;
 }
 
 /* Tables */
