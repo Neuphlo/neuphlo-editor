@@ -117,7 +117,7 @@ neuphlo-editor/
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/neuphlo-editor.git
+git clone https://github.com/Neuphlo/neuphlo-editor.git
 cd neuphlo-editor
 
 # Install dependencies
@@ -203,7 +203,7 @@ Contributions are welcome! Here's how you can help:
 
 ## 🐛 Known Issues
 
-None currently. Please [report issues](https://github.com/yourusername/neuphlo-editor/issues) if you find any!
+None currently. Please [report issues](https://github.com/Neuphlo/neuphlo-editor/issues) if you find any!
 
 ## 📄 License
 
@@ -220,8 +220,8 @@ See [LICENSE](./LICENSE) for more information.
 ## 💬 Support
 
 - **Documentation**: [Package README](./packages/neuphlo-editor/README.md)
-- **Issues**: [GitHub Issues](https://github.com/yourusername/neuphlo-editor/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/neuphlo-editor/discussions)
+- **Issues**: [GitHub Issues](https://github.com/Neuphlo/neuphlo-editor/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/Neuphlo/neuphlo-editor/discussions)
 - **npm**: [neuphlo-editor](https://www.npmjs.com/package/neuphlo-editor)
 
 ---

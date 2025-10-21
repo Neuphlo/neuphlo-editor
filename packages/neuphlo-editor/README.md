@@ -3,7 +3,7 @@
 A lightweight, feature-rich React wrapper around [Tiptap](https://tiptap.dev) with sensible defaults, built-in styling, and powerful image upload capabilities.
 
 [![npm version](https://img.shields.io/npm/v/neuphlo-editor.svg)](https://www.npmjs.com/package/neuphlo-editor)
-[![License](https://img.shields.io/npm/l/neuphlo-editor.svg)](https://github.com/yourusername/neuphlo-editor/blob/main/LICENSE)
+[![License](https://img.shields.io/npm/l/neuphlo-editor.svg)](https://github.com/Neuphlo/neuphlo-editor/blob/main/LICENSE)
 
 ## Features
 
@@ -455,4 +455,4 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## Support
 
-If you encounter any issues or have questions, please file an issue on the [GitHub repository](https://github.com/yourusername/neuphlo-editor/issues).
+If you encounter any issues or have questions, please file an issue on the [GitHub repository](https://github.com/Neuphlo/neuphlo-editor/issues).
