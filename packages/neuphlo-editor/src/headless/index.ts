@@ -13,7 +13,10 @@ export {
   EditorCommandList,
   EditorCommandOut,
 } from "./components/editor-command"
-export { EditorCommandItem } from "./components/editor-command-item"
+export {
+  EditorCommandItem,
+  EditorCommandEmpty,
+} from "./components/editor-command-item"
 
 export { Placeholder, StarterKit } from "./extensions"
 export {

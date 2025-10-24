@@ -3,6 +3,7 @@ import {
   EditorCommand,
   EditorCommandList,
   EditorCommandItem,
+  EditorCommandEmpty,
 } from "../../headless"
 import {
   IconBold,
@@ -34,6 +35,9 @@ export function SlashMenu({ className }: SlashMenuProps) {
         className="nph-command__list"
         style={{ display: "flex", flexDirection: "column", gap: 2 }}
       >
+        <EditorCommandEmpty style={{ padding: "8px 12px", fontSize: 14 }}>
+          No commands found
+        </EditorCommandEmpty>
         <EditorCommandItem
           value="bold"
           className="nph-command__item"

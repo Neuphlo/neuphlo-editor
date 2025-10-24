@@ -29,6 +29,8 @@ export const ExtensionKit = (options?: ExtensionKitOptions) => [
     suggestion: {
       char: "/",
       render: renderSlashItems,
+      allowSpaces: true,
+      allowedPrefixes: null,
     },
   }),
 ]
