@@ -12,6 +12,7 @@ A lightweight, feature-rich React wrapper around [Tiptap](https://tiptap.dev) wi
 - 📐 **Image controls** - Resize and align images with intuitive controls
 - ⌨️ **Slash commands** - Quick formatting with `/` commands
 - 💬 **Bubble menus** - Context-aware formatting menus
+- 🧩 **Expandable menus** - Add your own controls to the text or image menus
 - 🎯 **TypeScript** - Full TypeScript support with type definitions
 - 🎨 **Syntax highlighting** - Code blocks with highlight.js support
 - 🔗 **Link management** - Easy link insertion and editing
@@ -228,7 +229,7 @@ const handleImageUpload = async (file: File): Promise<string> => {
 | `showImageMenu` | `boolean` | `true` | Show image controls bubble menu |
 | `showSlashMenu` | `boolean` | `true` | Show slash command menu |
 | `extensions` | `Extension[]` | `[]` | Additional Tiptap extensions |
-| `bubbleMenuExtras` | `{ text?: BubbleMenuExtra \| BubbleMenuExtra[]; image?: BubbleMenuExtra \| BubbleMenuExtra[] }` | `undefined` | Append custom UI to bubble menus |
+| `bubbleMenuExtras` | `{ text?: BubbleMenuExtra \| BubbleMenuExtra[]; image?: BubbleMenuExtra \| BubbleMenuExtra[] }` | `undefined` | Expand text/image bubble menus with custom UI |
 | `uploadImage` | `(file: File) => Promise<string>` | `undefined` | Image upload handler |
 | `onUpdate` | `({ editor }) => void` | `undefined` | Called when content changes |
 | `onCreate` | `({ editor }) => void` | `undefined` | Called when editor is created |
@@ -254,9 +255,9 @@ const handleImageUpload = async (file: File): Promise<string> => {
 />
 ```
 
-### Bubble Menu Extras
+### Expandable Menus
 
-Use the `bubbleMenuExtras` prop when you need to sprinkle in project-specific controls (AI helpers, analytics buttons, etc.) without editing this package.
+Both the text and image bubble menus can expand with custom controls. Pass the `bubbleMenuExtras` prop when you need to sprinkle in project-specific actions (AI helpers, analytics buttons, etc.) without editing this package.
 
 ```tsx
 import type { Editor } from "@tiptap/react"
