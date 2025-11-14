@@ -1,4 +1,5 @@
 import { useCurrentEditor, useEditorState } from "@tiptap/react"
+import type { Editor as TiptapEditor } from "@tiptap/react"
 import { BubbleMenu } from "@tiptap/react/menus"
 import {
   IconBold,
@@ -6,14 +7,24 @@ import {
   IconStrikethrough,
   IconArrowBackUp,
 } from "@tabler/icons-react"
+import type { ReactNode } from "react"
+import { Fragment } from "react"
 import { MenuList } from "./MenuList"
 import { LinkPopover } from "./LinkPopover"
 
+type ExtraRenderer = (editor: TiptapEditor) => ReactNode
+
 export type TextMenuProps = {
   className?: string
+  leadingExtras?: ExtraRenderer[]
+  trailingExtras?: ExtraRenderer[]
 }
 
-export function TextMenu({ className }: TextMenuProps) {
+export function TextMenu({
+  className,
+  leadingExtras,
+  trailingExtras,
+}: TextMenuProps) {
   const { editor } = useCurrentEditor()
 
   const editorState = useEditorState({
@@ -86,6 +97,13 @@ export function TextMenu({ className }: TextMenuProps) {
       }}
     >
       <div className={className ? `bubble-menu ${className}` : "bubble-menu"}>
+        {leadingExtras && editor
+          ? leadingExtras.map((renderExtra, index) => (
+              <Fragment key={`leading-extra-${index}`}>
+                {renderExtra(editor)}
+              </Fragment>
+            ))
+          : null}
         <MenuList editor={editor} />
         <button
           type="button"
@@ -160,6 +178,13 @@ export function TextMenu({ className }: TextMenuProps) {
             </button>
           )
         })()}
+        {trailingExtras && editor
+          ? trailingExtras.map((renderExtra, index) => (
+              <Fragment key={`trailing-extra-${index}`}>
+                {renderExtra(editor)}
+              </Fragment>
+            ))
+          : null}
       </div>
     </BubbleMenu>
   )

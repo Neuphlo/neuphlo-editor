@@ -13,11 +13,11 @@ export default function Navigation() {
           <div className="flex items-center">
             <div className="flex items-center space-x-2">
               <Image
-                src="/logos/logo_cyan.svg"
+                src="/logos/logo.svg"
                 alt="Neuphlo"
                 width={120}
                 height={32}
-                className="h-8 w-auto"
+                className="h-8 w-auto dark:invert"
               />
               <span className="font-bold text-md text-slate-900 dark:text-white">
                 Neuphlo Editor

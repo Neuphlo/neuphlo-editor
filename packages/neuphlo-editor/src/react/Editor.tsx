@@ -6,6 +6,22 @@ import {
 } from "../headless"
 import ExtensionKit from "../headless/extensions/extension-kit"
 import { SlashMenu, TextMenu, ImageMenu } from "./menus"
+import type { ReactNode } from "react"
+import type { Editor as TiptapEditor } from "@tiptap/react"
+
+export type BubbleMenuExtraRenderer = (editor: TiptapEditor) => ReactNode
+
+export type BubbleMenuExtra =
+  | BubbleMenuExtraRenderer
+  | {
+      render: BubbleMenuExtraRenderer
+      align?: "start" | "end"
+    }
+
+export type BubbleMenuExtras = Partial<{
+  text: BubbleMenuExtra | BubbleMenuExtra[]
+  image: BubbleMenuExtra | BubbleMenuExtra[]
+}>
 
 export type NeuphloEditorProps = {
   content?: string
@@ -16,6 +32,7 @@ export type NeuphloEditorProps = {
   showSlashMenu?: boolean
   showImageMenu?: boolean
   extensions?: any[]
+  bubbleMenuExtras?: BubbleMenuExtras
   onUpdate?: EditorContentProps["onUpdate"]
   onCreate?: EditorContentProps["onCreate"]
   uploadImage?: (file: File) => Promise<string>
@@ -30,10 +47,36 @@ export function Editor({
   showSlashMenu = true,
   showImageMenu = true,
   extensions,
+  bubbleMenuExtras,
   onUpdate,
   onCreate,
   uploadImage,
 }: NeuphloEditorProps) {
+  const normalizeExtras = (extras?: BubbleMenuExtra | BubbleMenuExtra[]) => {
+    const result: {
+      start: BubbleMenuExtraRenderer[]
+      end: BubbleMenuExtraRenderer[]
+    } = {
+      start: [],
+      end: [],
+    }
+    if (!extras) return result
+
+    const list = Array.isArray(extras) ? extras : [extras]
+    list.forEach((item) => {
+      const config =
+        typeof item === "function"
+          ? { render: item, align: "end" as const }
+          : item
+      const slot = config.align === "start" ? "start" : "end"
+      result[slot].push(config.render)
+    })
+    return result
+  }
+
+  const textExtras = normalizeExtras(bubbleMenuExtras?.text)
+  const imageExtras = normalizeExtras(bubbleMenuExtras?.image)
+
   return (
     <div className={className}>
       <EditorRoot>
@@ -53,8 +96,18 @@ export function Editor({
             },
           }}
         >
-          {showTextMenu ? <TextMenu /> : null}
-          {showImageMenu ? <ImageMenu /> : null}
+          {showTextMenu ? (
+            <TextMenu
+              leadingExtras={textExtras.start}
+              trailingExtras={textExtras.end}
+            />
+          ) : null}
+          {showImageMenu ? (
+            <ImageMenu
+              leadingExtras={imageExtras.start}
+              trailingExtras={imageExtras.end}
+            />
+          ) : null}
           {showSlashMenu ? <SlashMenu /> : null}
         </EditorContent>
       </EditorRoot>

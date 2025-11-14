@@ -1,4 +1,5 @@
 import { useCurrentEditor } from "@tiptap/react"
+import type { Editor as TiptapEditor } from "@tiptap/react"
 import { BubbleMenu } from "@tiptap/react/menus"
 import {
   IconUpload,
@@ -7,13 +8,22 @@ import {
   IconAlignCenter,
   IconAlignRight,
 } from "@tabler/icons-react"
-import { useEffect, useState } from "react"
+import { Fragment, useEffect, useState } from "react"
+import type { ReactNode } from "react"
+
+type ExtraRenderer = (editor: TiptapEditor) => ReactNode
 
 export type ImageMenuProps = {
   className?: string
+  leadingExtras?: ExtraRenderer[]
+  trailingExtras?: ExtraRenderer[]
 }
 
-export function ImageMenu({ className }: ImageMenuProps) {
+export function ImageMenu({
+  className,
+  leadingExtras,
+  trailingExtras,
+}: ImageMenuProps) {
   const { editor } = useCurrentEditor()
   const [size, setSize] = useState<number>(100)
   const [align, setAlign] = useState<"left" | "center" | "right">("left")
@@ -85,6 +95,13 @@ export function ImageMenu({ className }: ImageMenuProps) {
       updateDelay={0}
     >
       <div className={className ? `bubble-menu ${className}` : "bubble-menu"}>
+        {leadingExtras && editor
+          ? leadingExtras.map((renderExtra, index) => (
+              <Fragment key={`image-leading-extra-${index}`}>
+                {renderExtra(editor)}
+              </Fragment>
+            ))
+          : null}
         <div
           style={{
             display: "flex",
@@ -160,6 +177,13 @@ export function ImageMenu({ className }: ImageMenuProps) {
         >
           <IconTrash size={16} />
         </button>
+        {trailingExtras && editor
+          ? trailingExtras.map((renderExtra, index) => (
+              <Fragment key={`image-trailing-extra-${index}`}>
+                {renderExtra(editor)}
+              </Fragment>
+            ))
+          : null}
       </div>
     </BubbleMenu>
   )

@@ -2,6 +2,11 @@
 import "../styles.css";
 
 export { Editor } from "./Editor";
-export type { NeuphloEditorProps as EditorProps } from "./Editor";
+export type {
+  NeuphloEditorProps as EditorProps,
+  BubbleMenuExtras,
+  BubbleMenuExtraRenderer,
+  BubbleMenuExtra,
+} from "./Editor";
 export { TextMenu } from "./menus";
 export type { TextMenuProps } from "./menus";

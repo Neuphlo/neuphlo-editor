@@ -228,6 +228,7 @@ const handleImageUpload = async (file: File): Promise<string> => {
 | `showImageMenu` | `boolean` | `true` | Show image controls bubble menu |
 | `showSlashMenu` | `boolean` | `true` | Show slash command menu |
 | `extensions` | `Extension[]` | `[]` | Additional Tiptap extensions |
+| `bubbleMenuExtras` | `{ text?: BubbleMenuExtra \| BubbleMenuExtra[]; image?: BubbleMenuExtra \| BubbleMenuExtra[] }` | `undefined` | Append custom UI to bubble menus |
 | `uploadImage` | `(file: File) => Promise<string>` | `undefined` | Image upload handler |
 | `onUpdate` | `({ editor }) => void` | `undefined` | Called when content changes |
 | `onCreate` | `({ editor }) => void` | `undefined` | Called when editor is created |
@@ -252,6 +253,59 @@ const handleImageUpload = async (file: File): Promise<string> => {
   }}
 />
 ```
+
+### Bubble Menu Extras
+
+Use the `bubbleMenuExtras` prop when you need to sprinkle in project-specific controls (AI helpers, analytics buttons, etc.) without editing this package.
+
+```tsx
+import type { Editor } from "@tiptap/react"
+
+const bubbleMenuExtras = {
+  text: {
+    align: "start", // show on the left side of the menu
+    render: (editor: Editor) => (
+      <button
+        type="button"
+        className="nph-btn nph-btn-ghost nph-btn-xs nph-btn-icon"
+        onMouseDown={(e) => e.preventDefault()}
+        onClick={() => {
+          if (editor.state.selection.empty) return
+          const note = window.prompt("Add note", "Needs review")
+          if (!note) return
+          const { to } = editor.state.selection
+          editor.chain().focus().insertContentAt(to, ` [Note: ${note}]`).run()
+        }}
+      >
+        Add note
+      </button>
+    ),
+  },
+  image: {
+    // Default align is "end" (right side). You can pass an array for multiple buttons.
+    render: (editor: Editor) => (
+      <button
+        type="button"
+        className="nph-btn nph-btn-ghost nph-btn-xs nph-btn-icon"
+        onMouseDown={(e) => e.preventDefault()}
+        onClick={() =>
+          editor
+            .chain()
+            .focus()
+            .updateAttributes("image", { align: "left" })
+            .run()
+        }
+      >
+        Pin left
+      </button>
+    ),
+  },
+}
+
+<Editor bubbleMenuExtras={bubbleMenuExtras} />
+```
+
+Each render callback receives the live Tiptap editor so you can check selection state, trigger commands, or early-return `null` to hide your custom control. The optional `align` flag lets you position the control on the left (`"start"`) or right (`"end"`, default) side of the bubble menu.
 
 ## Styling
 
