@@ -261,43 +261,41 @@ Both the text and image bubble menus can expand with custom controls. Pass the `
 
 ```tsx
 import type { Editor } from "@tiptap/react"
+import { Sparkles } from "lucide-react" // or any icon library
 
 const bubbleMenuExtras = {
   text: {
-    align: "start", // show on the left side of the menu
+    align: "start", // "start" (left) or "end" (right)
     render: (editor: Editor) => (
       <button
         type="button"
         className="nph-btn nph-btn-ghost nph-btn-xs nph-btn-icon"
         onMouseDown={(e) => e.preventDefault()}
         onClick={() => {
-          if (editor.state.selection.empty) return
-          const note = window.prompt("Add note", "Needs review")
-          if (!note) return
-          const { to } = editor.state.selection
-          editor.chain().focus().insertContentAt(to, ` [Note: ${note}]`).run()
+          const selection = editor.state.selection
+          const text = editor.state.doc.textBetween(selection.from, selection.to)
+          console.log("AI Action on:", text)
+          // Trigger your AI logic here
         }}
+        title="AI Assistant"
       >
-        Add note
+        <Sparkles size={16} />
       </button>
     ),
   },
   image: {
-    // Default align is "end" (right side). You can pass an array for multiple buttons.
+    align: "end",
     render: (editor: Editor) => (
       <button
         type="button"
         className="nph-btn nph-btn-ghost nph-btn-xs nph-btn-icon"
         onMouseDown={(e) => e.preventDefault()}
-        onClick={() =>
-          editor
-            .chain()
-            .focus()
-            .updateAttributes("image", { align: "left" })
-            .run()
-        }
+        onClick={() => {
+           // Custom image action
+           console.log("Custom image action")
+        }}
       >
-        Pin left
+        Custom Action
       </button>
     ),
   },
@@ -306,7 +304,13 @@ const bubbleMenuExtras = {
 <Editor bubbleMenuExtras={bubbleMenuExtras} />
 ```
 
-Each render callback receives the live Tiptap editor so you can check selection state, trigger commands, or early-return `null` to hide your custom control. The optional `align` flag lets you position the control on the left (`"start"`) or right (`"end"`, default) side of the bubble menu.
+Each render callback receives the live Tiptap editor instance, allowing you to:
+- Check the current selection state
+- Read the document content
+- Execute commands (e.g., `editor.chain().focus()...`)
+- Conditionally render your button (return `null` to hide it)
+
+The `align` property controls where your custom items appear in the menu relative to the default items.
 
 ## Styling
 
