@@ -14,6 +14,7 @@ A lightweight, feature-rich React wrapper around [Tiptap](https://tiptap.dev) wi
 - 📐 **Image controls** - Resize and align images with intuitive controls
 - ⌨️ **Slash commands** - Quick formatting with `/` commands
 - 💬 **Bubble menus** - Context-aware formatting menus
+- 🧩 **Expandable menus** - Add your own controls to the text or image menus
 - 🎯 **TypeScript** - Full TypeScript support with type definitions
 - 🎨 **Syntax highlighting** - Code blocks with highlight.js support
 - 🔗 **Link management** - Easy link insertion and editing
@@ -84,6 +85,7 @@ Full documentation is available in the [package README](./packages/neuphlo-edito
 ### Key Topics
 
 - [API Reference](./packages/neuphlo-editor/README.md#api-reference)
+- [Expandable Menus](./packages/neuphlo-editor/README.md#expandable-menus)
 - [Image Upload Examples](./packages/neuphlo-editor/README.md#upload-handler-examples) (S3, Cloudinary, Convex, Custom)
 - [Styling Guide](./packages/neuphlo-editor/README.md#styling)
 - [Advanced Usage](./packages/neuphlo-editor/README.md#advanced-usage)
