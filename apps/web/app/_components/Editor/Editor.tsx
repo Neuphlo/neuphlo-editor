@@ -8,6 +8,7 @@ import type { EditorProps } from "../../../../../packages/neuphlo-editor/src/rea
 
 // Componments
 import { Card } from "@/components/ui/card"
+import { AIButton } from "./AIButton"
 
 const NeuphloEditor = dynamic(
   () =>
@@ -98,6 +99,12 @@ export default function Editor({ content }: EditorProps) {
         onUpdate={handleUpdate}
         onCreate={handleCreate}
         uploadImage={handleImageUpload}
+        bubbleMenuExtras={{
+          text: {
+            render: AIButton,
+            align: "start",
+          },
+        }}
       />
     </Card>
   )
