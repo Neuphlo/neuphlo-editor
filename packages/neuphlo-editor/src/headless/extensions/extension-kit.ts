@@ -10,7 +10,7 @@ export interface ExtensionKitOptions {
 }
 
 export const ExtensionKit = (options?: ExtensionKitOptions) => [
-  StarterKit.configure({}),
+  StarterKit.configure({ codeBlock: false, link: false }),
   CodeBlock,
   Link,
   ImageBlock.configure({

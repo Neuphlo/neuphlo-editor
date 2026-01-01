@@ -31,8 +31,8 @@ export function ImageMenu({
   useEffect(() => {
     if (!editor) return
     const update = () => {
-      if (!editor.isActive("image")) return
-      const attrs = editor.getAttributes("image") ?? {
+      if (!editor.isActive("imageBlock")) return
+      const attrs = editor.getAttributes("imageBlock") ?? {
         width: "",
         align: "left",
       }
@@ -59,14 +59,12 @@ export function ImageMenu({
 
   const updateImageSize = (newSize: number) => {
     setSize(newSize)
-    editor.commands.updateAttributes("image", {
-      width: `${newSize}%`,
-    })
+    editor.commands.setImageBlockWidth(newSize)
   }
 
   const updateImageAlign = (newAlign: "left" | "center" | "right") => {
     setAlign(newAlign)
-    editor.commands.updateAttributes("image", { align: newAlign })
+    editor.commands.setImageBlockAlign(newAlign)
   }
 
   const removeImage = () => {
@@ -74,7 +72,7 @@ export function ImageMenu({
   }
 
   const triggerUpload = () => {
-    ;(editor as any).chain().focus().uploadImage().run()
+    editor.commands.updateAttributes("imageBlock", { src: "", loading: false })
   }
 
   return (
@@ -82,7 +80,7 @@ export function ImageMenu({
       editor={editor}
       shouldShow={({ editor: e, state }) => {
         // Only show when an image node is selected
-        if (!e.isActive("image")) return false
+        if (!e.isActive("imageBlock")) return false
 
         // Check if we have a node selection (clicking on image)
         const { selection } = state
