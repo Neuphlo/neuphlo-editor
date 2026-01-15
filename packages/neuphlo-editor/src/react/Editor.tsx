@@ -14,9 +14,9 @@ export type BubbleMenuExtraRenderer = (editor: TiptapEditor) => ReactNode
 export type BubbleMenuExtra =
   | BubbleMenuExtraRenderer
   | {
-      render: BubbleMenuExtraRenderer
-      align?: "start" | "end"
-    }
+    render: BubbleMenuExtraRenderer
+    align?: "start" | "end"
+  }
 
 export type BubbleMenuExtras = Partial<{
   text: BubbleMenuExtra | BubbleMenuExtra[]
@@ -36,6 +36,11 @@ export type NeuphloEditorProps = {
   onUpdate?: EditorContentProps["onUpdate"]
   onCreate?: EditorContentProps["onCreate"]
   uploadImage?: (file: File) => Promise<string>
+  collaboration?: {
+    doc: any
+    field: string
+    awareness?: any
+  }
 }
 
 export function Editor({
@@ -51,6 +56,7 @@ export function Editor({
   onUpdate,
   onCreate,
   uploadImage,
+  collaboration,
 }: NeuphloEditorProps) {
   const normalizeExtras = (extras?: BubbleMenuExtra | BubbleMenuExtra[]) => {
     const result: {
@@ -86,7 +92,10 @@ export function Editor({
           immediatelyRender={immediatelyRender}
           editable={editable}
           content={content}
-          extensions={[...ExtensionKit({ uploadImage }), ...(extensions ?? [])]}
+          extensions={[
+            ...ExtensionKit({ uploadImage, collaboration }),
+            ...(extensions ?? []),
+          ]}
           editorProps={{
             attributes: {
               class: "nph-editor max-w-none outline-none",
