@@ -58,10 +58,6 @@ export const ExtensionKit = (options?: ExtensionKitOptions) => {
       extensions.push(
         CollaborationCursor.configure({
           provider: options.collaboration.awareness,
-          user: options.collaboration.user ? {
-            name: options.collaboration.user.name,
-            color: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
-          } : undefined,
         }),
       )
     }
