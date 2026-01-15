@@ -58,6 +58,10 @@ export const ExtensionKit = (options?: ExtensionKitOptions) => {
       extensions.push(
         CollaborationCursor.configure({
           provider: options.collaboration.awareness,
+          user: options.collaboration.user || {
+            name: "Anonymous",
+            color: "#000000",
+          },
         }),
       )
     }
