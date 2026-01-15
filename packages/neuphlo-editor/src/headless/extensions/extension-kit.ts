@@ -57,7 +57,6 @@ export const ExtensionKit = (options?: ExtensionKitOptions) => {
       extensions.push(
         CollaborationCursor.configure({
           provider: options.collaboration.awareness,
-          user: options.collaboration.awareness.user, // The provider should hold the user info
         }),
       )
     }
