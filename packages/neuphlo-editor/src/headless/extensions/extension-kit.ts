@@ -1,5 +1,5 @@
 import Collaboration from "@tiptap/extension-collaboration"
-import CollaborationCursor from "@tiptap/extension-collaboration-cursor"
+// import CollaborationCursor from "@tiptap/extension-collaboration-cursor" // Temporarily disabled
 import { StarterKit, Placeholder, CodeBlock, Link } from "."
 import {
   Command as SlashCommand,
@@ -54,17 +54,9 @@ export const ExtensionKit = (options?: ExtensionKitOptions) => {
       }),
     )
 
-    if (options.collaboration.awareness) {
-      extensions.push(
-        CollaborationCursor.configure({
-          provider: options.collaboration.awareness,
-          user: options.collaboration.user || {
-            name: "Anonymous",
-            color: "#000000",
-          },
-        }),
-      )
-    }
+    // Note: CollaborationCursor is temporarily disabled due to compatibility issues
+    // Collaboration (document syncing) still works without it
+    // TODO: Fix CollaborationCursor integration
   }
 
   return extensions
