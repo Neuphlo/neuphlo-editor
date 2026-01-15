@@ -14,6 +14,7 @@ export interface ExtensionKitOptions {
     field: string
     awareness?: any
   }
+  imageBlockView?: any
 }
 
 export const ExtensionKit = (options?: ExtensionKitOptions) => {
@@ -23,6 +24,7 @@ export const ExtensionKit = (options?: ExtensionKitOptions) => {
     Link,
     ImageBlock.configure({
       uploadImage: options?.uploadImage,
+      nodeView: options?.imageBlockView,
     }),
     Placeholder.configure({
       placeholder: ({ node }: any) => {
@@ -43,7 +45,7 @@ export const ExtensionKit = (options?: ExtensionKitOptions) => {
     }),
   ]
 
-  if (options?.collaboration) {
+  if (options?.collaboration?.doc) {
     extensions.push(
       Collaboration.configure({
         document: options.collaboration.doc,

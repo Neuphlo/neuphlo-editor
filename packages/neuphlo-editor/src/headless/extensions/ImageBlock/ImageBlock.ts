@@ -6,6 +6,7 @@ import { EditorView } from "@tiptap/pm/view"
 
 export interface ImageBlockOptions {
   uploadImage?: (file: File) => Promise<string>
+  nodeView?: any
 }
 
 declare module "@tiptap/core" {
@@ -102,42 +103,43 @@ export const ImageBlock = TiptapImage.extend<ImageBlockOptions>({
     return {
       setImageBlock:
         (attrs) =>
-        ({ commands }) => {
-          return commands.insertContent({
-            type: "imageBlock",
-            attrs: { src: attrs.src },
-          })
-        },
+          ({ commands }) => {
+            return commands.insertContent({
+              type: "imageBlock",
+              attrs: { src: attrs.src },
+            })
+          },
 
       setImageBlockAt:
         (attrs) =>
-        ({ commands }) => {
-          return commands.insertContentAt(attrs.pos, {
-            type: "imageBlock",
-            attrs: { src: attrs.src },
-          })
-        },
+          ({ commands }) => {
+            return commands.insertContentAt(attrs.pos, {
+              type: "imageBlock",
+              attrs: { src: attrs.src },
+            })
+          },
 
       setImageBlockAlign:
         (align) =>
-        ({ commands }) =>
-          commands.updateAttributes("imageBlock", { align }),
+          ({ commands }) =>
+            commands.updateAttributes("imageBlock", { align }),
 
       setImageBlockWidth:
         (width) =>
-        ({ commands }) =>
-          commands.updateAttributes("imageBlock", {
-            width: `${Math.max(0, Math.min(100, width))}%`,
-          }),
+          ({ commands }) =>
+            commands.updateAttributes("imageBlock", {
+              width: `${Math.max(0, Math.min(100, width))}%`,
+            }),
     }
   },
 
   addNodeView() {
-    // We'll import this dynamically to avoid circular dependencies
-    // The view will be registered from the React side
-    return ReactNodeViewRenderer(
-      require("../../../react/menus/ImageBlock/ImageBlockView").ImageBlockView
-    )
+    if (this.options.nodeView) {
+      return ReactNodeViewRenderer(this.options.nodeView)
+    }
+    // If no custom node view is provided, we fall back to default behavior
+    // but avoid the circular dependency require()
+    return null
   },
 
   addProseMirrorPlugins() {
