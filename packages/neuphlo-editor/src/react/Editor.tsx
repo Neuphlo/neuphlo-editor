@@ -5,7 +5,9 @@ import {
   type EditorContentProps,
 } from "../headless"
 import ExtensionKit from "../headless/extensions/extension-kit"
-import { SlashMenu, TextMenu, ImageMenu } from "./menus"
+import { SlashMenu, TextMenu } from "./menus"
+import { ImageMenu } from "./menus/ImageMenu"
+import { LinkMenu } from "./menus/LinkMenu"
 import { ImageBlockView } from "./menus/ImageBlock/ImageBlockView"
 import type { ReactNode } from "react"
 import type { Editor as TiptapEditor } from "@tiptap/react"
@@ -94,7 +96,8 @@ export function Editor({
           editable={editable}
           content={content}
           extensions={[
-            ...ExtensionKit({
+            ...
+            ExtensionKit({
               uploadImage: uploadImage,
               collaboration: collaboration,
               imageBlockView: ImageBlockView,
@@ -122,6 +125,7 @@ export function Editor({
               trailingExtras={imageExtras.end}
             />
           ) : null}
+          <LinkMenu />
           {showSlashMenu ? <SlashMenu /> : null}
         </EditorContent>
       </EditorRoot>

@@ -6,11 +6,13 @@ import {
   IconItalic,
   IconStrikethrough,
   IconArrowBackUp,
+  IconLink,
+  IconCheck,
+  IconX,
 } from "@tabler/icons-react"
 import type { ReactNode } from "react"
-import { Fragment } from "react"
+import { Fragment, useState, useRef, useEffect } from "react"
 import { MenuList } from "./MenuList"
-import { LinkPopover } from "./LinkPopover"
 
 type ExtraRenderer = (editor: TiptapEditor) => ReactNode
 
@@ -26,6 +28,9 @@ export function TextMenu({
   trailingExtras,
 }: TextMenuProps) {
   const { editor } = useCurrentEditor()
+  const [isAddingLink, setIsAddingLink] = useState(false)
+  const [linkUrl, setLinkUrl] = useState("")
+  const linkInputRef = useRef<HTMLInputElement | null>(null)
 
   const editorState = useEditorState({
     editor,
@@ -47,7 +52,26 @@ export function TextMenu({
     },
   })
 
+  useEffect(() => {
+    if (isAddingLink && linkInputRef.current) {
+      linkInputRef.current.focus()
+    }
+  }, [isAddingLink])
+
   if (!editor || !editorState) return null
+
+  const handleSetLink = () => {
+    if (!linkUrl) return
+    editor.chain().focus().extendMarkRange("link").setLink({ href: linkUrl }).run()
+    setIsAddingLink(false)
+    setLinkUrl("")
+  }
+
+  const handleCancelLink = () => {
+    setIsAddingLink(false)
+    setLinkUrl("")
+    editor.chain().focus().run()
+  }
 
   const hasAnyMarksInSelection = () => {
     const anyEditor: any = editor
@@ -81,6 +105,9 @@ export function TextMenu({
 
         // Don't show if selection is empty
         if (from === to) return false
+
+        // Don't show if link is active (LinkMenu will handle this)
+        if (e.isActive("link")) return false
 
         // Check if the selection contains an imageBlock node
         let hasImage = false
@@ -141,8 +168,68 @@ export function TextMenu({
         >
           <IconStrikethrough size={16} />
         </button>
-
-        <LinkPopover editor={editor} hideWhenUnavailable={false} />
+        {!isAddingLink ? (
+          <button
+            type="button"
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={() => setIsAddingLink(true)}
+            className={`nph-btn nph-btn-ghost nph-btn-xs nph-btn-icon${editor.isActive("link") ? " is-active" : ""}`}
+            disabled={editorState.isCode || editorState.isCodeBlock}
+            aria-disabled={editorState.isCode || editorState.isCodeBlock}
+            aria-pressed={editor.isActive("link")}
+            aria-label="Add link"
+          >
+            <IconLink size={16} />
+          </button>
+        ) : (
+          <>
+            <input
+              ref={linkInputRef}
+              type="url"
+              value={linkUrl}
+              onChange={(e) => setLinkUrl(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault()
+                  handleSetLink()
+                } else if (e.key === "Escape") {
+                  e.preventDefault()
+                  handleCancelLink()
+                }
+              }}
+              placeholder="https://example.com"
+              className="nph-link-input"
+              style={{
+                padding: "4px 8px",
+                border: "1px solid #ccc",
+                borderRadius: "4px",
+                minWidth: "200px",
+                fontSize: "14px",
+              }}
+            />
+            <button
+              type="button"
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={handleSetLink}
+              className="nph-btn nph-btn-ghost nph-btn-xs nph-btn-icon"
+              aria-label="Apply"
+              title="Apply"
+              disabled={!linkUrl}
+            >
+              <IconCheck size={16} />
+            </button>
+            <button
+              type="button"
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={handleCancelLink}
+              className="nph-btn nph-btn-ghost nph-btn-xs nph-btn-icon"
+              aria-label="Cancel"
+              title="Cancel"
+            >
+              <IconX size={16} />
+            </button>
+          </>
+        )}
 
         {(() => {
           const hasInlineMarks = hasAnyMarksInSelection()

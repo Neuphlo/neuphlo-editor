@@ -22,6 +22,8 @@ export const Command = Extension.create({
       Suggestion({
         editor: this.editor,
         char: base.char ?? "/",
+        // Only trigger slash command at start of line or after whitespace
+        startOfLine: base.startOfLine ?? true,
         items: base.items ?? (() => ["/"] as any),
         command: (ctx: any) => {
           if (typeof ctx?.props?.command === "function") {
@@ -65,7 +67,16 @@ export const renderItems = (elementRef?: RefObject<Element> | null) => {
       const { selection } = props.editor.state
       const parentNode = selection.$from.node(selection.$from.depth)
       const blockType = parentNode.type.name
+
+      // Don't show slash menu in code blocks
       if (blockType === "codeBlock") return false
+
+      // Don't show slash menu if inside code or link marks
+      const { $from } = selection
+      const marks = $from.marks()
+      if (marks.some((mark: any) => mark.type.name === "code" || mark.type.name === "link")) {
+        return false
+      }
 
       component = new ReactRenderer(EditorCommandOut, {
         props: {

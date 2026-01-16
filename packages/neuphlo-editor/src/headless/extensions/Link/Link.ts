@@ -44,6 +44,10 @@ export const Link = TiptapLink.extend({
       }),
     ]
   },
+}).configure({
+  openOnClick: false,
+  autolink: true,
+  enableClickSelection: true,
 })
 
 export default Link
