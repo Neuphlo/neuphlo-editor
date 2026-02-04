@@ -134,6 +134,7 @@ export const createMentionExtension = (options?: MentionOptions) => {
       items: async ({ query }: { query: string }) => {
         if (!options?.items) return []
         const items = await options.items(query)
+        console.log(`[${extensionName}] Items:`, items)
         return items
       },
       command: ({ editor, range, props: item }: any) => {
