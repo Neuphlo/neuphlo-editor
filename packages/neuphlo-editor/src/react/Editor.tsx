@@ -48,6 +48,7 @@ export type NeuphloEditorProps = {
   mentionOptions?: MentionOptions
   referenceOptions?: MentionOptions
   slashCommand?: boolean
+  placeholder?: string
 }
 
 export function Editor({
