@@ -19,6 +19,7 @@ export interface ExtensionKitOptions {
   }
   imageBlockView?: any
   mention?: MentionOptions
+  reference?: MentionOptions
 }
 
 export const ExtensionKit = (options?: ExtensionKitOptions) => {
@@ -53,6 +54,12 @@ export const ExtensionKit = (options?: ExtensionKitOptions) => {
   if (options?.mention) {
     const mentionExt = createMentionExtension(options.mention)
     extensions.push(mentionExt)
+  }
+
+  // Add Reference extension if configured (uses same Mention extension with different config)
+  if (options?.reference) {
+    const referenceExt = createMentionExtension(options.reference)
+    extensions.push(referenceExt)
   }
 
   if (options?.collaboration?.doc) {
