@@ -25,6 +25,13 @@ export {
   createSuggestionItems,
   handleCommandNavigation,
 } from "./extensions/slash-command"
+export {
+  createMentionExtension,
+  renderMentionSuggestion,
+  MentionCommand,
+  type MentionItem,
+  type MentionOptions,
+} from "./extensions/Mention"
 // Path without extension to satisfy TS/tsup
 // (the file is at ./extensions/slash-command.tsx)
 // eslint-disable-next-line

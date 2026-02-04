@@ -20,6 +20,15 @@ const NeuphloEditor = dynamic(
   }
 )
 
+// Hardcoded test data for mentions
+const DEMO_USERS = [
+  { id: "user-1", label: "John Doe", email: "john@example.com", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=John" },
+  { id: "user-2", label: "Jane Smith", email: "jane@example.com", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Jane" },
+  { id: "user-3", label: "Bob Johnson", email: "bob@example.com", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Bob" },
+  { id: "user-4", label: "Alice Williams", email: "alice@example.com", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Alice" },
+  { id: "user-5", label: "Charlie Brown", email: "charlie@example.com", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Charlie" },
+]
+
 export default function Editor({ content }: EditorProps) {
   const STORAGE_KEY = "neuphlo-editor-content"
 
@@ -99,6 +108,21 @@ export default function Editor({ content }: EditorProps) {
         onUpdate={handleUpdate}
         onCreate={handleCreate}
         uploadImage={handleImageUpload}
+        mentionOptions={{
+          items: async (query: string) => {
+            // Filter users based on query
+            const lowerQuery = query.toLowerCase()
+            return DEMO_USERS.filter(
+              (user) =>
+                user.label.toLowerCase().includes(lowerQuery) ||
+                user.email.toLowerCase().includes(lowerQuery)
+            )
+          },
+          char: "@",
+          renderLabel: ({ node }) => {
+            return `@${node.attrs.label || node.attrs.id}`
+          },
+        }}
         bubbleMenuExtras={{
           text: {
             render: AIButton,

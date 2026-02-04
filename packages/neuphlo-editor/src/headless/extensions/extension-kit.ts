@@ -6,6 +6,8 @@ import {
   renderItems as renderSlashItems,
 } from "./slash-command"
 import { ImageBlock } from "./ImageBlock/ImageBlock"
+import { createMentionExtension } from "./Mention"
+import type { MentionOptions } from "./Mention"
 
 export interface ExtensionKitOptions {
   uploadImage?: (file: File) => Promise<string>
@@ -16,6 +18,7 @@ export interface ExtensionKitOptions {
     user?: any
   }
   imageBlockView?: any
+  mention?: MentionOptions
 }
 
 export const ExtensionKit = (options?: ExtensionKitOptions) => {
@@ -45,6 +48,16 @@ export const ExtensionKit = (options?: ExtensionKitOptions) => {
       },
     }),
   ]
+
+  // Add Mention extension if configured
+  if (options?.mention) {
+    console.log('[ExtensionKit] Adding mention extension with options:', options.mention)
+    const mentionExt = createMentionExtension(options.mention)
+    console.log('[ExtensionKit] Created mention extension:', mentionExt)
+    extensions.push(mentionExt)
+  } else {
+    console.log('[ExtensionKit] No mention options provided')
+  }
 
   if (options?.collaboration?.doc) {
     extensions.push(

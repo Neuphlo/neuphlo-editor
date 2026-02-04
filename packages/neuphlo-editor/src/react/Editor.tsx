@@ -5,6 +5,7 @@ import {
   type EditorContentProps,
 } from "../headless"
 import ExtensionKit from "../headless/extensions/extension-kit"
+import type { MentionOptions } from "../headless/extensions"
 import { SlashMenu, TextMenu } from "./menus"
 import { ImageMenu } from "./menus/ImageMenu"
 import { LinkMenu } from "./menus/LinkMenu"
@@ -44,6 +45,7 @@ export type NeuphloEditorProps = {
     field: string
     awareness?: any
   }
+  mentionOptions?: MentionOptions
 }
 
 export function Editor({
@@ -60,6 +62,7 @@ export function Editor({
   onCreate,
   uploadImage,
   collaboration,
+  mentionOptions,
 }: NeuphloEditorProps) {
   const normalizeExtras = (extras?: BubbleMenuExtra | BubbleMenuExtra[]) => {
     const result: {
@@ -101,6 +104,7 @@ export function Editor({
               uploadImage: uploadImage,
               collaboration: collaboration,
               imageBlockView: ImageBlockView,
+              mention: mentionOptions,
             }),
             ...(extensions ?? []),
           ]}

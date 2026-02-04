@@ -8,3 +8,5 @@ export { ImageBlock } from "./ImageBlock";
 export type { ImageBlockOptions } from "./ImageBlock";
 export { AISuggestion, AISuggestionPluginKey } from "./AISuggestion";
 export type { AISuggestionOptions } from "./AISuggestion";
+export { createMentionExtension, renderMentionSuggestion, MentionCommand } from "./Mention";
+export type { MentionItem, MentionOptions } from "./Mention";
