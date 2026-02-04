@@ -31,6 +31,11 @@ export interface MentionOptions {
    * Character that triggers the mention autocomplete (default: @)
    */
   char?: string
+
+  /**
+   * Custom name for the extension (to avoid duplicates)
+   */
+  name?: string
 }
 
 /**
@@ -38,6 +43,7 @@ export interface MentionOptions {
  */
 export const createMentionExtension = (options?: MentionOptions) => {
   return Mention.extend({
+    name: options?.name ?? "mention",
     addAttributes() {
       return {
         id: {

@@ -58,7 +58,10 @@ export const ExtensionKit = (options?: ExtensionKitOptions) => {
 
   // Add Reference extension if configured (uses same Mention extension with different config)
   if (options?.reference) {
-    const referenceExt = createMentionExtension(options.reference)
+    const referenceExt = createMentionExtension({
+      ...options.reference,
+      name: "reference", // Use unique name to avoid conflicts
+    })
     extensions.push(referenceExt)
   }
 
