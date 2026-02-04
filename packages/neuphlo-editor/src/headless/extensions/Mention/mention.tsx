@@ -42,8 +42,10 @@ export interface MentionOptions {
  * Create the mention extension with custom suggestion rendering
  */
 export const createMentionExtension = (options?: MentionOptions) => {
+  const extensionName = options?.name ?? "mention"
+
   return Mention.extend({
-    name: options?.name ?? "mention",
+    name: extensionName,
     addAttributes() {
       return {
         id: {
@@ -140,7 +142,7 @@ export const createMentionExtension = (options?: MentionOptions) => {
           .focus()
           .insertContentAt(range, [
             {
-              type: "mention",
+              type: extensionName,
               attrs: {
                 id: item.id,
                 label: item.label,
