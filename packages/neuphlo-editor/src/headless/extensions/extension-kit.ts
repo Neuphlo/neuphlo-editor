@@ -51,12 +51,8 @@ export const ExtensionKit = (options?: ExtensionKitOptions) => {
 
   // Add Mention extension if configured
   if (options?.mention) {
-    console.log('[ExtensionKit] Adding mention extension with options:', options.mention)
     const mentionExt = createMentionExtension(options.mention)
-    console.log('[ExtensionKit] Created mention extension:', mentionExt)
     extensions.push(mentionExt)
-  } else {
-    console.log('[ExtensionKit] No mention options provided')
   }
 
   if (options?.collaboration?.doc) {

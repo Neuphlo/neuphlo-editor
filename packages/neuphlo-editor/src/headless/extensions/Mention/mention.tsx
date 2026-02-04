@@ -139,7 +139,6 @@ export const renderMentionSuggestion = () => {
 
   return {
     onStart: (props: any) => {
-      console.log('[renderMentionSuggestion] onStart called with props:', props)
       component = new ReactRenderer(MentionCommand, {
         props: {
           items: props.items ?? [],
@@ -148,7 +147,6 @@ export const renderMentionSuggestion = () => {
         },
         editor: props.editor,
       })
-      console.log('[renderMentionSuggestion] ReactRenderer created')
 
       container = document.createElement("div")
       container.style.position = "fixed"
