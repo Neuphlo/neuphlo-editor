@@ -12,6 +12,8 @@ export interface MentionItem {
   avatar?: string
   email?: string
   type?: "node" | "article" // For reference mentions
+  nodeId?: string // For node references (user-facing ID like "TSK-1")
+  slug?: string // For article references (URL slug)
 }
 
 export interface MentionOptions {
@@ -86,6 +88,30 @@ export const createMentionExtension = (options?: MentionOptions) => {
             }
           },
         },
+        nodeId: {
+          default: null,
+          parseHTML: (element) => element.getAttribute("data-node-id"),
+          renderHTML: (attributes) => {
+            if (!attributes.nodeId) {
+              return {}
+            }
+            return {
+              "data-node-id": attributes.nodeId,
+            }
+          },
+        },
+        slug: {
+          default: null,
+          parseHTML: (element) => element.getAttribute("data-slug"),
+          renderHTML: (attributes) => {
+            if (!attributes.slug) {
+              return {}
+            }
+            return {
+              "data-slug": attributes.slug,
+            }
+          },
+        },
       }
     },
     addNodeView() {
@@ -114,6 +140,8 @@ export const createMentionExtension = (options?: MentionOptions) => {
                 label: item.label,
                 avatar: item.avatar,
                 type: item.type,
+                nodeId: item.nodeId,
+                slug: item.slug,
               },
             },
           ])
@@ -145,9 +173,27 @@ export const renderMentionSuggestion = () => {
 
   const updatePosition = (clientRect?: DOMRect | null) => {
     if (!container || !clientRect) return
-    const top = Math.round(clientRect.bottom + 8)
+
+    const gap = 8
+    const maxDropdownHeight = 300 // Match the maxHeight from MentionCommand
+    const spaceBelow = window.innerHeight - clientRect.bottom
+    const spaceAbove = clientRect.top
+
+    // Position above if not enough space below, otherwise position below
+    const shouldPositionAbove = spaceBelow < maxDropdownHeight && spaceAbove > spaceBelow
+
     const left = Math.round(clientRect.left)
-    container.style.top = `${top}px`
+
+    if (shouldPositionAbove) {
+      const bottom = Math.round(window.innerHeight - clientRect.top + gap)
+      container.style.bottom = `${bottom}px`
+      container.style.top = 'auto'
+    } else {
+      const top = Math.round(clientRect.bottom + gap)
+      container.style.top = `${top}px`
+      container.style.bottom = 'auto'
+    }
+
     container.style.left = `${left}px`
   }
 
