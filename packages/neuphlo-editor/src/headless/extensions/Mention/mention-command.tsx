@@ -49,6 +49,30 @@ function Avatar({ src, fallback }: { src?: string; fallback: string }) {
   )
 }
 
+// Icon component for reference types
+function ReferenceIcon({ type }: { type: "node" | "article" }) {
+  if (type === "node") {
+    return (
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
+        <path d="M12 3l8 4.5v9l-8 4.5l-8-4.5v-9l8-4.5"></path>
+        <path d="M12 12l8-4.5"></path>
+        <path d="M12 12v9"></path>
+        <path d="M12 12l-8-4.5"></path>
+      </svg>
+    )
+  }
+
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
+      <path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
+      <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"></path>
+      <path d="M9 9l1 0"></path>
+      <path d="M9 13l6 0"></path>
+      <path d="M9 17l6 0"></path>
+    </svg>
+  )
+}
+
 export const MentionCommand = forwardRef<any, MentionCommandProps>((props, ref) => {
   const [selectedIndex, setSelectedIndex] = useState(0)
 
@@ -135,10 +159,14 @@ export const MentionCommand = forwardRef<any, MentionCommandProps>((props, ref) 
               textAlign: "left",
             }}
           >
-            <Avatar
-              src={item.avatar}
-              fallback={item.label.slice(0, 2).toUpperCase()}
-            />
+            {item.type ? (
+              <ReferenceIcon type={item.type} />
+            ) : (
+              <Avatar
+                src={item.avatar}
+                fallback={item.label.slice(0, 2).toUpperCase()}
+              />
+            )}
             <span style={{
               flex: 1,
               overflow: "hidden",
@@ -156,7 +184,7 @@ export const MentionCommand = forwardRef<any, MentionCommandProps>((props, ref) 
           fontSize: "14px",
           color: "var(--muted-foreground)",
         }}>
-          No users found
+          No results found
         </div>
       )}
     </div>

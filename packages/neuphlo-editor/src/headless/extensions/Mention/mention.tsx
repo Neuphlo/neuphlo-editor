@@ -11,6 +11,7 @@ export interface MentionItem {
   label: string
   avatar?: string
   email?: string
+  type?: "node" | "article" // For reference mentions
 }
 
 export interface MentionOptions {
@@ -73,6 +74,18 @@ export const createMentionExtension = (options?: MentionOptions) => {
             }
           },
         },
+        type: {
+          default: null,
+          parseHTML: (element) => element.getAttribute("data-ref-type"),
+          renderHTML: (attributes) => {
+            if (!attributes.type) {
+              return {}
+            }
+            return {
+              "data-ref-type": attributes.type,
+            }
+          },
+        },
       }
     },
     addNodeView() {
@@ -100,6 +113,7 @@ export const createMentionExtension = (options?: MentionOptions) => {
                 id: item.id,
                 label: item.label,
                 avatar: item.avatar,
+                type: item.type,
               },
             },
           ])
