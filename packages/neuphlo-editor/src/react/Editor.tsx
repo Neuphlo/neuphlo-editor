@@ -47,6 +47,7 @@ export type NeuphloEditorProps = {
   }
   mentionOptions?: MentionOptions
   referenceOptions?: MentionOptions
+  slashCommand?: boolean
 }
 
 export function Editor({
@@ -65,6 +66,8 @@ export function Editor({
   collaboration,
   mentionOptions,
   referenceOptions,
+  slashCommand,
+  placeholder,
 }: NeuphloEditorProps) {
   const normalizeExtras = (extras?: BubbleMenuExtra | BubbleMenuExtra[]) => {
     const result: {
@@ -108,6 +111,8 @@ export function Editor({
               imageBlockView: ImageBlockView,
               mention: mentionOptions,
               reference: referenceOptions,
+              slashCommand: slashCommand,
+              placeholder: placeholder,
             }),
             ...(extensions ?? []),
           ]}

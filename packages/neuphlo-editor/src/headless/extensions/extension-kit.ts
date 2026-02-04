@@ -20,9 +20,13 @@ export interface ExtensionKitOptions {
   imageBlockView?: any
   mention?: MentionOptions
   reference?: MentionOptions
+  slashCommand?: boolean
+  placeholder?: string
 }
 
 export const ExtensionKit = (options?: ExtensionKitOptions) => {
+  const enableSlashCommand = options?.slashCommand !== false // Default to true
+
   const extensions = [
     StarterKit.configure({ codeBlock: false, link: false }),
     CodeBlock,
@@ -36,19 +40,29 @@ export const ExtensionKit = (options?: ExtensionKitOptions) => {
         if (node.type.name === "heading") {
           return `Heading ${node.attrs.level}`
         }
-        return "Press '/' for commands"
+        // Use custom placeholder if provided, otherwise show slash command hint if enabled
+        if (options?.placeholder) {
+          return options.placeholder
+        }
+        return enableSlashCommand ? "Press '/' for commands" : ""
       },
       includeChildren: true,
     }),
-    SlashCommand.configure({
-      suggestion: {
-        char: "/",
-        render: renderSlashItems,
-        allowSpaces: true,
-        allowedPrefixes: null,
-      },
-    }),
   ]
+
+  // Add SlashCommand if enabled
+  if (enableSlashCommand) {
+    extensions.push(
+      SlashCommand.configure({
+        suggestion: {
+          char: "/",
+          render: renderSlashItems,
+          allowSpaces: true,
+          allowedPrefixes: null,
+        },
+      })
+    )
+  }
 
   // Add Mention extension if configured
   if (options?.mention) {

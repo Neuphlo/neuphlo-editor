@@ -134,16 +134,9 @@ export const createMentionExtension = (options?: MentionOptions) => {
       items: async ({ query }: { query: string }) => {
         if (!options?.items) return []
         const items = await options.items(query)
-        console.log(`[${extensionName}] Items:`, items)
         return items
       },
       command: ({ editor, range, props: item }: any) => {
-        console.log("Inserting reference:", extensionName)
-        console.log("  - item.id:", item.id)
-        console.log("  - item.label:", item.label)
-        console.log("  - item.type:", item.type)
-        console.log("  - item.slug:", item.slug)
-        console.log("  - item.nodeId:", item.nodeId)
         editor
           .chain()
           .focus()
