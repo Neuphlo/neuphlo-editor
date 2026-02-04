@@ -137,6 +137,7 @@ export const createMentionExtension = (options?: MentionOptions) => {
         return items
       },
       command: ({ editor, range, props: item }: any) => {
+        console.log("Inserting reference:", { extensionName, item })
         editor
           .chain()
           .focus()
