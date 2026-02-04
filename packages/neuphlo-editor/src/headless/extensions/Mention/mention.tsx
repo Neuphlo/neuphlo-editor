@@ -172,12 +172,16 @@ export const renderMentionSuggestion = () => {
       if (!component) return false
 
       if (event.key === "Escape") {
+        event.preventDefault()
+        event.stopPropagation()
         destroy()
         return true
       }
 
       // Handle arrow keys and enter
       if (["ArrowUp", "ArrowDown", "Enter"].includes(event.key)) {
+        event.preventDefault()
+        event.stopPropagation()
         // Let the MentionList component handle keyboard navigation
         return (component.ref as any)?.onKeyDown?.({ event }) ?? false
       }
