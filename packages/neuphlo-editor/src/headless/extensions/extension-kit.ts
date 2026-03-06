@@ -6,6 +6,7 @@ import {
   renderItems as renderSlashItems,
 } from "./slash-command"
 import { ImageBlock } from "./ImageBlock/ImageBlock"
+import { VideoBlock } from "./VideoBlock/VideoBlock"
 import { createMentionExtension } from "./Mention"
 import type { MentionOptions } from "./Mention"
 
@@ -18,6 +19,7 @@ export interface ExtensionKitOptions {
     user?: any
   }
   imageBlockView?: any
+  videoBlockView?: any
   mention?: MentionOptions
   reference?: MentionOptions
   slashCommand?: boolean
@@ -34,6 +36,9 @@ export const ExtensionKit = (options?: ExtensionKitOptions) => {
     ImageBlock.configure({
       uploadImage: options?.uploadImage,
       nodeView: options?.imageBlockView,
+    }),
+    VideoBlock.configure({
+      nodeView: options?.videoBlockView,
     }),
     Placeholder.configure({
       placeholder: ({ node }: any) => {

@@ -19,6 +19,7 @@ import {
   IconCode,
   IconSourceCode,
   IconPhoto,
+  IconVideo,
 } from "@tabler/icons-react"
 
 export type SlashMenuProps = {
@@ -364,6 +365,32 @@ export function SlashMenu({ className }: SlashMenuProps) {
           >
             <IconPhoto size={16} />
             <span>Image</span>
+          </span>
+        </EditorCommandItem>
+
+        <EditorCommandItem
+          value="video embed youtube vimeo"
+          className="nph-command__item"
+          onCommand={({
+            editor,
+            range,
+          }: {
+            editor: any
+            range: { from: number; to: number }
+          }) => {
+            ;(editor as any)
+              .chain()
+              .focus()
+              .deleteRange(range)
+              .setVideoBlock({ src: "" })
+              .run()
+          }}
+        >
+          <span
+            style={{ display: "inline-flex", alignItems: "center", gap: 8 }}
+          >
+            <IconVideo size={16} />
+            <span>Video</span>
           </span>
         </EditorCommandItem>
       </EditorCommandList>

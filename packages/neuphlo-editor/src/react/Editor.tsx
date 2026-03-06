@@ -10,6 +10,7 @@ import { SlashMenu, TextMenu } from "./menus"
 import { ImageMenu } from "./menus/ImageMenu"
 import { LinkMenu } from "./menus/LinkMenu"
 import { ImageBlockView } from "./menus/ImageBlock/ImageBlockView"
+import { VideoBlockView } from "./menus/VideoBlock/VideoBlockView"
 import type { ReactNode } from "react"
 import type { Editor as TiptapEditor } from "@tiptap/react"
 
@@ -110,6 +111,7 @@ export function Editor({
               uploadImage: uploadImage,
               collaboration: collaboration,
               imageBlockView: ImageBlockView,
+              videoBlockView: VideoBlockView,
               mention: mentionOptions,
               reference: referenceOptions,
               slashCommand: slashCommand,
