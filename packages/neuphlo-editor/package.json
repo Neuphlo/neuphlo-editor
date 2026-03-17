@@ -1,6 +1,6 @@
 {
   "name": "neuphlo-editor",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "private": false,
   "description": "A lightweight React wrapper around Tiptap with sensible defaults and image upload support.",
   "type": "module",
@@ -49,37 +49,48 @@
     "lint": "eslint . --ext .ts,.tsx"
   },
   "peerDependencies": {
-    "@tiptap/pm": "3.15.3",
-    "@tiptap/react": "3.15.3",
-    "@tiptap/suggestion": "3.15.3",
-    "@tiptap/extension-collaboration": "3.15.3",
-    "@tiptap/extension-collaboration-cursor": "2.26.2",
+    "@tiptap/pm": "^3.20.2",
+    "@tiptap/react": "^3.20.2",
+    "@tiptap/suggestion": "^3.20.2",
+    "@tiptap/extension-collaboration": "^3.20.2",
+    "@tiptap/y-tiptap": "^3.0.2",
     "@types/react": "^18.2.0 || ^19.0.0",
     "@types/react-dom": "^18.2.0 || ^19.0.0",
     "react": "^18.2.0 || ^19.0.0",
     "react-dom": "^18.2.0 || ^19.0.0",
     "yjs": "^13.6.0"
   },
-  "peerDependenciesMeta": {},
+  "peerDependenciesMeta": {
+    "@tiptap/extension-collaboration": {
+      "optional": true
+    },
+    "@tiptap/y-tiptap": {
+      "optional": true
+    }
+  },
   "devDependencies": {
-    "@tiptap/suggestion": "3.15.3",
+    "@tiptap/pm": "3.20.2",
+    "@tiptap/react": "3.20.2",
+    "@tiptap/suggestion": "3.20.2",
     "@types/node": "^20.0.0",
     "@types/react": "^19.1.12",
     "@types/react-dom": "^19.1.5",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
     "tsup": "^8.0.0",
     "typescript": "^5.9.2"
   },
   "dependencies": {
     "@tabler/icons-react": "^3.34.1",
-    "@tiptap/core": "3.15.3",
-    "@tiptap/extension-code-block-lowlight": "3.15.3",
-    "@tiptap/extension-image": "3.15.3",
-    "@tiptap/extension-link": "3.15.3",
-    "@tiptap/extension-mention": "3.15.3",
-    "@tiptap/extension-placeholder": "3.15.3",
-    "@tiptap/starter-kit": "3.15.3",
-    "@tiptap/extension-collaboration": "3.15.3",
-    "@tiptap/extension-collaboration-cursor": "2.26.2",
+    "@tiptap/core": "3.20.2",
+    "@tiptap/extension-code-block-lowlight": "3.20.2",
+    "@tiptap/extension-image": "3.20.2",
+    "@tiptap/extension-link": "3.20.2",
+    "@tiptap/extension-mention": "3.20.2",
+    "@tiptap/extension-placeholder": "3.20.2",
+    "@tiptap/starter-kit": "3.20.2",
+    "@tiptap/extension-collaboration": "3.20.2",
+    "@tiptap/y-tiptap": "^3.0.2",
     "cmdk": "^1.1.1",
     "highlight.js": "^11.11.1",
     "jotai": "^2.11.0",
