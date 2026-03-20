@@ -96,8 +96,9 @@ export function TextMenu({
     <BubbleMenu
       editor={editor}
       shouldShow={({ editor: e, state, from, to, view }) => {
-        // Don't show if imageBlock is active
+        // Don't show if imageBlock or videoBlock is active
         if (e.isActive("imageBlock")) return false
+        if (e.isActive("videoBlock")) return false
 
         // Don't show for node selections
         const { selection } = state
@@ -112,7 +113,7 @@ export function TextMenu({
         // Check if the selection contains an imageBlock node
         let hasImage = false
         state.doc.nodesBetween(from, to, (node) => {
-          if (node.type.name === "imageBlock") {
+          if (node.type.name === "imageBlock" || node.type.name === "videoBlock") {
             hasImage = true
             return false
           }

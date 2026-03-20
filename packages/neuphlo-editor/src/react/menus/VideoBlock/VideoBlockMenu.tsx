@@ -38,14 +38,18 @@ export const VideoBlockMenu = ({ editor }: VideoBlockMenuProps) => {
 
   const shouldShow = useCallback(() => {
     if (!editor) return false
-    const isActive = editor.isActive("videoBlock")
-    if (!isActive) return false
 
     const { state } = editor
     const { selection } = state
-    const isNodeSelection = selection.constructor.name === "NodeSelection"
 
-    return isNodeSelection
+    // Must be a NodeSelection
+    if (selection.constructor.name !== "NodeSelection") return false
+
+    // The selected node must be a videoBlock
+    const node = (selection as any).node
+    if (!node || node.type.name !== "videoBlock") return false
+
+    return true
   }, [editor])
 
   const onAlignLeft = useCallback(() => {
