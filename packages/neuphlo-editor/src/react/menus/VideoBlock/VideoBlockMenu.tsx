@@ -1,6 +1,6 @@
-import { Editor } from "@tiptap/react"
-import { BubbleMenu } from "@tiptap/react/menus"
-import { useCallback, useRef, useState, useEffect } from "react"
+import { NodeSelection } from "@tiptap/pm/state"
+import { Editor, useEditorState } from "@tiptap/react"
+import { useCallback, useRef } from "react"
 import { ImageBlockWidth } from "../ImageBlock/ImageBlockWidth"
 import {
   IconAlignLeft,
@@ -11,46 +11,32 @@ import {
 
 export type VideoBlockMenuProps = {
   editor: Editor
+  getPos: () => number
 }
 
-export const VideoBlockMenu = ({ editor }: VideoBlockMenuProps) => {
+export const VideoBlockMenu = ({ editor, getPos }: VideoBlockMenuProps) => {
   const menuRef = useRef<HTMLDivElement>(null)
-  const [align, setAlign] = useState<"left" | "center" | "right">("center")
-  const [width, setWidth] = useState<number>(100)
 
-  useEffect(() => {
-    if (!editor) return
-    const update = () => {
-      if (!editor.isActive("videoBlock")) return
-      const attrs = editor.getAttributes("videoBlock")
-      setAlign(attrs.align || "center")
-      const widthStr = attrs.width || "100%"
-      setWidth(parseInt(widthStr) || 100)
-    }
-    update()
-    editor.on("selectionUpdate", update)
-    editor.on("transaction", update)
-    return () => {
-      editor.off("selectionUpdate", update)
-      editor.off("transaction", update)
-    }
-  }, [editor])
+  const { isVisible, align, width } = useEditorState({
+    editor,
+    selector: (ctx) => {
+      if (!ctx.editor) return { isVisible: false, align: "center" as const, width: 100 }
+      const { state } = ctx.editor
+      const { selection } = state
+      const isNodeSel = selection instanceof NodeSelection
+      const isThisNode = isNodeSel && selection.from === getPos()
 
-  const shouldShow = useCallback(() => {
-    if (!editor) return false
-
-    const { state } = editor
-    const { selection } = state
-
-    // Must be a NodeSelection
-    if (selection.constructor.name !== "NodeSelection") return false
-
-    // The selected node must be a videoBlock
-    const node = (selection as any).node
-    if (!node || node.type.name !== "videoBlock") return false
-
-    return true
-  }, [editor])
+      let currentAlign: "left" | "center" | "right" = "center"
+      let currentWidth = 100
+      if (isThisNode) {
+        const attrs = ctx.editor.getAttributes("videoBlock")
+        currentAlign = attrs.align || "center"
+        const widthStr = attrs.width || "100%"
+        currentWidth = parseInt(widthStr) || 100
+      }
+      return { isVisible: isThisNode, align: currentAlign, width: currentWidth }
+    },
+  })
 
   const onAlignLeft = useCallback(() => {
     editor
@@ -91,60 +77,66 @@ export const VideoBlockMenu = ({ editor }: VideoBlockMenuProps) => {
     editor.chain().focus(undefined, { scrollIntoView: false }).deleteSelection().run()
   }, [editor])
 
+  if (!isVisible) return null
+
   return (
-    <BubbleMenu
-      editor={editor}
-      shouldShow={shouldShow}
-      updateDelay={0}
+    <div
+      className="bubble-menu"
+      ref={menuRef}
+      style={{
+        position: "absolute",
+        top: "-40px",
+        left: "50%",
+        transform: "translateX(-50%)",
+        zIndex: "var(--nph-z, 50)",
+      }}
     >
-      <div className="bubble-menu" ref={menuRef}>
-        <button
-          type="button"
-          className={`nph-btn nph-btn-ghost nph-btn-xs nph-btn-icon${align === "left" ? " is-active" : ""}`}
-          title="Align left"
-          onMouseDown={(e) => e.preventDefault()}
-          onClick={onAlignLeft}
-        >
-          <IconAlignLeft size={16} />
-        </button>
-        <button
-          type="button"
-          className={`nph-btn nph-btn-ghost nph-btn-xs nph-btn-icon${align === "center" ? " is-active" : ""}`}
-          title="Align center"
-          onMouseDown={(e) => e.preventDefault()}
-          onClick={onAlignCenter}
-        >
-          <IconAlignCenter size={16} />
-        </button>
-        <button
-          type="button"
-          className={`nph-btn nph-btn-ghost nph-btn-xs nph-btn-icon${align === "right" ? " is-active" : ""}`}
-          title="Align right"
-          onMouseDown={(e) => e.preventDefault()}
-          onClick={onAlignRight}
-        >
-          <IconAlignRight size={16} />
-        </button>
-        <div
-          className="nph-link-popover__divider"
-          style={{ margin: "0 4px" }}
-        />
-        <ImageBlockWidth onChange={onWidthChange} value={width} />
-        <div
-          className="nph-link-popover__divider"
-          style={{ margin: "0 4px" }}
-        />
-        <button
-          type="button"
-          className="nph-btn nph-btn-ghost nph-btn-xs nph-btn-icon"
-          title="Remove video"
-          onMouseDown={(e) => e.preventDefault()}
-          onClick={onRemove}
-        >
-          <IconTrash size={16} />
-        </button>
-      </div>
-    </BubbleMenu>
+      <button
+        type="button"
+        className={`nph-btn nph-btn-ghost nph-btn-xs nph-btn-icon${align === "left" ? " is-active" : ""}`}
+        title="Align left"
+        onMouseDown={(e) => e.preventDefault()}
+        onClick={onAlignLeft}
+      >
+        <IconAlignLeft size={16} />
+      </button>
+      <button
+        type="button"
+        className={`nph-btn nph-btn-ghost nph-btn-xs nph-btn-icon${align === "center" ? " is-active" : ""}`}
+        title="Align center"
+        onMouseDown={(e) => e.preventDefault()}
+        onClick={onAlignCenter}
+      >
+        <IconAlignCenter size={16} />
+      </button>
+      <button
+        type="button"
+        className={`nph-btn nph-btn-ghost nph-btn-xs nph-btn-icon${align === "right" ? " is-active" : ""}`}
+        title="Align right"
+        onMouseDown={(e) => e.preventDefault()}
+        onClick={onAlignRight}
+      >
+        <IconAlignRight size={16} />
+      </button>
+      <div
+        className="nph-link-popover__divider"
+        style={{ margin: "0 4px" }}
+      />
+      <ImageBlockWidth onChange={onWidthChange} value={width} />
+      <div
+        className="nph-link-popover__divider"
+        style={{ margin: "0 4px" }}
+      />
+      <button
+        type="button"
+        className="nph-btn nph-btn-ghost nph-btn-xs nph-btn-icon"
+        title="Remove video"
+        onMouseDown={(e) => e.preventDefault()}
+        onClick={onRemove}
+      >
+        <IconTrash size={16} />
+      </button>
+    </div>
   )
 }
 

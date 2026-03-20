@@ -39,10 +39,11 @@ export const ImageBlockView = (props: ImageBlockViewProps) => {
   }, [getPos, editor.commands])
 
   // Calculate wrapper class based on alignment
+  // Uses max-width for the percentage so the wrapper shrinks to fit the image
   const getWrapperStyle = (): React.CSSProperties => {
     const baseStyle: React.CSSProperties = {
-      width: width || "100%",
-      maxWidth: "100%",
+      width: "fit-content",
+      maxWidth: width || "100%",
     }
 
     if (align === "left") {
@@ -54,14 +55,17 @@ export const ImageBlockView = (props: ImageBlockViewProps) => {
     }
   }
 
+  // The inner content wrapper for positioning the menu
+  const getContentStyle = (): React.CSSProperties => ({
+    position: "relative" as const,
+  })
+
   // Show uploader if no src
   if (!src || src === "") {
     return (
-      <NodeViewWrapper>
-        <div style={getWrapperStyle()}>
-          <div ref={imageWrapperRef}>
-            <ImageUploader onUpload={handleUpload} editor={editor} />
-          </div>
+      <NodeViewWrapper style={getWrapperStyle()}>
+        <div ref={imageWrapperRef}>
+          <ImageUploader onUpload={handleUpload} editor={editor} />
         </div>
       </NodeViewWrapper>
     )
@@ -70,11 +74,9 @@ export const ImageBlockView = (props: ImageBlockViewProps) => {
   // Show loading placeholder
   if (loading) {
     return (
-      <NodeViewWrapper>
-        <div style={getWrapperStyle()}>
-          <div ref={imageWrapperRef}>
-            <ImageBlockLoading />
-          </div>
+      <NodeViewWrapper style={getWrapperStyle()}>
+        <div ref={imageWrapperRef}>
+          <ImageBlockLoading />
         </div>
       </NodeViewWrapper>
     )
@@ -82,18 +84,16 @@ export const ImageBlockView = (props: ImageBlockViewProps) => {
 
   // Show the actual image
   return (
-    <NodeViewWrapper>
-      <div style={getWrapperStyle()}>
-        <div contentEditable={false} ref={imageWrapperRef} style={{ position: "relative" }}>
+    <NodeViewWrapper style={getWrapperStyle()}>
+        <div contentEditable={false} ref={imageWrapperRef} style={getContentStyle()}>
           <img
             src={src}
             alt={alt || ""}
             onClick={onClick}
             className="nph-image-block"
           />
+          <ImageBlockMenu editor={editor} getPos={getPos} appendTo={imageWrapperRef} />
         </div>
-      </div>
-      <ImageBlockMenu editor={editor} appendTo={imageWrapperRef} />
     </NodeViewWrapper>
   )
 }

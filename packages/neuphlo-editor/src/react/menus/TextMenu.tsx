@@ -1,3 +1,4 @@
+import { NodeSelection } from "@tiptap/pm/state"
 import { useCurrentEditor, useEditorState } from "@tiptap/react"
 import type { Editor as TiptapEditor } from "@tiptap/react"
 import { BubbleMenu } from "@tiptap/react/menus"
@@ -102,7 +103,7 @@ export function TextMenu({
 
         // Don't show for node selections
         const { selection } = state
-        if (selection.constructor.name === "NodeSelection") return false
+        if (selection instanceof NodeSelection) return false
 
         // Don't show if selection is empty
         if (from === to) return false

@@ -59,7 +59,7 @@ export function Editor({
   immediatelyRender = false,
   showTextMenu = true,
   showSlashMenu = true,
-  showImageMenu = true,
+  showImageMenu = false,
   extensions,
   bubbleMenuExtras,
   onUpdate,

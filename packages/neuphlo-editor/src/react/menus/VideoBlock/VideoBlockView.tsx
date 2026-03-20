@@ -1,5 +1,6 @@
 import { Node } from "@tiptap/pm/model"
-import { Editor, NodeViewWrapper } from "@tiptap/react"
+import { NodeSelection } from "@tiptap/pm/state"
+import { Editor, NodeViewWrapper, useEditorState } from "@tiptap/react"
 import { useCallback, useRef, useState } from "react"
 import { VideoBlockMenu } from "./VideoBlockMenu"
 import { IconVideo } from "@tabler/icons-react"
@@ -42,6 +43,15 @@ export const VideoBlockView = (props: VideoBlockViewProps) => {
   const wrapperRef = useRef<HTMLDivElement>(null)
   const { src, width, align } = node.attrs
   const [inputUrl, setInputUrl] = useState("")
+
+  const isSelected = useEditorState({
+    editor,
+    selector: (ctx) => {
+      if (!ctx.editor) return false
+      const { selection } = ctx.editor.state
+      return selection instanceof NodeSelection && selection.from === getPos()
+    },
+  })
 
   const handleEmbed = useCallback(() => {
     if (!inputUrl.trim()) return
@@ -120,17 +130,23 @@ export const VideoBlockView = (props: VideoBlockViewProps) => {
           ref={wrapperRef}
           style={{ position: "relative" }}
         >
-          <div className="nph-video-block" onClick={onClick}>
+          <div className="nph-video-block">
             <iframe
               src={src}
               className="nph-video-block__iframe"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
             />
+            {!isSelected && (
+              <div
+                className="nph-video-block__overlay"
+                onClick={onClick}
+              />
+            )}
           </div>
+          <VideoBlockMenu editor={editor} getPos={getPos} />
         </div>
       </div>
-      <VideoBlockMenu editor={editor} />
     </NodeViewWrapper>
   )
 }
