@@ -1,14 +1,18 @@
 import Collaboration from "@tiptap/extension-collaboration"
-// import CollaborationCursor from "@tiptap/extension-collaboration-cursor" // Temporarily disabled
+import CollaborationCaret from "@tiptap/extension-collaboration-caret"
 import { StarterKit, Placeholder, CodeBlock, Link } from "."
+import Underline from "@tiptap/extension-underline"
 import {
   Command as SlashCommand,
-  renderItems as renderSlashItems,
 } from "./slash-command"
 import { ImageBlock } from "./ImageBlock/ImageBlock"
 import { VideoBlock } from "./VideoBlock/VideoBlock"
 import { createMentionExtension } from "./Mention"
 import type { MentionOptions } from "./Mention"
+import { DragHandle, setDragHandleCallbacks } from "./DragHandle"
+import type { DragHandleCallbacks } from "./DragHandle"
+import { TableKit } from "./Table"
+import { MarkdownPaste } from "./MarkdownPaste"
 
 export interface ExtensionKitOptions {
   uploadImage?: (file: File) => Promise<string>
@@ -16,13 +20,17 @@ export interface ExtensionKitOptions {
     doc: any
     field: string
     awareness?: any
-    user?: any
+    provider?: any
+    user?: { name: string; color: string; [key: string]: any }
   }
   imageBlockView?: any
   videoBlockView?: any
   mention?: MentionOptions
   reference?: MentionOptions
   slashCommand?: boolean
+  dragHandle?: boolean
+  dragHandleCallbacks?: DragHandleCallbacks
+  table?: boolean
   placeholder?: string
 }
 
@@ -33,6 +41,7 @@ export const ExtensionKit = (options?: ExtensionKitOptions) => {
     StarterKit.configure({ codeBlock: false, link: false }),
     CodeBlock,
     Link,
+    Underline,
     ImageBlock.configure({
       uploadImage: options?.uploadImage,
       nodeView: options?.imageBlockView,
@@ -53,7 +62,27 @@ export const ExtensionKit = (options?: ExtensionKitOptions) => {
       },
       includeChildren: true,
     }),
+    MarkdownPaste,
   ]
+
+  // Add Table support if enabled
+  if (options?.table !== false) {
+    extensions.push(
+      TableKit.configure({
+        resizable: true,
+        lastColumnResizable: true,
+        allowTableNodeSelection: true,
+      }) as any
+    )
+  }
+
+  // Add DragHandle if enabled
+  if (options?.dragHandle !== false) {
+    extensions.push(DragHandle as any)
+    if (options?.dragHandleCallbacks) {
+      setDragHandleCallbacks(options.dragHandleCallbacks)
+    }
+  }
 
   // Add SlashCommand if enabled
   if (enableSlashCommand) {
@@ -61,7 +90,6 @@ export const ExtensionKit = (options?: ExtensionKitOptions) => {
       SlashCommand.configure({
         suggestion: {
           char: "/",
-          render: renderSlashItems,
           allowSpaces: true,
           allowedPrefixes: null,
         },
@@ -92,9 +120,33 @@ export const ExtensionKit = (options?: ExtensionKitOptions) => {
       }),
     )
 
-    // Note: CollaborationCursor is temporarily disabled due to compatibility issues
-    // Collaboration (document syncing) still works without it
-    // TODO: Fix CollaborationCursor integration
+    // Add collaboration carets if provider and user are available
+    if (options.collaboration.provider && options.collaboration.user) {
+      extensions.push(
+        CollaborationCaret.configure({
+          provider: options.collaboration.provider,
+          user: options.collaboration.user,
+          render: (user: Record<string, any>) => {
+            const cursor = document.createElement("span")
+            cursor.classList.add("nph-collab-caret")
+            cursor.setAttribute("style", `border-color: ${user.color || "#3b82f6"}`)
+
+            const label = document.createElement("div")
+            label.classList.add("nph-collab-caret__label")
+            label.setAttribute("style", `background-color: ${user.color || "#3b82f6"}`)
+            label.insertBefore(document.createTextNode(user.name || "Anonymous"), null)
+
+            cursor.insertBefore(label, null)
+            return cursor
+          },
+          selectionRender: (user: Record<string, any>) => ({
+            nodeName: "span",
+            class: "nph-collab-selection",
+            style: `background-color: ${user.color || "#3b82f6"}20`,
+          }),
+        }) as any
+      )
+    }
   }
 
   return extensions

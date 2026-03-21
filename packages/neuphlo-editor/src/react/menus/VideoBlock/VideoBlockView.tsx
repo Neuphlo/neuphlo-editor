@@ -75,8 +75,8 @@ export const VideoBlockView = (props: VideoBlockViewProps) => {
 
   const getWrapperStyle = (): React.CSSProperties => {
     const baseStyle: React.CSSProperties = {
-      width: width || "100%",
-      maxWidth: "100%",
+      width: "fit-content",
+      maxWidth: width || "100%",
     }
 
     if (align === "left") {
@@ -91,9 +91,9 @@ export const VideoBlockView = (props: VideoBlockViewProps) => {
   // Show URL input if no src
   if (!src || src === "") {
     return (
-      <NodeViewWrapper>
-        <div style={getWrapperStyle()}>
-          <div className="nph-video-input" ref={wrapperRef}>
+      <NodeViewWrapper style={getWrapperStyle()}>
+        <div ref={wrapperRef}>
+          <div className="nph-video-input">
             <div className="nph-video-input__icon">
               <IconVideo size={24} />
             </div>
@@ -123,29 +123,27 @@ export const VideoBlockView = (props: VideoBlockViewProps) => {
 
   // Show the embedded video
   return (
-    <NodeViewWrapper>
-      <div style={getWrapperStyle()}>
-        <div
-          contentEditable={false}
-          ref={wrapperRef}
-          style={{ position: "relative" }}
-        >
-          <div className="nph-video-block">
-            <iframe
-              src={src}
-              className="nph-video-block__iframe"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
+    <NodeViewWrapper style={getWrapperStyle()}>
+      <div
+        contentEditable={false}
+        ref={wrapperRef}
+        style={{ position: "relative" }}
+      >
+        <div className="nph-video-block">
+          <iframe
+            src={src}
+            className="nph-video-block__iframe"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+          {!isSelected && (
+            <div
+              className="nph-video-block__overlay"
+              onClick={onClick}
             />
-            {!isSelected && (
-              <div
-                className="nph-video-block__overlay"
-                onClick={onClick}
-              />
-            )}
-          </div>
-          <VideoBlockMenu editor={editor} getPos={getPos} />
+          )}
         </div>
+        <VideoBlockMenu editor={editor} getPos={getPos} />
       </div>
     </NodeViewWrapper>
   )

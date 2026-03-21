@@ -4,6 +4,7 @@ import { useCallback, useRef } from "react"
 import { ImageBlockMenu } from "./ImageBlockMenu"
 import { ImageUploader } from "./ImageUploader"
 import { ImageBlockLoading } from "./ImageBlockLoading"
+import { ImageResizeHandle } from "./ImageResizeHandle"
 
 interface ImageBlockViewProps {
   editor: Editor
@@ -38,12 +39,18 @@ export const ImageBlockView = (props: ImageBlockViewProps) => {
     editor.commands.setNodeSelection(getPos())
   }, [getPos, editor.commands])
 
-  // Calculate wrapper class based on alignment
-  // Uses max-width for the percentage so the wrapper shrinks to fit the image
+  const handleResize = useCallback(
+    (widthPercent: number) => {
+      updateAttributes({ width: `${widthPercent}%` })
+    },
+    [updateAttributes]
+  )
+
+  // Calculate wrapper style based on alignment and width
   const getWrapperStyle = (): React.CSSProperties => {
     const baseStyle: React.CSSProperties = {
-      width: "fit-content",
-      maxWidth: width || "100%",
+      width: width || "100%",
+      maxWidth: "100%",
     }
 
     if (align === "left") {
@@ -63,7 +70,7 @@ export const ImageBlockView = (props: ImageBlockViewProps) => {
   // Show uploader if no src
   if (!src || src === "") {
     return (
-      <NodeViewWrapper style={getWrapperStyle()}>
+      <NodeViewWrapper style={{ width: "100%", marginTop: "0.5rem", marginBottom: "0.5rem" }}>
         <div ref={imageWrapperRef}>
           <ImageUploader onUpload={handleUpload} editor={editor} />
         </div>
@@ -86,12 +93,14 @@ export const ImageBlockView = (props: ImageBlockViewProps) => {
   return (
     <NodeViewWrapper style={getWrapperStyle()}>
         <div contentEditable={false} ref={imageWrapperRef} style={getContentStyle()}>
-          <img
-            src={src}
-            alt={alt || ""}
-            onClick={onClick}
-            className="nph-image-block"
-          />
+          <ImageResizeHandle onResize={handleResize} currentWidth={width}>
+            <img
+              src={src}
+              alt={alt || ""}
+              onClick={onClick}
+              className="nph-image-block"
+            />
+          </ImageResizeHandle>
           <ImageBlockMenu editor={editor} getPos={getPos} appendTo={imageWrapperRef} />
         </div>
     </NodeViewWrapper>

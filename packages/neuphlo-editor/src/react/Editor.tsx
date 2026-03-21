@@ -12,7 +12,10 @@ import { LinkMenu } from "./menus/LinkMenu"
 import { ImageBlockView } from "./menus/ImageBlock/ImageBlockView"
 import { VideoBlockView } from "./menus/VideoBlock/VideoBlockView"
 import type { ReactNode } from "react"
+import { useMemo, useState, useCallback, useRef, useEffect } from "react"
 import type { Editor as TiptapEditor } from "@tiptap/react"
+import { BlockActionMenu } from "./menus/DragHandle/BlockActionMenu"
+import { TableMenu } from "./menus/TableMenu"
 
 export type BubbleMenuExtraRenderer = (editor: TiptapEditor) => ReactNode
 
@@ -36,6 +39,7 @@ export type NeuphloEditorProps = {
   showTextMenu?: boolean
   showSlashMenu?: boolean
   showImageMenu?: boolean
+  showDragHandle?: boolean
   extensions?: any[]
   bubbleMenuExtras?: BubbleMenuExtras
   onUpdate?: EditorContentProps["onUpdate"]
@@ -60,6 +64,7 @@ export function Editor({
   showTextMenu = true,
   showSlashMenu = true,
   showImageMenu = false,
+  showDragHandle = true,
   extensions,
   bubbleMenuExtras,
   onUpdate,
@@ -71,6 +76,55 @@ export function Editor({
   slashCommand,
   placeholder,
 }: NeuphloEditorProps) {
+  const [actionMenuAnchor, setActionMenuAnchor] = useState<HTMLElement | null>(null)
+  const [actionMenuEditor, setActionMenuEditor] = useState<TiptapEditor | null>(null)
+  const actionMenuRef = useRef<HTMLDivElement>(null)
+
+  // Close action menu on click outside
+  useEffect(() => {
+    if (!actionMenuAnchor) return
+    const handlePointerDown = (e: MouseEvent) => {
+      if (actionMenuRef.current && !actionMenuRef.current.contains(e.target as HTMLElement)) {
+        setActionMenuAnchor(null)
+      }
+    }
+    document.addEventListener("pointerdown", handlePointerDown)
+    return () => document.removeEventListener("pointerdown", handlePointerDown)
+  }, [actionMenuAnchor])
+
+  const dragHandleCallbacks = useMemo(
+    () => ({
+      onAddBlock: (editor: any) => {
+        const { state } = editor
+        const { selection } = state
+        const { $anchor } = selection
+
+        // Find the top-level block node (depth 1) and insert after it
+        const topDepth = Math.min($anchor.depth, 1)
+        const endOfBlock = $anchor.end(topDepth)
+        const insertPos = endOfBlock + 1
+
+        editor
+          .chain()
+          .focus()
+          .insertContentAt(insertPos, { type: "paragraph" })
+          .focus(insertPos + 1)
+          .run()
+        // Insert "/" to trigger slash command menu after the new paragraph is focused
+        requestAnimationFrame(() => {
+          editor.commands.insertContent("/")
+        })
+      },
+      onGripClick: (editor: any, _node: any, element: HTMLElement) => {
+        setActionMenuEditor(editor)
+        setActionMenuAnchor((prev) => (prev === element ? null : element))
+      },
+    }),
+    []
+  )
+
+  const enableDragHandle = showDragHandle && editable
+
   const normalizeExtras = (extras?: BubbleMenuExtra | BubbleMenuExtra[]) => {
     const result: {
       start: BubbleMenuExtraRenderer[]
@@ -96,6 +150,10 @@ export function Editor({
   const textExtras = normalizeExtras(bubbleMenuExtras?.text)
   const imageExtras = normalizeExtras(bubbleMenuExtras?.image)
 
+  const handleCloseActionMenu = useCallback(() => {
+    setActionMenuAnchor(null)
+  }, [])
+
   return (
     <div className={className}>
       <EditorRoot>
@@ -115,6 +173,8 @@ export function Editor({
               mention: mentionOptions,
               reference: referenceOptions,
               slashCommand: slashCommand,
+              dragHandle: enableDragHandle,
+              dragHandleCallbacks: enableDragHandle ? dragHandleCallbacks : undefined,
               placeholder: placeholder,
             }),
             ...(extensions ?? []),
@@ -141,9 +201,26 @@ export function Editor({
             />
           ) : null}
           <LinkMenu />
+          <TableMenu />
           {showSlashMenu ? <SlashMenu /> : null}
         </EditorContent>
       </EditorRoot>
+      {actionMenuAnchor && actionMenuEditor && (
+        <div
+          ref={actionMenuRef}
+          style={{
+            position: "fixed",
+            zIndex: 10000,
+            top: actionMenuAnchor.getBoundingClientRect().bottom + 4,
+            left: actionMenuAnchor.getBoundingClientRect().left,
+          }}
+        >
+          <BlockActionMenu
+            editor={actionMenuEditor}
+            onClose={handleCloseActionMenu}
+          />
+        </div>
+      )}
     </div>
   )
 }

@@ -1,8 +1,8 @@
 import { forwardRef } from "react"
-import { CommandEmpty, CommandItem } from "cmdk"
 import { useCurrentEditor } from "@tiptap/react"
 import { useAtomValue } from "jotai"
-import { rangeAtom } from "../utils/atoms"
+import { rangeAtom, queryAtom } from "../utils/atoms"
+import { novelStore } from "../utils/store"
 import type { Editor, Range } from "@tiptap/core"
 
 interface EditorCommandItemProps {
@@ -13,33 +13,51 @@ interface EditorCommandItemProps {
     editor: Editor
     range: Range
   }) => void
+  readonly value?: string
 }
-
-const CommandItemAny: any = CommandItem
-const CommandEmptyAny: any = CommandEmpty
 
 export const EditorCommandItem = forwardRef<
   HTMLDivElement,
   EditorCommandItemProps & any
->(({ children, onCommand, ...rest }, ref) => {
+>(({ children, onCommand, value, className, ...rest }, ref) => {
   const { editor } = useCurrentEditor()
-  const range = useAtomValue(rangeAtom)
+  const range = useAtomValue(rangeAtom, { store: novelStore })
+  const query = useAtomValue(queryAtom, { store: novelStore })
 
   if (!editor || !range) return null
 
+  // Filter: if query is set, check if this item matches
+  if (query && value) {
+    const searchText = value.toLowerCase()
+    const q = query.toLowerCase()
+    if (!searchText.includes(q)) return null
+  }
+
   return (
-    <CommandItemAny
+    <div
       ref={ref}
-      {...(rest as any)}
-      onSelect={() => onCommand({ editor, range })}
+      role="option"
+      className={className}
+      onClick={() => onCommand({ editor, range })}
+      {...rest}
     >
       {children}
-    </CommandItemAny>
+    </div>
   )
 })
 
 EditorCommandItem.displayName = "EditorCommandItem"
 
-export const EditorCommandEmpty: any = CommandEmptyAny
+export const EditorCommandEmpty = forwardRef<HTMLDivElement, any>(
+  ({ children, ...rest }, ref) => {
+    return (
+      <div ref={ref} {...rest}>
+        {children}
+      </div>
+    )
+  }
+)
+
+EditorCommandEmpty.displayName = "EditorCommandEmpty"
 
 export default EditorCommandItem

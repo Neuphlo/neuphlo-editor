@@ -1,6 +1,6 @@
 {
   "name": "neuphlo-editor",
-  "version": "1.8.3",
+  "version": "2.0.0",
   "private": false,
   "description": "A lightweight React wrapper around Tiptap with sensible defaults and image upload support.",
   "type": "module",
@@ -49,10 +49,10 @@
     "lint": "eslint . --ext .ts,.tsx"
   },
   "peerDependencies": {
+    "@tiptap/extension-collaboration": "^3.20.2",
     "@tiptap/pm": "^3.20.2",
     "@tiptap/react": "^3.20.2",
     "@tiptap/suggestion": "^3.20.2",
-    "@tiptap/extension-collaboration": "^3.20.2",
     "@tiptap/y-tiptap": "^3.0.2",
     "@types/react": "^18.2.0 || ^19.0.0",
     "@types/react-dom": "^18.2.0 || ^19.0.0",
@@ -81,6 +81,7 @@
     "typescript": "^5.9.2"
   },
   "dependencies": {
+    "@floating-ui/dom": "^1.7.6",
     "@tabler/icons-react": "^3.34.1",
     "@tiptap/core": "3.20.2",
     "@tiptap/extension-blockquote": "3.20.2",
@@ -90,7 +91,9 @@
     "@tiptap/extension-code-block": "3.20.2",
     "@tiptap/extension-code-block-lowlight": "3.20.2",
     "@tiptap/extension-collaboration": "3.20.2",
+    "@tiptap/extension-collaboration-caret": "3.20.2",
     "@tiptap/extension-document": "3.20.2",
+    "@tiptap/extension-drag-handle": "3.20.2",
     "@tiptap/extension-dropcursor": "3.20.2",
     "@tiptap/extension-gapcursor": "3.20.2",
     "@tiptap/extension-hard-break": "3.20.2",
@@ -103,10 +106,12 @@
     "@tiptap/extension-list-item": "3.20.2",
     "@tiptap/extension-list-keymap": "3.20.2",
     "@tiptap/extension-mention": "3.20.2",
+    "@tiptap/extension-node-range": "3.20.2",
     "@tiptap/extension-ordered-list": "3.20.2",
     "@tiptap/extension-paragraph": "3.20.2",
     "@tiptap/extension-placeholder": "3.20.2",
     "@tiptap/extension-strike": "3.20.2",
+    "@tiptap/extension-table": "3.20.2",
     "@tiptap/extension-text": "3.20.2",
     "@tiptap/extension-underline": "3.20.2",
     "@tiptap/extensions": "3.20.2",
