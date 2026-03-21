@@ -1,3 +1,4 @@
+import { NodeSelection } from "@tiptap/pm/state"
 import { useCurrentEditor } from "@tiptap/react"
 import type { Editor as TiptapEditor } from "@tiptap/react"
 import { BubbleMenu } from "@tiptap/react/menus"
@@ -84,7 +85,7 @@ export function ImageMenu({
 
         // Check if we have a node selection (clicking on image)
         const { selection } = state
-        const isNodeSelection = selection.constructor.name === "NodeSelection"
+        const isNodeSelection = selection instanceof NodeSelection
 
         // Only show for node selections (when clicking directly on the image)
         // This prevents showing when there's a text selection that includes an image

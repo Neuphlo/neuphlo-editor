@@ -1,50 +1,128 @@
 const exampleContent = /* html */ `
-  <h1>Introducing Neuphlo Editor</h1>
+  <h1>Welcome to Neuphlo Editor</h1>
   <p>
-    Neuphlo Editor is a Notion‑style WYSIWYG editor for React, built on Tiptap.
-    It ships a small, sensible preset and a typed React wrapper — easy to style
-    and easy to extend.
+    A modern block editor for React, built on <a href="https://tiptap.dev">Tiptap</a>.
+    Try editing this page to explore all the features below.
   </p>
 
-  <h2>Installation</h2>
-  <pre><code class="language-js">npm i neuphlo-editor</code></pre>
+  <h2>Text Formatting</h2>
+  <p>
+    Select any text to see the <strong>bubble menu</strong> appear. You can make text
+    <strong>bold</strong>, <em>italic</em>, <u>underlined</u>,
+    <s>strikethrough</s>, or <code>inline code</code>.
+    You can also add <a href="https://github.com">links</a> to any text.
+  </p>
 
-  <h2>Usage</h2>
-  <pre><code class="language-js">import { Editor } from "neuphlo-editor/react";
+  <h2>Headings</h2>
+  <p>The editor supports four levels of headings. Use the slash command or the bubble menu to switch between them.</p>
+  <h3>This is a Heading 3</h3>
+  <h4>This is a Heading 4</h4>
+
+  <h2>Lists</h2>
+  <p>Bullet lists, numbered lists, and task lists are all supported:</p>
+  <ul>
+    <li>Drag handles appear on hover to reorder blocks</li>
+    <li>Nest items by pressing <kbd>Tab</kbd></li>
+    <li>Use the slash command to switch list types</li>
+  </ul>
+  <ol>
+    <li>First item in a numbered list</li>
+    <li>Second item — ordering is automatic</li>
+    <li>Third item</li>
+  </ol>
+  <ul data-type="taskList">
+    <li data-type="taskItem" data-checked="true">Ship the new editor</li>
+    <li data-type="taskItem" data-checked="true">Add drag-and-drop support</li>
+    <li data-type="taskItem" data-checked="false">Write documentation</li>
+    <li data-type="taskItem" data-checked="false">Celebrate launch</li>
+  </ul>
+
+  <h2>Blockquote</h2>
+  <blockquote>
+    The best way to predict the future is to invent it. Great editors don't just
+    display content — they make creating it feel effortless.
+  </blockquote>
+
+  <h2>Code Block</h2>
+  <pre><code class="language-typescript">import { Editor } from "neuphlo-editor/react";
 
 export default function App() {
-  return &lt;Editor content={"&lt;p&gt;Hello Neuphlo&lt;/p&gt;"} /&gt;;
+  return (
+    &lt;Editor
+      content="&lt;p&gt;Hello world&lt;/p&gt;"
+      uploadImage={async (file) =&gt; {
+        const url = await uploadToStorage(file);
+        return url;
+      }}
+    /&gt;
+  );
 }</code></pre>
 
-  <p>Style it your way with Tailwind or CSS (styles are auto‑included when importing <code>neuphlo-editor/react</code>):</p>
-  <pre><code class="language-js">&lt;Editor className="min-h-[200px] border rounded-md p-3 outline-none" /&gt;</code></pre>
+  <h2>Images</h2>
+  <p>
+    Click on an image to select it. Use the resize handles on the sides to adjust
+    the width, or the toolbar above to change alignment. Try uploading your own
+    image using the slash command.
+  </p>
+  <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80" alt="Mountain landscape" />
 
-  <h2>Features</h2>
-  <ul>
-    <li>Headings 1–3, bold/italic, paragraphs</li>
-    <li>Lists: bullet and numbered (keeps marks)</li>
-    <li>Blockquote and code blocks</li>
-    <li>Horizontal rule and inline code</li>
-    <li>Keyboard shortcuts: <kbd>Cmd/Ctrl</kbd>+<kbd>B</kbd> and <kbd>Cmd/Ctrl</kbd>+<kbd>I</kbd></li>
-    <li>Themeable: minimal CSS you can override</li>
-    <li>Composable: extend with any Tiptap extension</li>
-    <li>Type‑safe: built with TypeScript</li>
-  </ul>
+  <h2>Tables</h2>
+  <p>
+    Hover over a table to see column and row grips. Click a grip to access options
+    like insert, delete, or toggle headers. Drag grips to reorder rows or columns.
+  </p>
+  <table>
+    <tr>
+      <th>Feature</th>
+      <th>Status</th>
+      <th>Notes</th>
+    </tr>
+    <tr>
+      <td>Rich text formatting</td>
+      <td>Ready</td>
+      <td>Bold, italic, underline, strike, code</td>
+    </tr>
+    <tr>
+      <td>Slash commands</td>
+      <td>Ready</td>
+      <td>Type <code>/</code> to insert any block type</td>
+    </tr>
+    <tr>
+      <td>Image blocks</td>
+      <td>Ready</td>
+      <td>Upload, resize, and align images</td>
+    </tr>
+    <tr>
+      <td>Table editing</td>
+      <td>Ready</td>
+      <td>Add/remove rows and columns, drag to reorder</td>
+    </tr>
+    <tr>
+      <td>Drag handles</td>
+      <td>Ready</td>
+      <td>Reorder any block with drag and drop</td>
+    </tr>
+  </table>
 
-  <h2>Try It</h2>
-  <ul>
-    <li>Select some text, then use the floating menu to set a Heading, List, or Code Block.</li>
-    <li>Use <kbd>Cmd/Ctrl</kbd>+<kbd>B</kbd> and <kbd>Cmd/Ctrl</kbd>+<kbd>I</kbd> to toggle formatting.</li>
-    <li>Start a list with <code>-</code> or <code>1.</code></li>
-    <li>Paste formatted text — it just works.</li>
-  </ul>
+  <h2>Mentions</h2>
+  <p>
+    Type <code>@</code> followed by a name to mention someone. Try it — type
+    <code>@</code> right here to see the suggestion list.
+  </p>
+
+  <h2>Slash Commands</h2>
+  <p>
+    Press <code>/</code> on an empty line to open the command menu. From there you
+    can insert headings, lists, images, videos, tables, code blocks, and more.
+    Start typing to filter the options.
+  </p>
 
   <hr />
 
-  <blockquote>
-    Neuphlo keeps the surface area small so you can ship content experiences
-    faster without wrestling complex configs.
-  </blockquote>
+  <p>
+    Built with Tiptap, React, and TypeScript. Designed to be minimal, composable,
+    and ready to ship.
+  </p>
 `
 
 export default exampleContent

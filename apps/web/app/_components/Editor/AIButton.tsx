@@ -1,7 +1,7 @@
 import { Sparkles } from "lucide-react"
-import type { Editor } from "@tiptap/react"
 
-export const AIButton = (editor: Editor) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const AIButton = (editor: any) => {
   return (
     <button
       type="button"

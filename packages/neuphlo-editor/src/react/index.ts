@@ -10,3 +10,5 @@ export type {
 } from "./Editor";
 export { TextMenu } from "./menus";
 export type { TextMenuProps } from "./menus";
+export { TableOfContents } from "./TableOfContents";
+export type { TableOfContentsProps } from "./TableOfContents";

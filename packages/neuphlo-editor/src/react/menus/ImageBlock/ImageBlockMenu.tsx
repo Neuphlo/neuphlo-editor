@@ -1,6 +1,6 @@
-import { Editor } from "@tiptap/react"
-import { BubbleMenu } from "@tiptap/react/menus"
-import { useCallback, useRef, useState, useEffect } from "react"
+import { NodeSelection } from "@tiptap/pm/state"
+import { Editor, useEditorState } from "@tiptap/react"
+import { useCallback, useRef } from "react"
 import { ImageBlockWidth } from "./ImageBlockWidth"
 import {
   IconAlignLeft,
@@ -11,75 +11,34 @@ import {
 
 export type ImageBlockMenuProps = {
   editor: Editor
+  getPos: () => number
   appendTo?: React.RefObject<HTMLElement | null>
 }
 
-export const ImageBlockMenu = ({ editor, appendTo }: ImageBlockMenuProps) => {
+export const ImageBlockMenu = ({ editor, getPos, appendTo }: ImageBlockMenuProps) => {
   const menuRef = useRef<HTMLDivElement>(null)
-  const [align, setAlign] = useState<"left" | "center" | "right">("center")
-  const [width, setWidth] = useState<number>(100)
 
-  useEffect(() => {
-    if (!editor) return
-    const update = () => {
-      if (!editor.isActive("imageBlock")) return
-      const attrs = editor.getAttributes("imageBlock")
-      setAlign(attrs.align || "center")
-      const widthStr = attrs.width || "100%"
-      setWidth(parseInt(widthStr) || 100)
-    }
-    update()
-    editor.on("selectionUpdate", update)
-    editor.on("transaction", update)
-    return () => {
-      editor.off("selectionUpdate", update)
-      editor.off("transaction", update)
-    }
-  }, [editor])
+  const { isVisible, align, width } = useEditorState({
+    editor,
+    selector: (ctx) => {
+      if (!ctx.editor) return { isVisible: false, align: "center" as const, width: 100 }
+      const { state } = ctx.editor
+      const { selection } = state
+      const isNodeSel = selection instanceof NodeSelection
+      const isThisNode = isNodeSel && selection.from === getPos()
+      const visible = isThisNode
 
-  const getReferenceClientRect = useCallback(() => {
-    if (!editor) return new DOMRect(-1000, -1000, 0, 0)
-
-    const { view } = editor
-    const { state } = view
-    const { selection } = state
-
-    // Get the node at the current selection
-    const node = selection instanceof (window as any).ProseMirror?.state?.NodeSelection
-      ? (selection as any).node
-      : null
-
-    if (node && node.type.name === "imageBlock") {
-      const nodePos = (selection as any).from
-      const domNode = view.nodeDOM(nodePos)
-      if (domNode && domNode instanceof HTMLElement) {
-        return domNode.getBoundingClientRect()
+      let currentAlign: "left" | "center" | "right" = "center"
+      let currentWidth = 100
+      if (visible) {
+        const attrs = ctx.editor.getAttributes("imageBlock")
+        currentAlign = attrs.align || "center"
+        const widthStr = attrs.width || "100%"
+        currentWidth = parseInt(widthStr) || 100
       }
-    }
-
-    // Fallback: try to find the image block element
-    const imageBlockElements = document.querySelectorAll('[data-node-view-wrapper]')
-    for (const el of Array.from(imageBlockElements)) {
-      if (el.querySelector("img")) {
-        return el.getBoundingClientRect()
-      }
-    }
-
-    return new DOMRect(-1000, -1000, 0, 0)
-  }, [editor])
-
-  const shouldShow = useCallback(() => {
-    if (!editor) return false
-    const isActive = editor.isActive("imageBlock")
-    if (!isActive) return false
-
-    // Check if it's a node selection
-    const { state } = editor
-    const { selection } = state
-    const isNodeSelection = selection.constructor.name === "NodeSelection"
-
-    return isNodeSelection
-  }, [editor])
+      return { isVisible: visible, align: currentAlign, width: currentWidth }
+    },
+  })
 
   const onAlignImageLeft = useCallback(() => {
     editor
@@ -120,60 +79,66 @@ export const ImageBlockMenu = ({ editor, appendTo }: ImageBlockMenuProps) => {
     editor.chain().focus(undefined, { scrollIntoView: false }).deleteSelection().run()
   }, [editor])
 
+  if (!isVisible) return null
+
   return (
-    <BubbleMenu
-      editor={editor}
-      shouldShow={shouldShow}
-      updateDelay={0}
+    <div
+      className="bubble-menu"
+      ref={menuRef}
+      style={{
+        position: "absolute",
+        top: "-40px",
+        left: "50%",
+        transform: "translateX(-50%)",
+        zIndex: "var(--nph-z, 50)",
+      }}
     >
-      <div className="bubble-menu" ref={menuRef}>
-        <button
-          type="button"
-          className={`nph-btn nph-btn-ghost nph-btn-xs nph-btn-icon${align === "left" ? " is-active" : ""}`}
-          title="Align left"
-          onMouseDown={(e) => e.preventDefault()}
-          onClick={onAlignImageLeft}
-        >
-          <IconAlignLeft size={16} />
-        </button>
-        <button
-          type="button"
-          className={`nph-btn nph-btn-ghost nph-btn-xs nph-btn-icon${align === "center" ? " is-active" : ""}`}
-          title="Align center"
-          onMouseDown={(e) => e.preventDefault()}
-          onClick={onAlignImageCenter}
-        >
-          <IconAlignCenter size={16} />
-        </button>
-        <button
-          type="button"
-          className={`nph-btn nph-btn-ghost nph-btn-xs nph-btn-icon${align === "right" ? " is-active" : ""}`}
-          title="Align right"
-          onMouseDown={(e) => e.preventDefault()}
-          onClick={onAlignImageRight}
-        >
-          <IconAlignRight size={16} />
-        </button>
-        <div
-          className="nph-link-popover__divider"
-          style={{ margin: "0 4px" }}
-        />
-        <ImageBlockWidth onChange={onWidthChange} value={width} />
-        <div
-          className="nph-link-popover__divider"
-          style={{ margin: "0 4px" }}
-        />
-        <button
-          type="button"
-          className="nph-btn nph-btn-ghost nph-btn-xs nph-btn-icon"
-          title="Remove image"
-          onMouseDown={(e) => e.preventDefault()}
-          onClick={onRemoveImage}
-        >
-          <IconTrash size={16} />
-        </button>
-      </div>
-    </BubbleMenu>
+      <button
+        type="button"
+        className={`nph-btn nph-btn-ghost nph-btn-xs nph-btn-icon${align === "left" ? " is-active" : ""}`}
+        title="Align left"
+        onMouseDown={(e) => e.preventDefault()}
+        onClick={onAlignImageLeft}
+      >
+        <IconAlignLeft size={16} />
+      </button>
+      <button
+        type="button"
+        className={`nph-btn nph-btn-ghost nph-btn-xs nph-btn-icon${align === "center" ? " is-active" : ""}`}
+        title="Align center"
+        onMouseDown={(e) => e.preventDefault()}
+        onClick={onAlignImageCenter}
+      >
+        <IconAlignCenter size={16} />
+      </button>
+      <button
+        type="button"
+        className={`nph-btn nph-btn-ghost nph-btn-xs nph-btn-icon${align === "right" ? " is-active" : ""}`}
+        title="Align right"
+        onMouseDown={(e) => e.preventDefault()}
+        onClick={onAlignImageRight}
+      >
+        <IconAlignRight size={16} />
+      </button>
+      <div
+        className="nph-link-popover__divider"
+        style={{ margin: "0 4px" }}
+      />
+      <ImageBlockWidth onChange={onWidthChange} value={width} />
+      <div
+        className="nph-link-popover__divider"
+        style={{ margin: "0 4px" }}
+      />
+      <button
+        type="button"
+        className="nph-btn nph-btn-ghost nph-btn-xs nph-btn-icon"
+        title="Remove image"
+        onMouseDown={(e) => e.preventDefault()}
+        onClick={onRemoveImage}
+      >
+        <IconTrash size={16} />
+      </button>
+    </div>
   )
 }
 

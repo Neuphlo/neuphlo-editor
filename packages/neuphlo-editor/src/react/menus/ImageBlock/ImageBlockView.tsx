@@ -4,6 +4,7 @@ import { useCallback, useRef } from "react"
 import { ImageBlockMenu } from "./ImageBlockMenu"
 import { ImageUploader } from "./ImageUploader"
 import { ImageBlockLoading } from "./ImageBlockLoading"
+import { ImageResizeHandle } from "./ImageResizeHandle"
 
 interface ImageBlockViewProps {
   editor: Editor
@@ -38,7 +39,14 @@ export const ImageBlockView = (props: ImageBlockViewProps) => {
     editor.commands.setNodeSelection(getPos())
   }, [getPos, editor.commands])
 
-  // Calculate wrapper class based on alignment
+  const handleResize = useCallback(
+    (widthPercent: number) => {
+      updateAttributes({ width: `${widthPercent}%` })
+    },
+    [updateAttributes]
+  )
+
+  // Calculate wrapper style based on alignment and width
   const getWrapperStyle = (): React.CSSProperties => {
     const baseStyle: React.CSSProperties = {
       width: width || "100%",
@@ -54,14 +62,17 @@ export const ImageBlockView = (props: ImageBlockViewProps) => {
     }
   }
 
+  // The inner content wrapper for positioning the menu
+  const getContentStyle = (): React.CSSProperties => ({
+    position: "relative" as const,
+  })
+
   // Show uploader if no src
   if (!src || src === "") {
     return (
-      <NodeViewWrapper>
-        <div style={getWrapperStyle()}>
-          <div ref={imageWrapperRef}>
-            <ImageUploader onUpload={handleUpload} editor={editor} />
-          </div>
+      <NodeViewWrapper style={{ width: "100%", marginTop: "0.5rem", marginBottom: "0.5rem" }}>
+        <div ref={imageWrapperRef}>
+          <ImageUploader onUpload={handleUpload} editor={editor} />
         </div>
       </NodeViewWrapper>
     )
@@ -70,11 +81,9 @@ export const ImageBlockView = (props: ImageBlockViewProps) => {
   // Show loading placeholder
   if (loading) {
     return (
-      <NodeViewWrapper>
-        <div style={getWrapperStyle()}>
-          <div ref={imageWrapperRef}>
-            <ImageBlockLoading />
-          </div>
+      <NodeViewWrapper style={getWrapperStyle()}>
+        <div ref={imageWrapperRef}>
+          <ImageBlockLoading />
         </div>
       </NodeViewWrapper>
     )
@@ -82,18 +91,18 @@ export const ImageBlockView = (props: ImageBlockViewProps) => {
 
   // Show the actual image
   return (
-    <NodeViewWrapper>
-      <div style={getWrapperStyle()}>
-        <div contentEditable={false} ref={imageWrapperRef} style={{ position: "relative" }}>
-          <img
-            src={src}
-            alt={alt || ""}
-            onClick={onClick}
-            className="nph-image-block"
-          />
+    <NodeViewWrapper style={getWrapperStyle()}>
+        <div contentEditable={false} ref={imageWrapperRef} style={getContentStyle()}>
+          <ImageResizeHandle onResize={handleResize} currentWidth={width}>
+            <img
+              src={src}
+              alt={alt || ""}
+              onClick={onClick}
+              className="nph-image-block"
+            />
+          </ImageResizeHandle>
+          <ImageBlockMenu editor={editor} getPos={getPos} appendTo={imageWrapperRef} />
         </div>
-      </div>
-      <ImageBlockMenu editor={editor} appendTo={imageWrapperRef} />
     </NodeViewWrapper>
   )
 }

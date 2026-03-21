@@ -1,8 +1,8 @@
-import { ReactRenderer } from "@tiptap/react"
 import Suggestion from "@tiptap/suggestion"
 import { Extension } from "@tiptap/core"
-import type { RefObject, ReactNode } from "react"
-import { EditorCommandOut } from "../components/editor-command"
+import type { ReactNode } from "react"
+import { queryAtom, rangeAtom, slashMenuOpenAtom, slashMenuRectAtom } from "../utils/atoms"
+import { novelStore } from "../utils/store"
 
 export const Command = Extension.create({
   name: "slash-command",
@@ -22,7 +22,6 @@ export const Command = Extension.create({
       Suggestion({
         editor: this.editor,
         char: base.char ?? "/",
-        // Only trigger slash command at start of line or after whitespace
         startOfLine: base.startOfLine ?? true,
         items: base.items ?? (() => ["/"] as any),
         command: (ctx: any) => {
@@ -31,98 +30,76 @@ export const Command = Extension.create({
           }
         },
         ...base,
+        render: () => {
+          return {
+            onStart: (props: any) => {
+              const { selection } = props.editor.state
+              const parentNode = selection.$from.node(selection.$from.depth)
+              const blockType = parentNode.type.name
+
+              if (blockType === "codeBlock") return false
+
+              const { $from } = selection
+              const marks = $from.marks()
+              if (marks.some((mark: any) => mark.type.name === "code" || mark.type.name === "link")) {
+                return false
+              }
+
+              novelStore.set(queryAtom, props.query ?? "")
+              novelStore.set(rangeAtom, props.range ?? null)
+              novelStore.set(slashMenuOpenAtom, true)
+
+              const rect = typeof props.clientRect === "function" ? props.clientRect() : null
+              novelStore.set(slashMenuRectAtom, rect)
+            },
+            onUpdate: (props: any) => {
+              novelStore.set(queryAtom, props.query ?? "")
+              novelStore.set(rangeAtom, props.range ?? null)
+
+              const rect = typeof props.clientRect === "function" ? props.clientRect() : null
+              novelStore.set(slashMenuRectAtom, rect)
+            },
+            onKeyDown: ({ event }: { event: KeyboardEvent }) => {
+              if (event.key === "Escape") {
+                novelStore.set(slashMenuOpenAtom, false)
+                return true
+              }
+
+              if (["ArrowUp", "ArrowDown", "Enter"].includes(event.key)) {
+                const slashCommand = document.querySelector("#slash-command")
+                if (slashCommand) {
+                  slashCommand.dispatchEvent(
+                    new KeyboardEvent("keydown", {
+                      key: event.key,
+                      cancelable: true,
+                      bubbles: true,
+                    })
+                  )
+                  return true
+                }
+              }
+
+              return false
+            },
+            onExit: () => {
+              novelStore.set(slashMenuOpenAtom, false)
+              novelStore.set(queryAtom, "")
+              novelStore.set(rangeAtom, null)
+              novelStore.set(slashMenuRectAtom, null)
+            },
+          }
+        },
       }),
     ]
   },
 })
 
-export const renderItems = (elementRef?: RefObject<Element> | null) => {
-  let component: ReactRenderer | null = null
-  let container: HTMLElement | null = null
-
-  const destroy = () => {
-    component?.destroy()
-    component = null
-    if (container) {
-      container.remove()
-      container = null
-    }
-  }
-
-  const updatePosition = (clientRect?: DOMRect | null) => {
-    if (!container || !clientRect) return
-    const top = Math.round(clientRect.bottom + 8)
-    const left = Math.round(clientRect.left)
-    container.style.top = `${top}px`
-    container.style.left = `${left}px`
-  }
-
-  return {
-    onStart: (props: {
-      editor: any
-      clientRect: (() => DOMRect | null) | null
-      query?: string
-      range?: any
-    }) => {
-      const { selection } = props.editor.state
-      const parentNode = selection.$from.node(selection.$from.depth)
-      const blockType = parentNode.type.name
-
-      // Don't show slash menu in code blocks
-      if (blockType === "codeBlock") return false
-
-      // Don't show slash menu if inside code or link marks
-      const { $from } = selection
-      const marks = $from.marks()
-      if (marks.some((mark: any) => mark.type.name === "code" || mark.type.name === "link")) {
-        return false
-      }
-
-      component = new ReactRenderer(EditorCommandOut, {
-        props: {
-          query: (props as any).query ?? "",
-          range: (props as any).range,
-        },
-        editor: props.editor,
-      })
-
-      container = document.createElement("div")
-      container.style.position = "fixed"
-      container.style.zIndex = "9999"
-      container.style.minWidth = "240px"
-      ;(elementRef?.current ?? document.body).appendChild(container)
-      container.appendChild(component.element)
-
-      const rect =
-        typeof props.clientRect === "function" ? props.clientRect() : null
-      if (rect) updatePosition(rect)
-    },
-    onUpdate: (props: {
-      editor: any
-      clientRect: (() => DOMRect | null) | null
-      query?: string
-      range?: any
-    }) => {
-      component?.updateProps({
-        query: (props as any).query ?? "",
-        range: (props as any).range,
-      })
-      const rect =
-        typeof props.clientRect === "function" ? props.clientRect() : null
-      if (rect) updatePosition(rect)
-    },
-    onKeyDown: ({ event }: { event: KeyboardEvent }) => {
-      if (event.key === "Escape") {
-        destroy()
-        return true
-      }
-      return false
-    },
-    onExit: () => {
-      destroy()
-    },
-  }
-}
+export const renderItems = () => ({
+  onStart: () => {},
+  onUpdate: () => {},
+  onKeyDown: () => false,
+  onExit: () => {},
+})
 
 export interface SuggestionItem {
   title: string

@@ -1,10 +1,13 @@
+import { NodeSelection } from "@tiptap/pm/state"
 import { useCurrentEditor, useEditorState } from "@tiptap/react"
 import type { Editor as TiptapEditor } from "@tiptap/react"
 import { BubbleMenu } from "@tiptap/react/menus"
 import {
   IconBold,
   IconItalic,
+  IconUnderline,
   IconStrikethrough,
+  IconCode,
   IconArrowBackUp,
   IconLink,
   IconCheck,
@@ -20,6 +23,10 @@ export type TextMenuProps = {
   className?: string
   leadingExtras?: ExtraRenderer[]
   trailingExtras?: ExtraRenderer[]
+}
+
+function Separator() {
+  return <div className="nph-bubble-separator" />
 }
 
 export function TextMenu({
@@ -39,6 +46,7 @@ export function TextMenu({
       return {
         isBold: ctx.editor.isActive("bold"),
         isItalic: ctx.editor.isActive("italic"),
+        isUnderline: ctx.editor.isActive("underline"),
         isStrike: ctx.editor.isActive("strike"),
         isCode: ctx.editor.isActive("code"),
         isCodeBlock: ctx.editor.isActive("codeBlock"),
@@ -92,6 +100,8 @@ export function TextMenu({
     return has
   }
 
+  const isInCode = editorState.isCode || editorState.isCodeBlock
+
   return (
     <BubbleMenu
       editor={editor}
@@ -102,7 +112,7 @@ export function TextMenu({
 
         // Don't show for node selections
         const { selection } = state
-        if (selection.constructor.name === "NodeSelection") return false
+        if (selection instanceof NodeSelection) return false
 
         // Don't show if selection is empty
         if (from === to) return false
@@ -133,13 +143,14 @@ export function TextMenu({
             ))
           : null}
         <MenuList editor={editor} />
+        <Separator />
         <button
           type="button"
           onMouseDown={(e) => e.preventDefault()}
           onClick={() => editor.chain().focus().toggleBold().run()}
           className={`nph-btn nph-btn-ghost nph-btn-xs nph-btn-icon${editorState.isBold ? " is-active" : ""}`}
-          disabled={editorState.isCode || editorState.isCodeBlock}
-          aria-disabled={editorState.isCode || editorState.isCodeBlock}
+          disabled={isInCode}
+          aria-disabled={isInCode}
           aria-pressed={editorState.isBold}
           aria-label="Toggle bold"
         >
@@ -150,8 +161,8 @@ export function TextMenu({
           onMouseDown={(e) => e.preventDefault()}
           onClick={() => editor.chain().focus().toggleItalic().run()}
           className={`nph-btn nph-btn-ghost nph-btn-xs nph-btn-icon${editorState.isItalic ? " is-active" : ""}`}
-          disabled={editorState.isCode || editorState.isCodeBlock}
-          aria-disabled={editorState.isCode || editorState.isCodeBlock}
+          disabled={isInCode}
+          aria-disabled={isInCode}
           aria-pressed={editorState.isItalic}
           aria-label="Toggle italic"
         >
@@ -160,23 +171,48 @@ export function TextMenu({
         <button
           type="button"
           onMouseDown={(e) => e.preventDefault()}
+          onClick={() => editor.chain().focus().toggleUnderline().run()}
+          className={`nph-btn nph-btn-ghost nph-btn-xs nph-btn-icon${editorState.isUnderline ? " is-active" : ""}`}
+          disabled={isInCode}
+          aria-disabled={isInCode}
+          aria-pressed={editorState.isUnderline}
+          aria-label="Toggle underline"
+        >
+          <IconUnderline size={16} />
+        </button>
+        <button
+          type="button"
+          onMouseDown={(e) => e.preventDefault()}
           onClick={() => editor.chain().focus().toggleStrike().run()}
           className={`nph-btn nph-btn-ghost nph-btn-xs nph-btn-icon${editorState.isStrike ? " is-active" : ""}`}
-          disabled={editorState.isCode || editorState.isCodeBlock}
-          aria-disabled={editorState.isCode || editorState.isCodeBlock}
+          disabled={isInCode}
+          aria-disabled={isInCode}
           aria-pressed={editorState.isStrike}
           aria-label="Toggle strike"
         >
           <IconStrikethrough size={16} />
         </button>
+        <button
+          type="button"
+          onMouseDown={(e) => e.preventDefault()}
+          onClick={() => editor.chain().focus().toggleCode().run()}
+          className={`nph-btn nph-btn-ghost nph-btn-xs nph-btn-icon${editorState.isCode ? " is-active" : ""}`}
+          disabled={editorState.isCodeBlock}
+          aria-disabled={editorState.isCodeBlock}
+          aria-pressed={editorState.isCode}
+          aria-label="Toggle inline code"
+        >
+          <IconCode size={16} />
+        </button>
+        <Separator />
         {!isAddingLink ? (
           <button
             type="button"
             onMouseDown={(e) => e.preventDefault()}
             onClick={() => setIsAddingLink(true)}
             className={`nph-btn nph-btn-ghost nph-btn-xs nph-btn-icon${editor.isActive("link") ? " is-active" : ""}`}
-            disabled={editorState.isCode || editorState.isCodeBlock}
-            aria-disabled={editorState.isCode || editorState.isCodeBlock}
+            disabled={isInCode}
+            aria-disabled={isInCode}
             aria-pressed={editor.isActive("link")}
             aria-label="Add link"
           >
@@ -244,26 +280,29 @@ export function TextMenu({
             !hasInlineMarks
 
           return (
-            <button
-              type="button"
-              onMouseDown={(e) => e.preventDefault()}
-              onClick={() =>
-                editor
-                  .chain()
-                  .focus()
-                  .clearNodes()
-                  .setParagraph()
-                  .unsetAllMarks()
-                  .run()
-              }
-              className="nph-btn nph-btn-ghost nph-btn-xs nph-btn-icon"
-              aria-label="Revert to paragraph"
-              title="Revert to paragraph"
-              disabled={isPlainParagraph}
-              aria-disabled={isPlainParagraph}
-            >
-              <IconArrowBackUp size={16} />
-            </button>
+            <>
+              <Separator />
+              <button
+                type="button"
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={() =>
+                  editor
+                    .chain()
+                    .focus()
+                    .clearNodes()
+                    .setParagraph()
+                    .unsetAllMarks()
+                    .run()
+                }
+                className="nph-btn nph-btn-ghost nph-btn-xs nph-btn-icon"
+                aria-label="Revert to paragraph"
+                title="Revert to paragraph"
+                disabled={isPlainParagraph}
+                aria-disabled={isPlainParagraph}
+              >
+                <IconArrowBackUp size={16} />
+              </button>
+            </>
           )
         })()}
         {trailingExtras && editor
