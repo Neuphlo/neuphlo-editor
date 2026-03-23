@@ -72,7 +72,7 @@ export const ExtensionKit = (options?: ExtensionKitOptions) => {
         resizable: true,
         lastColumnResizable: true,
         allowTableNodeSelection: true,
-      }) as any
+      } as any)
     )
   }
 
@@ -100,7 +100,7 @@ export const ExtensionKit = (options?: ExtensionKitOptions) => {
   // Add Mention extension if configured
   if (options?.mention) {
     const mentionExt = createMentionExtension(options.mention)
-    extensions.push(mentionExt)
+    extensions.push(mentionExt as any)
   }
 
   // Add Reference extension if configured (uses same Mention extension with different config)
@@ -109,7 +109,7 @@ export const ExtensionKit = (options?: ExtensionKitOptions) => {
       ...options.reference,
       name: "reference", // Use unique name to avoid conflicts
     })
-    extensions.push(referenceExt)
+    extensions.push(referenceExt as any)
   }
 
   if (options?.collaboration?.doc) {
