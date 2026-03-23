@@ -88,8 +88,9 @@ export const VideoBlockView = (props: VideoBlockViewProps) => {
     }
   }
 
-  // Show URL input if no src
+  // Show URL input if no src (only when editable)
   if (!src || src === "") {
+    if (!editor.isEditable) return <NodeViewWrapper />
     return (
       <NodeViewWrapper style={getWrapperStyle()}>
         <div ref={wrapperRef}>
@@ -143,7 +144,7 @@ export const VideoBlockView = (props: VideoBlockViewProps) => {
             />
           )}
         </div>
-        <VideoBlockMenu editor={editor} getPos={getPos} />
+        {editor.isEditable && <VideoBlockMenu editor={editor} getPos={getPos} />}
       </div>
     </NodeViewWrapper>
   )

@@ -67,8 +67,9 @@ export const ImageBlockView = (props: ImageBlockViewProps) => {
     position: "relative" as const,
   })
 
-  // Show uploader if no src
+  // Show uploader if no src (only when editable)
   if (!src || src === "") {
+    if (!editor.isEditable) return <NodeViewWrapper />
     return (
       <NodeViewWrapper style={{ width: "100%", marginTop: "0.5rem", marginBottom: "0.5rem" }}>
         <div ref={imageWrapperRef}>
@@ -93,15 +94,23 @@ export const ImageBlockView = (props: ImageBlockViewProps) => {
   return (
     <NodeViewWrapper style={getWrapperStyle()}>
         <div contentEditable={false} ref={imageWrapperRef} style={getContentStyle()}>
-          <ImageResizeHandle onResize={handleResize} currentWidth={width}>
+          {editor.isEditable ? (
+            <ImageResizeHandle onResize={handleResize} currentWidth={width}>
+              <img
+                src={src}
+                alt={alt || ""}
+                onClick={onClick}
+                className="nph-image-block"
+              />
+            </ImageResizeHandle>
+          ) : (
             <img
               src={src}
               alt={alt || ""}
-              onClick={onClick}
               className="nph-image-block"
             />
-          </ImageResizeHandle>
-          <ImageBlockMenu editor={editor} getPos={getPos} appendTo={imageWrapperRef} />
+          )}
+          {editor.isEditable && <ImageBlockMenu editor={editor} getPos={getPos} appendTo={imageWrapperRef} />}
         </div>
     </NodeViewWrapper>
   )
