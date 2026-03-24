@@ -16,6 +16,7 @@ import { MarkdownPaste } from "./MarkdownPaste"
 
 export interface ExtensionKitOptions {
   uploadImage?: (file: File) => Promise<string>
+  browseAssets?: (onSelect: (url: string) => void) => void
   collaboration?: {
     doc: any
     field: string
@@ -44,6 +45,7 @@ export const ExtensionKit = (options?: ExtensionKitOptions) => {
     Underline,
     ImageBlock.configure({
       uploadImage: options?.uploadImage,
+      browseAssets: options?.browseAssets,
       nodeView: options?.imageBlockView,
     }),
     VideoBlock.configure({

@@ -45,6 +45,7 @@ export type NeuphloEditorProps = {
   onUpdate?: EditorContentProps["onUpdate"]
   onCreate?: EditorContentProps["onCreate"]
   uploadImage?: (file: File) => Promise<string>
+  browseAssets?: (onSelect: (url: string) => void) => void
   collaboration?: {
     doc: any
     field: string
@@ -70,6 +71,7 @@ export function Editor({
   onUpdate,
   onCreate,
   uploadImage,
+  browseAssets,
   collaboration,
   mentionOptions,
   referenceOptions,
@@ -167,6 +169,7 @@ export function Editor({
             ...
             ExtensionKit({
               uploadImage: uploadImage,
+              browseAssets: browseAssets,
               collaboration: collaboration,
               imageBlockView: ImageBlockView,
               videoBlockView: VideoBlockView,

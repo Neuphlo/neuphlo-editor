@@ -6,6 +6,7 @@ import { EditorView } from "@tiptap/pm/view"
 
 export interface ImageBlockOptions {
   uploadImage?: (file: File) => Promise<string>
+  browseAssets?: (onSelect: (url: string) => void) => void
   nodeView?: any
 }
 
@@ -35,7 +36,6 @@ export const ImageBlock = TiptapImage.extend<ImageBlockOptions>({
   addOptions() {
     return {
       ...this.parent?.(),
-      uploadImage: undefined,
       inline: false,
     }
   },

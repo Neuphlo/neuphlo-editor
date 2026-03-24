@@ -25,6 +25,7 @@ export const ImageBlockMenu = ({ editor, getPos, appendTo }: ImageBlockMenuProps
       const { state } = ctx.editor
       const { selection } = state
       if (!ctx.editor.isEditable) return { isVisible: false, align: "center" as const, width: 100 }
+      if (!ctx.editor.isFocused) return { isVisible: false, align: "center" as const, width: 100 }
       const isNodeSel = selection instanceof NodeSelection
       const isThisNode = isNodeSel && selection.from === getPos()
       const visible = isThisNode

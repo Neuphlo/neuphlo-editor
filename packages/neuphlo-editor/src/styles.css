@@ -886,6 +886,91 @@
   position: absolute;
 }
 
+/* Image block error state */
+.nph-image-block-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 32px;
+  border-radius: 12px;
+  border: 1.5px dashed var(--border, #e5e7eb);
+  background: var(--muted, rgba(0, 0, 0, 0.02));
+  color: var(--muted-foreground, #6b7280);
+  font-size: 13px;
+  cursor: pointer;
+  aspect-ratio: 16 / 9;
+}
+
+.dark .nph-image-block-error {
+  border-color: var(--border, #374151);
+  background: var(--muted, rgba(255, 255, 255, 0.03));
+  color: var(--muted-foreground, #9ca3af);
+}
+
+/* Browse-only variant — clean, clickable CTA */
+.nph-image-uploader--browse-only {
+  padding: 0;
+  border: 1.5px dashed var(--border, #e5e7eb);
+  border-radius: 12px;
+  background: var(--muted, rgba(0, 0, 0, 0.02));
+  transition: all 0.2s ease;
+  aspect-ratio: 16 / 9;
+}
+
+.nph-image-uploader--browse-only:hover {
+  border-color: var(--muted-foreground, #9ca3af);
+  background: var(--muted, rgba(0, 0, 0, 0.04));
+}
+
+.nph-image-uploader__browse-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.nph-image-uploader__browse-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  background: var(--muted, rgba(0, 0, 0, 0.06));
+  color: var(--muted-foreground, #6b7280);
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.nph-image-uploader--browse-only:hover .nph-image-uploader__browse-icon-wrapper {
+  background: var(--muted, rgba(0, 0, 0, 0.1));
+  color: var(--foreground, #374151);
+}
+
+.nph-image-uploader__browse-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.nph-image-uploader__browse-title {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--foreground, #111827);
+  line-height: 1.4;
+}
+
+.nph-image-uploader__browse-subtitle {
+  display: block;
+  font-size: 12px;
+  color: var(--muted-foreground, #6b7280);
+  line-height: 1.4;
+}
+
 /* Dark mode - supports both media query and class-based approaches */
 @media (prefers-color-scheme: dark) {
   .nph-image-block {
@@ -927,6 +1012,30 @@
   .nph-image-uploader__icon,
   .nph-image-uploader__text {
     color: var(--muted-foreground, #9ca3af);
+  }
+
+  .nph-image-uploader--browse-only {
+    border-color: var(--border, #374151);
+    background: var(--muted, rgba(255, 255, 255, 0.03));
+  }
+
+  .nph-image-uploader--browse-only:hover {
+    border-color: var(--muted-foreground, #6b7280);
+    background: var(--muted, rgba(255, 255, 255, 0.05));
+  }
+
+  .nph-image-uploader__browse-icon-wrapper {
+    background: var(--muted, rgba(255, 255, 255, 0.08));
+    color: var(--muted-foreground, #9ca3af);
+  }
+
+  .nph-image-uploader--browse-only:hover .nph-image-uploader__browse-icon-wrapper {
+    background: var(--muted, rgba(255, 255, 255, 0.12));
+    color: var(--foreground, #e5e7eb);
+  }
+
+  .nph-image-uploader__browse-title {
+    color: var(--foreground, #f3f4f6);
   }
 }
 
@@ -972,6 +1081,30 @@
   color: var(--muted-foreground, #9ca3af);
 }
 
+.dark .nph-image-uploader--browse-only {
+  border-color: var(--border, #374151);
+  background: var(--muted, rgba(255, 255, 255, 0.03));
+}
+
+.dark .nph-image-uploader--browse-only:hover {
+  border-color: var(--muted-foreground, #6b7280);
+  background: var(--muted, rgba(255, 255, 255, 0.05));
+}
+
+.dark .nph-image-uploader__browse-icon-wrapper {
+  background: var(--muted, rgba(255, 255, 255, 0.08));
+  color: var(--muted-foreground, #9ca3af);
+}
+
+.dark .nph-image-uploader--browse-only:hover .nph-image-uploader__browse-icon-wrapper {
+  background: var(--muted, rgba(255, 255, 255, 0.12));
+  color: var(--foreground, #e5e7eb);
+}
+
+.dark .nph-image-uploader__browse-title {
+  color: var(--foreground, #f3f4f6);
+}
+
 /* Video Block */
 .nph-video-block {
   position: relative;
@@ -1002,6 +1135,38 @@
   position: absolute;
   inset: 0;
   cursor: pointer;
+}
+
+/* Video block error state */
+.nph-video-block-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 32px;
+  border-radius: 12px;
+  border: 1.5px dashed var(--border, #e5e7eb);
+  background: var(--muted, rgba(0, 0, 0, 0.02));
+  color: var(--muted-foreground, #6b7280);
+  font-size: 13px;
+  cursor: pointer;
+  aspect-ratio: 16 / 9;
+}
+
+.nph-video-block-error__url {
+  font-size: 11px;
+  opacity: 0.6;
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dark .nph-video-block-error {
+  border-color: var(--border, #374151);
+  background: var(--muted, rgba(255, 255, 255, 0.03));
+  color: var(--muted-foreground, #9ca3af);
 }
 
 /* Video URL Input */
