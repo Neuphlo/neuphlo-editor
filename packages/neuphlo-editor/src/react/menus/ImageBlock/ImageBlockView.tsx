@@ -1,6 +1,7 @@
 import { Node } from "@tiptap/pm/model"
 import { Editor, NodeViewWrapper } from "@tiptap/react"
-import { useCallback, useRef } from "react"
+import { useCallback, useRef, useState } from "react"
+import { IconPhotoOff } from "@tabler/icons-react"
 import { ImageBlockMenu } from "./ImageBlockMenu"
 import { ImageUploader } from "./ImageUploader"
 import { ImageBlockLoading } from "./ImageBlockLoading"
@@ -26,6 +27,7 @@ export const ImageBlockView = (props: ImageBlockViewProps) => {
     }
   }
   const imageWrapperRef = useRef<HTMLDivElement>(null)
+  const [imageError, setImageError] = useState(false)
   const { src, width, align, alt, loading } = node.attrs
 
   const handleUpload = useCallback(
@@ -90,6 +92,21 @@ export const ImageBlockView = (props: ImageBlockViewProps) => {
     )
   }
 
+  // Show error state for broken images
+  if (imageError) {
+    return (
+      <NodeViewWrapper style={getWrapperStyle()}>
+        <div contentEditable={false} ref={imageWrapperRef} style={getContentStyle()}>
+          <div className="nph-image-block-error" onClick={onClick}>
+            <IconPhotoOff size={32} />
+            <span>Image could not be loaded</span>
+          </div>
+          {editor.isEditable && <ImageBlockMenu editor={editor} getPos={getPos} appendTo={imageWrapperRef} />}
+        </div>
+      </NodeViewWrapper>
+    )
+  }
+
   // Show the actual image
   return (
     <NodeViewWrapper style={getWrapperStyle()}>
@@ -100,6 +117,7 @@ export const ImageBlockView = (props: ImageBlockViewProps) => {
                 src={src}
                 alt={alt || ""}
                 onClick={onClick}
+                onError={() => setImageError(true)}
                 className="nph-image-block"
               />
             </ImageResizeHandle>
@@ -107,6 +125,7 @@ export const ImageBlockView = (props: ImageBlockViewProps) => {
             <img
               src={src}
               alt={alt || ""}
+              onError={() => setImageError(true)}
               className="nph-image-block"
             />
           )}

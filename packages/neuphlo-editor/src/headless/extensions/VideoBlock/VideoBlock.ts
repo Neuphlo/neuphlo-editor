@@ -99,10 +99,11 @@ export const VideoBlock = Node.create<VideoBlockOptions>({
   },
 
   addNodeView() {
+    console.log("[VideoBlock] addNodeView called, options:", Object.keys(this.options), "hasNodeView:", !!this.options.nodeView)
     if (this.options.nodeView) {
       return ReactNodeViewRenderer(this.options.nodeView)
     }
-    return null
+    return undefined as any
   },
 })
 

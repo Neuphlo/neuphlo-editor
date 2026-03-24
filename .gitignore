@@ -10,3 +10,6 @@ yarn-debug.log*
 pnpm-debug.log*
 # Turbo
 .turbo
+# additional
+.DS_Store
+apps/.DS_Store

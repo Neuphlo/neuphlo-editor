@@ -3,21 +3,32 @@ import { NodeSelection } from "@tiptap/pm/state"
 import { Editor, NodeViewWrapper, useEditorState } from "@tiptap/react"
 import { useCallback, useRef, useState } from "react"
 import { VideoBlockMenu } from "./VideoBlockMenu"
-import { IconVideo } from "@tabler/icons-react"
+import { IconVideo, IconVideoOff } from "@tabler/icons-react"
 
 function toEmbedUrl(url: string): string {
-  // YouTube: youtube.com/watch?v=ID or youtu.be/ID
+  // Already an embed URL — return as-is
+  if (url.includes("/embed/") || url.includes("player.vimeo.com") || url.includes("loom.com/embed")) {
+    return url
+  }
+
+  // YouTube: youtube.com/watch?v=ID, youtu.be/ID, youtube.com/shorts/ID
   const ytMatch = url.match(
-    /(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)/
+    /(?:youtube\.com\/(?:watch\?v=|shorts\/)|youtu\.be\/)([\w-]+)/
   )
   if (ytMatch) {
     return `https://www.youtube.com/embed/${ytMatch[1]}`
   }
 
-  // Vimeo: vimeo.com/ID
-  const vimeoMatch = url.match(/vimeo\.com\/(\d+)/)
+  // Vimeo: vimeo.com/ID or vimeo.com/channels/.../ID
+  const vimeoMatch = url.match(/vimeo\.com\/(?:channels\/[\w-]+\/)?(\d+)/)
   if (vimeoMatch) {
     return `https://player.vimeo.com/video/${vimeoMatch[1]}`
+  }
+
+  // Loom: loom.com/share/ID
+  const loomMatch = url.match(/loom\.com\/share\/([\w-]+)/)
+  if (loomMatch) {
+    return `https://www.loom.com/embed/${loomMatch[1]}`
   }
 
   return url
@@ -43,6 +54,7 @@ export const VideoBlockView = (props: VideoBlockViewProps) => {
   const wrapperRef = useRef<HTMLDivElement>(null)
   const { src, width, align } = node.attrs
   const [inputUrl, setInputUrl] = useState("")
+  const [videoError, setVideoError] = useState(false)
 
   const isSelected = useEditorState({
     editor,
@@ -75,8 +87,8 @@ export const VideoBlockView = (props: VideoBlockViewProps) => {
 
   const getWrapperStyle = (): React.CSSProperties => {
     const baseStyle: React.CSSProperties = {
-      width: "fit-content",
-      maxWidth: width || "100%",
+      width: width || "100%",
+      maxWidth: "100%",
     }
 
     if (align === "left") {
@@ -122,6 +134,22 @@ export const VideoBlockView = (props: VideoBlockViewProps) => {
     )
   }
 
+  // Show error state for broken video
+  if (videoError) {
+    return (
+      <NodeViewWrapper style={getWrapperStyle()}>
+        <div contentEditable={false} ref={wrapperRef} style={{ position: "relative" }}>
+          <div className="nph-video-block-error" onClick={onClick}>
+            <IconVideoOff size={32} />
+            <span>Video could not be loaded</span>
+            <span className="nph-video-block-error__url">{src}</span>
+          </div>
+          {editor.isEditable && <VideoBlockMenu editor={editor} getPos={getPos} />}
+        </div>
+      </NodeViewWrapper>
+    )
+  }
+
   // Show the embedded video
   return (
     <NodeViewWrapper style={getWrapperStyle()}>
@@ -136,6 +164,7 @@ export const VideoBlockView = (props: VideoBlockViewProps) => {
             className="nph-video-block__iframe"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
+            onError={() => setVideoError(true)}
           />
           {!isSelected && (
             <div

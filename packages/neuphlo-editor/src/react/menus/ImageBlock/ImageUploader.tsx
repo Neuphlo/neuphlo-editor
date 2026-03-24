@@ -13,14 +13,15 @@ export const ImageUploader = ({ onUpload, editor }: ImageUploaderProps) => {
   const [draggedInside, setDraggedInside] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
+  const imageExtension = editor.extensionManager.extensions.find(
+    (ext) => ext.name === "imageBlock"
+  )
+  const browseAssets = (imageExtension?.options as any)?.browseAssets
+
   const uploadFile = useCallback(
     async (file: File) => {
       setLoading(true)
       try {
-        // Get the upload handler from the editor
-        const imageExtension = editor.extensionManager.extensions.find(
-          (ext) => ext.name === "imageBlock"
-        )
         const uploadImage = (imageExtension?.options as any)?.uploadImage
 
         if (uploadImage) {
@@ -35,7 +36,7 @@ export const ImageUploader = ({ onUpload, editor }: ImageUploaderProps) => {
         setLoading(false)
       }
     },
-    [editor, onUpload]
+    [imageExtension, onUpload]
   )
 
   const handleUploadClick = useCallback(() => {
@@ -82,6 +83,36 @@ export const ImageUploader = ({ onUpload, editor }: ImageUploaderProps) => {
     return <ImageBlockLoading />
   }
 
+  // When browseAssets is provided, show a clean asset browser CTA
+  if (browseAssets) {
+    return (
+      <div
+        className="nph-image-uploader nph-image-uploader--browse-only"
+        contentEditable={false}
+        onClick={() => browseAssets(onUpload)}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault()
+            browseAssets(onUpload)
+          }
+        }}
+      >
+        <div className="nph-image-uploader__browse-cta">
+          <div className="nph-image-uploader__browse-icon-wrapper">
+            <IconPhoto size={28} />
+          </div>
+          <div className="nph-image-uploader__browse-text">
+            <span className="nph-image-uploader__browse-title">Choose from assets</span>
+            <span className="nph-image-uploader__browse-subtitle">Select an image from your library</span>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Fallback: standard drag-and-drop / upload flow
   return (
     <div
       className={`nph-image-uploader${draggedInside ? " nph-image-uploader--dragging" : ""}`}
@@ -95,7 +126,7 @@ export const ImageUploader = ({ onUpload, editor }: ImageUploaderProps) => {
         <div className="nph-image-uploader__text">
           {draggedInside ? "Drop image here" : "Drag and drop or"}
         </div>
-        <div>
+        <div className="nph-image-uploader__actions">
           <button
             type="button"
             disabled={draggedInside}
