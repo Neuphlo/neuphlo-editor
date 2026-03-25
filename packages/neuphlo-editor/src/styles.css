@@ -1196,10 +1196,11 @@
 
 .nph-video-input__field {
   flex: 1;
-  padding: 8px 12px;
+  padding: 10px 14px;
   font-size: 14px;
+  line-height: 1.4;
   border: 1px solid var(--border, #e5e7eb);
-  border-radius: 6px;
+  border-radius: 8px;
   outline: none;
   background: transparent;
   color: inherit;
@@ -1211,11 +1212,12 @@
 }
 
 .nph-video-input__button {
-  padding: 8px 16px;
+  padding: 10px 20px;
   font-size: 14px;
   font-weight: 500;
+  line-height: 1.4;
   border: 1px solid var(--border, #e5e7eb);
-  border-radius: 6px;
+  border-radius: 8px;
   background: var(--primary, #111827);
   color: var(--primary-foreground, #fff);
   cursor: pointer;
@@ -1225,6 +1227,66 @@
 .nph-video-input__button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+/* Video Placeholder */
+.nph-video-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 16 / 9;
+  border-radius: 12px;
+  border: 2px dashed var(--border, #e5e7eb);
+  background: var(--muted, rgba(0, 0, 0, 0.02));
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+  gap: 12px;
+}
+
+.nph-video-placeholder:hover {
+  border-color: var(--muted-foreground, #9ca3af);
+  background: var(--muted, rgba(0, 0, 0, 0.04));
+}
+
+.nph-video-placeholder__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  background: var(--muted, rgba(0, 0, 0, 0.06));
+  color: var(--muted-foreground, #6b7280);
+}
+
+.nph-video-placeholder__text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.nph-video-placeholder__title {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--foreground, #111827);
+}
+
+.nph-video-placeholder__subtitle {
+  display: block;
+  font-size: 13px;
+  color: var(--muted-foreground, #6b7280);
+}
+
+.nph-video-placeholder__input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 420px;
+  margin-top: 4px;
 }
 
 /* Video Block Dark Mode */
@@ -1270,6 +1332,29 @@
 
 .dark .nph-video-input__field {
   border-color: var(--border, #374151);
+}
+
+.dark .nph-video-placeholder {
+  border-color: var(--border, #374151);
+  background: var(--muted, rgba(255, 255, 255, 0.03));
+}
+
+.dark .nph-video-placeholder:hover {
+  border-color: var(--muted-foreground, #6b7280);
+  background: var(--muted, rgba(255, 255, 255, 0.05));
+}
+
+.dark .nph-video-placeholder__icon {
+  background: var(--muted, rgba(255, 255, 255, 0.06));
+  color: var(--muted-foreground, #9ca3af);
+}
+
+.dark .nph-video-placeholder__title {
+  color: var(--foreground, #f9fafb);
+}
+
+.dark .nph-video-placeholder__subtitle {
+  color: var(--muted-foreground, #9ca3af);
 }
 
 /* Drag Handle */

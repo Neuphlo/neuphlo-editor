@@ -106,23 +106,28 @@ export const VideoBlockView = (props: VideoBlockViewProps) => {
     return (
       <NodeViewWrapper style={getWrapperStyle()}>
         <div ref={wrapperRef}>
-          <div className="nph-video-input">
-            <div className="nph-video-input__icon">
-              <IconVideo size={24} />
+          <div className="nph-video-placeholder" onClick={onClick}>
+            <div className="nph-video-placeholder__icon">
+              <IconVideo size={28} stroke={1.5} />
             </div>
-            <div className="nph-video-input__content">
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "2px" }}>
+              <div style={{ fontSize: "14px", fontWeight: 600, lineHeight: "20px" }}>Add a video</div>
+              <div style={{ fontSize: "13px", opacity: 0.5, lineHeight: "18px" }}>Paste a URL to embed</div>
+            </div>
+            <div className="nph-video-placeholder__input">
               <input
                 type="text"
                 className="nph-video-input__field"
-                placeholder="Paste a YouTube, Vimeo, or video URL..."
+                placeholder="YouTube, Vimeo, or Loom URL..."
                 value={inputUrl}
                 onChange={(e) => setInputUrl(e.target.value)}
                 onKeyDown={handleKeyDown}
+                onClick={(e) => e.stopPropagation()}
               />
               <button
                 type="button"
                 className="nph-video-input__button"
-                onClick={handleEmbed}
+                onClick={(e) => { e.stopPropagation(); handleEmbed() }}
                 disabled={!inputUrl.trim()}
               >
                 Embed
