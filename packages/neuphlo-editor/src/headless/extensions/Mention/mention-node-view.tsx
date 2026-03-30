@@ -1,6 +1,25 @@
 import { NodeViewWrapper } from "@tiptap/react"
 import type { NodeViewProps } from "@tiptap/react"
 
+const GRADIENT_MAP: Record<string, string> = {
+  red: "linear-gradient(135deg, #ef4444, #fb7185)",
+  coral: "linear-gradient(135deg, #f87171, #fb923c)",
+  orange: "linear-gradient(135deg, #f97316, #fbbf24)",
+  amber: "linear-gradient(135deg, #f59e0b, #facc15)",
+  lime: "linear-gradient(135deg, #84cc16, #4ade80)",
+  green: "linear-gradient(135deg, #10b981, #2dd4bf)",
+  teal: "linear-gradient(135deg, #14b8a6, #22d3ee)",
+  cyan: "linear-gradient(135deg, #06b6d4, #60a5fa)",
+  blue: "linear-gradient(135deg, #3b82f6, #818cf8)",
+  indigo: "linear-gradient(135deg, #6366f1, #a78bfa)",
+  violet: "linear-gradient(135deg, #8b5cf6, #a855f7)",
+  purple: "linear-gradient(135deg, #a855f7, #d946ef)",
+  fuchsia: "linear-gradient(135deg, #d946ef, #f472b6)",
+  pink: "linear-gradient(135deg, #ec4899, #fb7185)",
+  slate: "linear-gradient(135deg, #64748b, #71717a)",
+  stone: "linear-gradient(135deg, #78716c, #a3a3a3)",
+}
+
 // Icon components
 function NodeIcon() {
   return (
@@ -74,7 +93,26 @@ export const MentionNodeView = (props: NodeViewProps) => {
       {isArticle && <ArticleIcon />}
 
       {/* Show avatar for user mentions */}
-      {!isReference && avatar && (
+      {!isReference && avatar && avatar in GRADIENT_MAP && (
+        <div
+          style={{
+            width: "20px",
+            height: "20px",
+            borderRadius: "50%",
+            background: GRADIENT_MAP[avatar],
+            color: "#ffffff",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: "8px",
+            fontWeight: 600,
+            flexShrink: 0,
+          }}
+        >
+          {(label || id).split(/\s+/).map((w: string) => w[0]).join("").slice(0, 2).toUpperCase()}
+        </div>
+      )}
+      {!isReference && avatar && !(avatar in GRADIENT_MAP) && (
         <img
           src={avatar}
           alt={label || id}
