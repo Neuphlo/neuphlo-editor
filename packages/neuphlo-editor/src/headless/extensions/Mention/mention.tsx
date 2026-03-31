@@ -152,6 +152,7 @@ export const createMentionExtension = (options?: MentionOptions) => {
                 slug: item.slug,
               },
             },
+            { type: "text", text: " " },
           ])
           .run()
       },

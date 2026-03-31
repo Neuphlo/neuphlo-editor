@@ -1,6 +1,38 @@
 import { forwardRef, useEffect, useImperativeHandle, useState } from "react"
 import type { MentionItem } from "./mention"
 
+const GRADIENT_MAP: Record<string, string> = {
+  red: "linear-gradient(135deg, #ef4444, #fb7185)",
+  coral: "linear-gradient(135deg, #f87171, #fb923c)",
+  orange: "linear-gradient(135deg, #f97316, #fbbf24)",
+  amber: "linear-gradient(135deg, #f59e0b, #facc15)",
+  lime: "linear-gradient(135deg, #84cc16, #4ade80)",
+  green: "linear-gradient(135deg, #10b981, #2dd4bf)",
+  teal: "linear-gradient(135deg, #14b8a6, #22d3ee)",
+  cyan: "linear-gradient(135deg, #06b6d4, #60a5fa)",
+  blue: "linear-gradient(135deg, #3b82f6, #818cf8)",
+  indigo: "linear-gradient(135deg, #6366f1, #a78bfa)",
+  violet: "linear-gradient(135deg, #8b5cf6, #a855f7)",
+  purple: "linear-gradient(135deg, #a855f7, #d946ef)",
+  fuchsia: "linear-gradient(135deg, #d946ef, #f472b6)",
+  pink: "linear-gradient(135deg, #ec4899, #fb7185)",
+  slate: "linear-gradient(135deg, #64748b, #71717a)",
+  stone: "linear-gradient(135deg, #78716c, #a3a3a3)",
+}
+
+function isGradientKey(avatar?: string): boolean {
+  return !!avatar && avatar in GRADIENT_MAP
+}
+
+function isAgentItem(item: MentionItem): boolean {
+  return !!item.email?.endsWith("@ai.neuphlo.local")
+}
+
+function getInitials(name: string): string {
+  if (!name) return "AG"
+  return name.split(/\s+/).map((w: string) => w[0]).join("").slice(0, 2).toUpperCase()
+}
+
 interface MentionCommandProps {
   items: MentionItem[]
   command: (item: MentionItem) => void
@@ -8,7 +40,9 @@ interface MentionCommandProps {
 }
 
 // Simple Avatar component with inline styles
-function Avatar({ src, fallback }: { src?: string; fallback: string }) {
+function Avatar({ src, fallback, isAgent }: { src?: string; fallback: string; isAgent?: boolean }) {
+  const gradient = src && isGradientKey(src) ? GRADIENT_MAP[src] : isAgent ? GRADIENT_MAP.violet : null
+
   return (
     <div style={{
       position: "relative",
@@ -19,7 +53,22 @@ function Avatar({ src, fallback }: { src?: string; fallback: string }) {
       overflow: "hidden",
       borderRadius: "9999px",
     }}>
-      {src ? (
+      {gradient ? (
+        <div style={{
+          display: "flex",
+          height: "100%",
+          width: "100%",
+          alignItems: "center",
+          justifyContent: "center",
+          borderRadius: "9999px",
+          background: gradient,
+          color: "#ffffff",
+          fontSize: "10px",
+          fontWeight: 600,
+        }}>
+          {fallback}
+        </div>
+      ) : src ? (
         <img
           style={{
             aspectRatio: "1",
@@ -135,48 +184,70 @@ export const MentionCommand = forwardRef<any, MentionCommandProps>((props, ref) 
       }}
     >
       {props.items.length ? (
-        props.items.map((item, index) => (
-          <button
-            key={item.id}
-            type="button"
-            onClick={() => selectItem(index)}
-            onMouseEnter={() => setSelectedIndex(index)}
-            style={{
-              position: "relative",
-              display: "flex",
-              width: "100%",
-              cursor: "default",
-              userSelect: "none",
-              alignItems: "center",
-              gap: "8px",
-              borderRadius: "4px",
-              padding: "10px 8px",
-              fontSize: "14px",
-              outline: "none",
-              backgroundColor: index === selectedIndex ? "var(--accent)" : "transparent",
-              color: index === selectedIndex ? "var(--accent-foreground)" : "inherit",
-              border: "none",
-              textAlign: "left",
-            }}
-          >
-            {item.type ? (
-              <ReferenceIcon type={item.type} />
-            ) : (
-              <Avatar
-                src={item.avatar}
-                fallback={item.label.slice(0, 2).toUpperCase()}
-              />
-            )}
-            <span style={{
-              flex: 1,
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
-            }}>
-              {item.label}
-            </span>
-          </button>
-        ))
+        (() => {
+          const agents = props.items.filter(i => !i.type && isAgentItem(i))
+          const others = props.items.filter(i => i.type || !isAgentItem(i))
+          const sections: Array<{ label: string | null; items: typeof props.items; startIndex: number }> = []
+          if (agents.length) sections.push({ label: "Agents", items: agents, startIndex: 0 })
+          if (others.length) sections.push({ label: agents.length ? "Members" : null, items: others, startIndex: agents.length })
+
+          return sections.map((section) => (
+            <div key={section.label ?? "default"}>
+              {section.label && (
+                <div style={{ padding: "6px 8px 2px", fontSize: "11px", fontWeight: 600, color: "var(--muted-foreground)", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                  {section.label}
+                </div>
+              )}
+              {section.items.map((item, i) => {
+                const index = section.startIndex + i
+                const agent = isAgentItem(item)
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => selectItem(index)}
+                    onMouseEnter={() => setSelectedIndex(index)}
+                    style={{
+                      position: "relative",
+                      display: "flex",
+                      width: "100%",
+                      cursor: "default",
+                      userSelect: "none",
+                      alignItems: "center",
+                      gap: "8px",
+                      borderRadius: "4px",
+                      padding: "10px 8px",
+                      fontSize: "14px",
+                      outline: "none",
+                      backgroundColor: index === selectedIndex ? "var(--accent)" : "transparent",
+                      color: index === selectedIndex ? "var(--accent-foreground)" : "inherit",
+                      border: "none",
+                      textAlign: "left",
+                    }}
+                  >
+                    {item.type ? (
+                      <ReferenceIcon type={item.type} />
+                    ) : (
+                      <Avatar
+                        src={item.avatar}
+                        fallback={getInitials(item.label)}
+                        isAgent={agent}
+                      />
+                    )}
+                    <span style={{
+                      flex: 1,
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                    }}>
+                      {item.label}
+                    </span>
+                  </button>
+                )
+              })}
+            </div>
+          ))
+        })()
       ) : (
         <div style={{
           padding: "24px 0",
