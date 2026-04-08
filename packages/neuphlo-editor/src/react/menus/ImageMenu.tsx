@@ -79,6 +79,7 @@ export function ImageMenu({
   return (
     <BubbleMenu
       editor={editor}
+      pluginKey="imageBubbleMenu"
       shouldShow={({ editor: e, state }) => {
         // Only show when an image node is selected
         if (!e.isActive("imageBlock")) return false
