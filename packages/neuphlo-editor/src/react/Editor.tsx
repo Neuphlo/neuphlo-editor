@@ -11,6 +11,10 @@ import { ImageMenu } from "./menus/ImageMenu"
 import { LinkMenu } from "./menus/LinkMenu"
 import { ImageBlockView } from "./menus/ImageBlock/ImageBlockView"
 import { VideoBlockView } from "./menus/VideoBlock/VideoBlockView"
+import {
+  createTaskItemView,
+  type TaskItemCheckboxComponent,
+} from "./menus/TaskItem/TaskItemView"
 import type { ReactNode } from "react"
 import { useMemo, useState, useCallback, useRef, useEffect } from "react"
 import type { Editor as TiptapEditor } from "@tiptap/react"
@@ -55,6 +59,8 @@ export type NeuphloEditorProps = {
   referenceOptions?: MentionOptions
   slashCommand?: boolean
   placeholder?: string
+  taskItemView?: any
+  checkboxComponent?: TaskItemCheckboxComponent
 }
 
 export function Editor({
@@ -77,7 +83,14 @@ export function Editor({
   referenceOptions,
   slashCommand,
   placeholder,
+  taskItemView,
+  checkboxComponent,
 }: NeuphloEditorProps) {
+  const resolvedTaskItemView = useMemo(() => {
+    if (taskItemView) return taskItemView
+    if (checkboxComponent) return createTaskItemView(checkboxComponent)
+    return undefined
+  }, [taskItemView, checkboxComponent])
   const [actionMenuAnchor, setActionMenuAnchor] = useState<HTMLElement | null>(null)
   const [actionMenuEditor, setActionMenuEditor] = useState<TiptapEditor | null>(null)
   const actionMenuRef = useRef<HTMLDivElement>(null)
@@ -173,6 +186,7 @@ export function Editor({
               collaboration: collaboration,
               imageBlockView: ImageBlockView,
               videoBlockView: VideoBlockView,
+              taskItemView: resolvedTaskItemView,
               mention: mentionOptions,
               reference: referenceOptions,
               slashCommand: slashCommand,

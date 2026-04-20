@@ -377,12 +377,62 @@
 }
 .nph-editor ul[data-type="taskList"] li > label,
 .ProseMirror.nph-editor ul[data-type="taskList"] li > label {
-  margin-right: 0.5rem;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  height: 1.65em;
+  margin: 0;
   user-select: none;
+}
+.nph-editor ul[data-type="taskList"] li > div,
+.ProseMirror.nph-editor ul[data-type="taskList"] li > div {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.nph-editor ul[data-type="taskList"] li > div > p,
+.ProseMirror.nph-editor ul[data-type="taskList"] li > div > p {
+  margin: 0;
 }
 .nph-editor ul[data-type="taskList"] li input[type="checkbox"],
 .ProseMirror.nph-editor ul[data-type="taskList"] li input[type="checkbox"] {
-  margin: 0.25rem 0.5rem 0 0;
+  margin: 0;
+  cursor: pointer;
+}
+.nph-editor ul[data-type="taskList"] li[data-checked="true"] > div,
+.ProseMirror.nph-editor ul[data-type="taskList"] li[data-checked="true"] > div {
+  color: var(--muted-foreground, #6b7280);
+  text-decoration: line-through;
+}
+
+/* Task item React NodeView variant */
+.nph-editor li.nph-task-item,
+.ProseMirror.nph-editor li.nph-task-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+.nph-editor .nph-task-item__checkbox,
+.ProseMirror.nph-editor .nph-task-item__checkbox {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  height: 1.65em;
+  margin: 0;
+  user-select: none;
+}
+.nph-editor .nph-task-item__content,
+.ProseMirror.nph-editor .nph-task-item__content {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.nph-editor .nph-task-item__content > p,
+.ProseMirror.nph-editor .nph-task-item__content > p {
+  margin: 0;
+}
+.nph-editor .nph-task-item__content--checked,
+.ProseMirror.nph-editor .nph-task-item__content--checked {
+  color: var(--muted-foreground, #6b7280);
+  text-decoration: line-through;
 }
 
 /* ProseMirror helpers */
