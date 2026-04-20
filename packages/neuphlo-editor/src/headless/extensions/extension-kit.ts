@@ -2,6 +2,24 @@ import Collaboration from "@tiptap/extension-collaboration"
 import CollaborationCaret from "@tiptap/extension-collaboration-caret"
 import { StarterKit, Placeholder, CodeBlock, Link } from "."
 import Underline from "@tiptap/extension-underline"
+import { TaskList, TaskItem as BaseTaskItem } from "@tiptap/extension-list"
+import { ReactNodeViewRenderer } from "@tiptap/react"
+
+const TaskItem = BaseTaskItem.extend({
+  addOptions() {
+    return {
+      ...this.parent?.(),
+      nodeView: null as any,
+    }
+  },
+  addNodeView() {
+    const custom = (this.options as any).nodeView
+    if (custom) {
+      return ReactNodeViewRenderer(custom)
+    }
+    return this.parent?.()
+  },
+})
 import {
   Command as SlashCommand,
 } from "./slash-command"
@@ -26,6 +44,7 @@ export interface ExtensionKitOptions {
   }
   imageBlockView?: any
   videoBlockView?: any
+  taskItemView?: any
   mention?: MentionOptions
   reference?: MentionOptions
   slashCommand?: boolean
@@ -43,6 +62,8 @@ export const ExtensionKit = (options?: ExtensionKitOptions) => {
     CodeBlock,
     Link,
     Underline,
+    TaskList,
+    TaskItem.configure({ nested: true, nodeView: options?.taskItemView } as any),
     ImageBlock.configure({
       uploadImage: options?.uploadImage,
       browseAssets: options?.browseAssets,

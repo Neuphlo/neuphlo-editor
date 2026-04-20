@@ -4,8 +4,8 @@
     {
       "name": "editor",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["run", "dev", "--filter", "web"],
-      "port": 3000
+      "runtimeArgs": ["--filter", "web", "exec", "next", "dev", "--turbopack", "--port", "3100"],
+      "port": 3100
     }
   ]
 }

@@ -8,6 +8,7 @@ import type { EditorProps } from "../../../../../packages/neuphlo-editor/src/rea
 
 // Componments
 import { Card } from "@/components/ui/card"
+import { Checkbox } from "@/components/ui/checkbox"
 import { AIButton } from "./AIButton"
 
 const NeuphloEditor = dynamic(
@@ -108,6 +109,7 @@ export default function Editor({ content }: EditorProps) {
         onUpdate={handleUpdate}
         onCreate={handleCreate}
         uploadImage={handleImageUpload}
+        checkboxComponent={Checkbox}
         mentionOptions={{
           items: async (query: string) => {
             // Filter users based on query
