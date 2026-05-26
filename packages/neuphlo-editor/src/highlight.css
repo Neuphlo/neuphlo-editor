@@ -1,11 +1,5 @@
-/* Default: GitHub light theme for code token colors.
-   Consumers that toggle a `.dark` class on a parent get the github-dark
-   palette below via higher selector specificity. */
 @import "highlight.js/styles/github.css";
 
-/* GitHub Dark palette — readable on #1F1F1E / #262626 surfaces.
-   The `.hljs` background is intentionally transparent so the consumer's
-   own `<pre>` styling (usually a muted/elevated bg token) shows through. */
 .dark .hljs {
 	color: #c9d1d9;
 	background: transparent;
