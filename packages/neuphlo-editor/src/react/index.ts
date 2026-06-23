@@ -2,6 +2,8 @@
 import "../styles.css";
 
 export { Editor } from "./Editor";
+export { Markdown, markdownToHtml } from "../headless/extensions";
+export type { MarkdownStorage } from "../headless/extensions";
 export type {
   NeuphloEditorProps as EditorProps,
   BubbleMenuExtras,

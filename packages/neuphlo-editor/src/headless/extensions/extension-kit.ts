@@ -31,6 +31,7 @@ import { DragHandle, setDragHandleCallbacks } from "./DragHandle"
 import type { DragHandleCallbacks } from "./DragHandle"
 import { TableKit } from "./Table"
 import { MarkdownPaste } from "./MarkdownPaste"
+import { Markdown } from "./Markdown"
 
 export interface ExtensionKitOptions {
   uploadImage?: (file: File) => Promise<string>
@@ -86,6 +87,7 @@ export const ExtensionKit = (options?: ExtensionKitOptions) => {
       includeChildren: true,
     }),
     MarkdownPaste,
+    Markdown,
   ]
 
   // Add Table support if enabled
