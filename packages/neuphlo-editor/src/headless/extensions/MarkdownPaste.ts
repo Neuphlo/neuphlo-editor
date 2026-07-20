@@ -1,6 +1,6 @@
 import { Extension } from "@tiptap/core"
 import { Plugin, PluginKey } from "@tiptap/pm/state"
-import { MarkdownParser, defaultMarkdownParser } from "@tiptap/pm/markdown"
+import { MarkdownParser, defaultMarkdownParser } from "prosemirror-markdown"
 
 const markdownPastePluginKey = new PluginKey("markdownPaste")
 
