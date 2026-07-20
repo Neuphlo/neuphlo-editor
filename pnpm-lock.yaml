@@ -257,6 +257,9 @@ importers:
       '@tiptap/suggestion':
         specifier: 3.20.2
         version: 3.20.2(@tiptap/core@3.20.2(@tiptap/pm@3.20.2))(@tiptap/pm@3.20.2)
+      '@types/markdown-it':
+        specifier: ^14.1.2
+        version: 14.1.2
       '@types/node':
         specifier: ^20.0.0
         version: 20.19.30

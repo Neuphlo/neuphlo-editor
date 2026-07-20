@@ -19,6 +19,8 @@ export {
 } from "./components/editor-command-item"
 
 export { Placeholder, StarterKit } from "./extensions"
+export { Markdown, markdownToHtml } from "./extensions"
+export type { MarkdownStorage } from "./extensions"
 export {
   Command as SlashCommand,
   renderItems as renderSlashCommandItems,

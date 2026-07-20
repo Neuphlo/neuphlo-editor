@@ -14,3 +14,5 @@ export { DragHandle, setDragHandleCallbacks } from "./DragHandle";
 export type { DragHandleCallbacks } from "./DragHandle";
 export { TableKit, Table, TableCell, TableHeader, TableRow } from "./Table";
 export { MarkdownPaste } from "./MarkdownPaste";
+export { Markdown, markdownToHtml } from "./Markdown";
+export type { MarkdownStorage } from "./Markdown";

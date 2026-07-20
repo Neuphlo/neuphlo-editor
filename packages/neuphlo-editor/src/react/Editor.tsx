@@ -6,6 +6,7 @@ import {
 } from "../headless"
 import ExtensionKit from "../headless/extensions/extension-kit"
 import type { MentionOptions } from "../headless/extensions"
+import { markdownToHtml } from "../headless/extensions"
 import { SlashMenu, TextMenu } from "./menus"
 import { ImageMenu } from "./menus/ImageMenu"
 import { LinkMenu } from "./menus/LinkMenu"
@@ -37,6 +38,7 @@ export type BubbleMenuExtras = Partial<{
 
 export type NeuphloEditorProps = {
   content?: string
+  markdown?: boolean
   className?: string
   editable?: boolean
   immediatelyRender?: boolean
@@ -65,6 +67,7 @@ export type NeuphloEditorProps = {
 
 export function Editor({
   content,
+  markdown = false,
   className,
   editable = true,
   immediatelyRender = false,
@@ -91,6 +94,10 @@ export function Editor({
     if (checkboxComponent) return createTaskItemView(checkboxComponent)
     return undefined
   }, [taskItemView, checkboxComponent])
+  const resolvedContent = useMemo(() => {
+    if (markdown && typeof content === "string") return markdownToHtml(content)
+    return content
+  }, [markdown, content])
   const [actionMenuAnchor, setActionMenuAnchor] = useState<HTMLElement | null>(null)
   const [actionMenuEditor, setActionMenuEditor] = useState<TiptapEditor | null>(null)
   const actionMenuRef = useRef<HTMLDivElement>(null)
@@ -177,7 +184,7 @@ export function Editor({
           onCreate={onCreate}
           immediatelyRender={immediatelyRender}
           editable={editable}
-          content={content}
+          content={resolvedContent}
           extensions={[
             ...
             ExtensionKit({
