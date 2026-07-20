@@ -6,6 +6,7 @@ import {
   IconH3,
   IconH4,
   IconList,
+  IconListCheck,
   IconListNumbers,
   IconBlockquote,
   IconCode,
@@ -40,6 +41,7 @@ export function MenuList({
     if (editor.isActive("heading", { level: 4 })) return "Heading 4"
     if (editor.isActive("bulletList")) return "Bullet list"
     if (editor.isActive("orderedList")) return "Ordered list"
+    if (editor.isActive("taskList")) return "Task list"
     if (editor.isActive("blockquote")) return "Quote"
     if (editor.isActive("code")) return "Code"
     if (editor.isActive("codeBlock")) return "Code Block"
@@ -216,6 +218,18 @@ export function MenuList({
             >
               <IconListNumbers size={16} />
               <span>Ordered list</span>
+            </button>
+
+            <button
+              type="button"
+              className={`nph-command__item${isActive("Task list") ? " is-active" : ""}`}
+              aria-selected={isActive("Task list")}
+              onClick={handle(() =>
+                (editor as any).chain().focus().toggleTaskList().run()
+              )}
+            >
+              <IconListCheck size={16} />
+              <span>Task list</span>
             </button>
 
             <button

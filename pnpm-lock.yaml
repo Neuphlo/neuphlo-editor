@@ -238,9 +238,9 @@ importers:
       lowlight:
         specifier: ^3.3.0
         version: 3.3.0
-      markdown-it:
-        specifier: ^14.1.0
-        version: 14.1.1
+      prosemirror-markdown:
+        specifier: ^1.13.2
+        version: 1.13.2
       tunnel-rat:
         specifier: ^0.1.2
         version: 0.1.2(@types/react@19.2.8)(react@19.2.4)
