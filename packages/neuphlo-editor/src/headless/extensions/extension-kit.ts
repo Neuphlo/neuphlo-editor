@@ -3,21 +3,24 @@ import CollaborationCaret from "@tiptap/extension-collaboration-caret"
 import { StarterKit, Placeholder, CodeBlock, Link } from "."
 import Underline from "@tiptap/extension-underline"
 import { TaskList, TaskItem as BaseTaskItem } from "@tiptap/extension-list"
+import type { TaskItemOptions } from "@tiptap/extension-list"
 import { ReactNodeViewRenderer } from "@tiptap/react"
 
-const TaskItem = BaseTaskItem.extend({
+type TaskItemWithNodeViewOptions = TaskItemOptions & { nodeView: any }
+
+const TaskItem = BaseTaskItem.extend<TaskItemWithNodeViewOptions>({
   addOptions() {
     return {
       ...this.parent?.(),
-      nodeView: null as any,
-    }
+      nodeView: null,
+    } as TaskItemWithNodeViewOptions
   },
   addNodeView() {
-    const custom = (this.options as any).nodeView
+    const custom = this.options.nodeView
     if (custom) {
       return ReactNodeViewRenderer(custom)
     }
-    return this.parent?.()
+    return this.parent?.() ?? null
   },
 })
 import {
