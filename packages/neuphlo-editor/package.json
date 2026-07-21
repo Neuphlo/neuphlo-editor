@@ -1,6 +1,6 @@
 {
   "name": "neuphlo-editor",
-  "version": "2.6.2",
+  "version": "2.7.0",
   "private": false,
   "description": "A lightweight React wrapper around Tiptap with sensible defaults and image upload support.",
   "type": "module",
@@ -46,7 +46,8 @@
     "prepack": "pnpm run build",
     "prepare": "pnpm run build",
     "typecheck": "tsc -p tsconfig.json",
-    "lint": "eslint . --ext .ts,.tsx"
+    "lint": "eslint . --ext .ts,.tsx",
+    "test": "vitest run"
   },
   "peerDependencies": {
     "@tiptap/extension-collaboration": "^3.20.2",
@@ -79,7 +80,9 @@
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "tsup": "^8.0.0",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "vitest": "^4.1.10",
+    "happy-dom": "^20.11.0"
   },
   "dependencies": {
     "@floating-ui/dom": "^1.7.6",
@@ -122,6 +125,7 @@
     "highlight.js": "^11.11.1",
     "jotai": "^2.11.0",
     "lowlight": "^3.3.0",
+    "markdown-it": "^14.1.0",
     "prosemirror-markdown": "^1.13.2",
     "tunnel-rat": "^0.1.2",
     "yjs": "^13.6.0"

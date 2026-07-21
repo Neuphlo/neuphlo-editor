@@ -1,13 +1,95 @@
 import { Extension } from "@tiptap/core"
-import { MarkdownSerializer } from "@tiptap/pm/markdown"
+import { MarkdownSerializer } from "prosemirror-markdown"
 import { DOMSerializer, type Node as PMNode, type Schema } from "@tiptap/pm/model"
 import MarkdownIt from "markdown-it"
+import type Token from "markdown-it/lib/token.mjs"
+
+const VIDEO_LINK_LINE = /^\[▶[^\]]*\]\(([^)\s]*)\)[^\S\n]*$/gm
+const TASK_MARKER = /^\[([ xX])\]\s+/
+
+function escapeAttribute(value: string): string {
+  return value.replace(/&/g, "&amp;").replace(/"/g, "&quot;")
+}
+
+function normalizeVideoSrc(url: string): string {
+  const trimmed = url.trim()
+  if (trimmed === "https://" || trimmed === "http://") return ""
+  return trimmed
+}
+
+function replaceVideoLinks(markdown: string): string {
+  return markdown.replace(VIDEO_LINK_LINE, (_match, url: string) => {
+    const src = escapeAttribute(normalizeVideoSrc(url))
+    return `<div data-type="video-block" data-src="${src}" data-width="100%" data-align="center"></div>`
+  })
+}
+
+function itemParagraphInline(tokens: Token[], itemOpenIdx: number): number {
+  const level = tokens[itemOpenIdx].level
+  for (let k = itemOpenIdx + 1; k < tokens.length; k += 1) {
+    const token = tokens[k]
+    if (token.type === "list_item_close" && token.level === level) return -1
+    if (token.type === "inline" && token.level === level + 2) return k
+  }
+  return -1
+}
+
+function collectDirectItems(
+  tokens: Token[],
+  openIdx: number,
+): { close: number; items: number[] } {
+  const level = tokens[openIdx].level
+  const items: number[] = []
+  for (let k = openIdx + 1; k < tokens.length; k += 1) {
+    const token = tokens[k]
+    if (token.type === "bullet_list_close" && token.level === level) {
+      return { close: k, items }
+    }
+    if (token.type === "list_item_open" && token.level === level + 1) {
+      items.push(k)
+    }
+  }
+  return { close: -1, items }
+}
+
+function stripTaskMarker(inline: Token): void {
+  inline.content = inline.content.replace(TASK_MARKER, "")
+  const child = inline.children?.[0]
+  if (child && child.type === "text") {
+    child.content = child.content.replace(TASK_MARKER, "")
+  }
+}
+
+function taskListPlugin(md: MarkdownIt): void {
+  md.core.ruler.after("inline", "neuphlo_task_list", (state) => {
+    const tokens = state.tokens as Token[]
+    for (let i = 0; i < tokens.length; i += 1) {
+      if (tokens[i].type !== "bullet_list_open") continue
+      const { items } = collectDirectItems(tokens, i)
+      if (items.length === 0) continue
+      const inlineIdxs = items.map((itemIdx) =>
+        itemParagraphInline(tokens, itemIdx),
+      )
+      if (inlineIdxs.some((idx) => idx < 0)) continue
+      const markers = inlineIdxs.map((idx) => TASK_MARKER.exec(tokens[idx].content))
+      if (markers.some((marker) => marker === null)) continue
+      tokens[i].attrSet("data-type", "taskList")
+      items.forEach((itemIdx, n) => {
+        const checked = markers[n]![1].toLowerCase() === "x"
+        tokens[itemIdx].attrSet("data-type", "taskItem")
+        tokens[itemIdx].attrSet("data-checked", checked ? "true" : "false")
+        stripTaskMarker(tokens[inlineIdxs[n]])
+      })
+    }
+  })
+}
 
 const markdownIt = new MarkdownIt({ html: true, linkify: false, breaks: false })
+markdownIt.use(taskListPlugin)
 
 export function markdownToHtml(input: string | null | undefined): string {
   if (!input) return ""
-  return markdownIt.render(input)
+  return markdownIt.render(replaceVideoLinks(input))
 }
 
 function nodeToHtml(node: PMNode, schema: Schema): string {
@@ -54,6 +136,19 @@ const specificNodes: Record<string, NodeSerializer> = {
   },
   listItem: (state, node) => {
     state.renderContent(node)
+  },
+  taskList: (state, node) => {
+    state.renderList(node, "    ", (index: number) =>
+      node.child(index).attrs.checked ? "- [x] " : "- [ ] ",
+    )
+  },
+  taskItem: (state, node) => {
+    state.renderContent(node)
+  },
+  videoBlock: (state, node) => {
+    const src = String(node.attrs.src ?? "").trim()
+    state.write(`[▶ Video](${src || "https://"})`)
+    state.closeBlock(node)
   },
   codeBlock: (state, node) => {
     state.write(`\`\`\`${node.attrs.language || ""}\n`)
