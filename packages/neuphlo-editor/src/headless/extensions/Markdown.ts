@@ -1,5 +1,5 @@
 import { Extension } from "@tiptap/core"
-import { MarkdownSerializer } from "@tiptap/pm/markdown"
+import { MarkdownSerializer } from "prosemirror-markdown"
 import { DOMSerializer, type Node as PMNode, type Schema } from "@tiptap/pm/model"
 import MarkdownIt from "markdown-it"
 
