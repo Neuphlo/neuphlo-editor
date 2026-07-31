@@ -8,6 +8,7 @@ import {
 export type TaskItemCheckboxProps = {
   checked: boolean
   onCheckedChange: (checked: boolean) => void
+  disabled?: boolean
   className?: string
 }
 
@@ -16,7 +17,7 @@ export type TaskItemCheckboxComponent = ComponentType<TaskItemCheckboxProps>
 export const createTaskItemView = (
   Checkbox: TaskItemCheckboxComponent,
 ) => {
-  const TaskItemView = ({ node, updateAttributes }: NodeViewProps) => {
+  const TaskItemView = ({ node, updateAttributes, editor }: NodeViewProps) => {
     const checked = !!node.attrs.checked
 
     return (
@@ -28,9 +29,11 @@ export const createTaskItemView = (
         <label contentEditable={false} className="nph-task-item__checkbox">
           <Checkbox
             checked={checked}
-            onCheckedChange={(value) =>
+            disabled={!editor.isEditable}
+            onCheckedChange={(value) => {
+              if (!editor.isEditable) return
               updateAttributes({ checked: value === true })
-            }
+            }}
           />
         </label>
         <NodeViewContent

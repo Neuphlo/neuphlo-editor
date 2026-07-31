@@ -107,6 +107,7 @@ export function TextMenu({
       editor={editor}
       pluginKey="textBubbleMenu"
       shouldShow={({ editor: e, state, from, to, view }) => {
+        if (!e.isEditable) return false
         // Don't show if imageBlock or videoBlock is active
         if (e.isActive("imageBlock")) return false
         if (e.isActive("videoBlock")) return false

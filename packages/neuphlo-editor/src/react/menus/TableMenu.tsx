@@ -55,7 +55,7 @@ export function TableMenu({ className: _className }: TableMenuProps) {
   const tableInfo = useEditorState({
     editor,
     selector: (ctx) => {
-      if (!ctx.editor) return null
+      if (!ctx.editor || !ctx.editor.isEditable) return null
       const { $from } = ctx.editor.state.selection
       for (let d = $from.depth; d > 0; d--) {
         if ($from.node(d).type.name === "table") {

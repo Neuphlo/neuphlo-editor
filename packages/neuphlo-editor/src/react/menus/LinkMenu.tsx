@@ -61,6 +61,7 @@ export function LinkMenu() {
       editor={editor}
       pluginKey="linkBubbleMenu"
       shouldShow={({ editor: e, state }) => {
+        if (!e.isEditable) return false
         // Show when link is active (whether selection is empty or not)
         return e.isActive("link")
       }}
