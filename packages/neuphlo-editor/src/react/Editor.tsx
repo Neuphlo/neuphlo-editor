@@ -212,21 +212,21 @@ export function Editor({
             },
           }}
         >
-          {showTextMenu ? (
+          {editable && showTextMenu ? (
             <TextMenu
               leadingExtras={textExtras.start}
               trailingExtras={textExtras.end}
             />
           ) : null}
-          {showImageMenu ? (
+          {editable && showImageMenu ? (
             <ImageMenu
               leadingExtras={imageExtras.start}
               trailingExtras={imageExtras.end}
             />
           ) : null}
-          <LinkMenu />
-          <TableMenu />
-          {showSlashMenu ? <SlashMenu /> : null}
+          {editable ? <LinkMenu /> : null}
+          {editable ? <TableMenu /> : null}
+          {editable && showSlashMenu ? <SlashMenu /> : null}
         </EditorContent>
       </EditorRoot>
       {actionMenuAnchor && actionMenuEditor && (

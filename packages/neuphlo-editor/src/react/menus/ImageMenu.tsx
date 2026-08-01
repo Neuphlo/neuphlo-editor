@@ -81,6 +81,7 @@ export function ImageMenu({
       editor={editor}
       pluginKey="imageBubbleMenu"
       shouldShow={({ editor: e, state }) => {
+        if (!e.isEditable) return false
         // Only show when an image node is selected
         if (!e.isActive("imageBlock")) return false
 
