@@ -1,7 +1,6 @@
 import Collaboration from "@tiptap/extension-collaboration"
 import CollaborationCaret from "@tiptap/extension-collaboration-caret"
 import { StarterKit, Placeholder, CodeBlock, Link } from "."
-import Underline from "@tiptap/extension-underline"
 import { TaskList, TaskItem as BaseTaskItem } from "@tiptap/extension-list"
 import type { TaskItemOptions } from "@tiptap/extension-list"
 import { ReactNodeViewRenderer } from "@tiptap/react"
@@ -65,7 +64,6 @@ export const ExtensionKit = (options?: ExtensionKitOptions) => {
     StarterKit.configure({ codeBlock: false, link: false }),
     CodeBlock,
     Link,
-    Underline,
     TaskList,
     TaskItem.configure({ nested: true, nodeView: options?.taskItemView } as any),
     ImageBlock.configure({
