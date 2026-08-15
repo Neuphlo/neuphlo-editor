@@ -17,7 +17,7 @@ export default function Navigation() {
                 alt="Neuphlo"
                 width={120}
                 height={32}
-                className="h-8 w-auto dark:invert"
+                className="h-8 w-auto rounded-[22.4%]"
               />
               <span className="font-bold text-md text-slate-900 dark:text-white">
                 Neuphlo Editor
