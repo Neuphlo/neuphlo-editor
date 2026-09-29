@@ -14,6 +14,12 @@ A lightweight, feature-rich React wrapper around [Tiptap](https://tiptap.dev) wi
 - 💬 **Bubble menus** - Context-aware formatting menus
 - 🧩 **Expandable menus** - Add your own controls to the text or image menus
 - 🎯 **TypeScript** - Full TypeScript support with type definitions
+
+## Page collaboration codec preview
+
+`neuphlo-editor/codec` is a React-free, versioned conversion boundary for Page content. It is a local foundation, not yet wired to the live Page editor or a published package release. It accepts Markdown or ProseMirror JSON, validates the v1 schema, and converts validated JSON to and from a Yjs document using the `body` field. Each operation returns `{ ok: true, value, version: 1 }` or `{ ok: false, error: { code, detail } }`; callers must not treat an error as empty content.
+
+V1 supports paragraphs, headings, blockquotes, horizontal rules, bullet and ordered lists, code blocks, hard breaks, bold, italic, strike, inline code, and links. This is a supported subset of the current editor schema, not an equivalent full editor schema. It rejects unsupported Markdown tokens and JSON nodes, marks, or attributes. In particular, task lists, images, video, tables, mentions, references, underline, and media width/alignment are not yet safe to import into this codec. The current editor's full rich-content fixture is expected to be rejected, not flattened. Existing editor content containing any of these must stay on its current path until a later codec version supports it. This codec does not use `./headless`, whose Markdown path has browser dependencies and fallback behavior unsuitable for canonical Page storage.
 - 🎨 **Syntax highlighting** - Code blocks with highlight.js support
 - 🔗 **Link management** - Easy link insertion and editing
 - 📦 **Lightweight** - Minimal bundle size with tree-shaking support
