@@ -61,7 +61,11 @@ export const ExtensionKit = (options?: ExtensionKitOptions) => {
   const enableSlashCommand = options?.slashCommand !== false // Default to true
 
   const extensions = [
-    StarterKit.configure({ codeBlock: false, link: false }),
+    StarterKit.configure({
+      codeBlock: false,
+      link: false,
+      undoRedo: options?.collaboration?.doc ? false : undefined,
+    }),
     CodeBlock,
     Link,
     TaskList,
