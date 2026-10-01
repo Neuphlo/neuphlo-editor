@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest"
+import * as Y from "yjs"
 import { PAGE_CODEC_VERSION, PAGE_MAX_MARKDOWN_LENGTH, PAGE_MAX_STATE_BYTES, PAGE_YJS_FIELD, markdownToPageYjsState, pageJSONToYDoc, pageYDocToJSON, pageYjsStateToMarkdown, parsePageJSON, parsePageMarkdown, serializePageMarkdown } from "./index"
 
 const examples = [
@@ -36,6 +37,7 @@ describe("Page codec v1", () => {
     ["style", "<style>body{display:none}</style>"],
     ["event handler", "<img src=\"https://example.com/a.png\" onerror=\"globalThis.codecExecuted = true\">"],
     ["unknown node", "<iframe src=\"https://example.com\"></iframe>"],
+    ["invalid whitespace marker", "<p data-page-whitespace=\"false\">text </p>"],
   ])("rejects unsupported %s Markdown", (_name, markdown) => {
     const previous = (globalThis as { codecExecuted?: boolean }).codecExecuted
     expect(parsePageMarkdown(markdown)).toMatchObject({ ok: false, error: { code: "unsupported_content" } })
@@ -52,6 +54,45 @@ describe("Page codec v1", () => {
     const expected = parsePageMarkdown(markdown)
     const actual = parsePageMarkdown(restored.value)
     expect(actual.ok && actual.value.toJSON()).toEqual(expected.ok && expected.value.toJSON())
+  })
+
+  it("preserves each typed boundary space before the next letter", () => {
+    const encoded = pageJSONToYDoc({ type: "doc", content: [{ type: "paragraph" }] }, PAGE_CODEC_VERSION)
+    expect(encoded.ok).toBe(true)
+    if (!encoded.ok) return
+    try {
+      const paragraph = encoded.value.getXmlFragment(PAGE_YJS_FIELD).get(0) as Y.XmlElement
+      const text = new Y.XmlText()
+      paragraph.insert(0, [text])
+      let expected = ""
+      for (const part of [" ", "First", " ", "editor", " ", "checked.", " ", "!"]) {
+        text.insert(text.length, part)
+        expected += part
+        const bytes = Y.encodeStateAsUpdate(encoded.value)
+        const projected = pageYjsStateToMarkdown(bytes, PAGE_CODEC_VERSION)
+        expect(projected, expected).toMatchObject({ ok: true })
+        if (!projected.ok) continue
+        const restored = parsePageMarkdown(projected.value)
+        expect(restored.ok && restored.value.toJSON(), expected).toEqual({ type: "doc", content: [{ type: "paragraph", content: [{ type: "text", text: expected }] }] })
+        expect(Y.encodeStateAsUpdate(encoded.value)).toEqual(bytes)
+      }
+    } finally {
+      encoded.value.destroy()
+    }
+  })
+
+  it.each([
+    { type: "heading", attrs: { level: 2 }, content: [{ type: "text", text: "Heading " }] },
+    { type: "bulletList", content: [{ type: "listItem", content: [{ type: "paragraph", content: [{ type: "text", text: "List " }] }] }] },
+    { type: "table", content: [{ type: "tableRow", content: [{ type: "tableCell", content: [{ type: "paragraph", content: [{ type: "text", text: "Cell " }] }] }] }] },
+  ])("round-trips trailing spaces inside $type", block => {
+    const json = { type: "doc", content: [block] }
+    const projected = serializePageMarkdown(json, PAGE_CODEC_VERSION)
+    expect(projected).toMatchObject({ ok: true })
+    if (!projected.ok) return
+    const restored = parsePageMarkdown(projected.value)
+    const expected = parsePageJSON(json, PAGE_CODEC_VERSION)
+    expect(restored.ok && restored.value.toJSON()).toEqual(expected.ok && expected.value.toJSON())
   })
 
   it("bounds Markdown and binary state before parsing", () => {

@@ -22,12 +22,12 @@ export type PageCodecResult<T> =
 export const pageSchema = new Schema({
   nodes: {
     doc: { content: "block+" },
-    paragraph: { content: "inline*", group: "block", parseDOM: [{ tag: "p" }], toDOM: () => ["p", 0] },
+    paragraph: { content: "inline*", group: "block", parseDOM: [{ tag: "p[data-page-whitespace='true']", preserveWhitespace: "full" }, { tag: "p" }], toDOM: () => ["p", 0] },
     blockquote: { content: "block+", group: "block", parseDOM: [{ tag: "blockquote" }], toDOM: () => ["blockquote", 0] },
     horizontalRule: { group: "block", parseDOM: [{ tag: "hr" }], toDOM: () => ["hr"] },
     heading: {
       attrs: { level: { default: 1 } }, content: "inline*", group: "block",
-      parseDOM: [1, 2, 3, 4, 5, 6].map(level => ({ tag: `h${level}`, attrs: { level } })),
+      parseDOM: [1, 2, 3, 4, 5, 6].flatMap(level => [{ tag: `h${level}[data-page-whitespace='true']`, attrs: { level }, preserveWhitespace: "full" as const }, { tag: `h${level}`, attrs: { level } }]),
       toDOM: node => [`h${node.attrs.level}`, 0],
     },
     codeBlock: {
@@ -103,9 +103,9 @@ function createCodecWindow() {
 const allowedHtmlAttributes: Record<string, string[]> = {
   a: ["href", "title", "target", "rel"], b: [], blockquote: [], br: [], code: ["class"],
   col: ["style"], colgroup: [], del: [], div: ["data-type", "data-src", "data-width", "data-align"],
-  em: [], h1: [], h2: [], h3: [], h4: [], h5: [], h6: [], hr: [], i: [],
+  em: [], h1: ["data-page-whitespace"], h2: ["data-page-whitespace"], h3: ["data-page-whitespace"], h4: ["data-page-whitespace"], h5: ["data-page-whitespace"], h6: ["data-page-whitespace"], hr: [], i: [],
   img: ["src", "alt", "data-width", "data-align"], li: ["data-type", "data-checked"],
-  ol: ["start"], p: [], pre: [], s: [], span: [], strike: [], strong: [],
+  ol: ["start"], p: ["data-page-whitespace"], pre: [], s: [], span: [], strike: [], strong: [],
   table: ["style"], tbody: [], td: ["colspan", "rowspan", "colwidth", "data-colwidth"],
   th: ["colspan", "rowspan", "colwidth", "data-colwidth"], thead: [], tr: [], u: [], ul: ["data-type"],
 }
@@ -115,6 +115,7 @@ function invalidHtml(element: Element): string | null {
   const allowed = allowedHtmlAttributes[name]
   if (!allowed) return `html:${name}`
   if (Array.from(element.attributes).some(attribute => !allowed.includes(attribute.name.toLowerCase()))) return `html:${name}:attribute`
+  if (element.hasAttribute("data-page-whitespace") && element.getAttribute("data-page-whitespace") !== "true") return `html:${name}:whitespace`
   if (name === "div" && element.getAttribute("data-type") !== "video-block") return "html:div"
   if (name === "ul" && element.hasAttribute("data-type") && element.getAttribute("data-type") !== "taskList") return "html:ul"
   if (name === "li" && element.hasAttribute("data-type") && element.getAttribute("data-type") !== "taskItem") return "html:li"
@@ -138,6 +139,9 @@ function nodeToHtml(node: ProseMirrorNode): string {
     const container = window.document.createElement("div")
     const fragment = DOMSerializer.fromSchema(pageSchema).serializeNode(node, { document: window.document as unknown as Document })
     container.appendChild(fragment as unknown as Parameters<typeof container.appendChild>[0])
+    for (const element of Array.from(container.querySelectorAll("p,h1,h2,h3,h4,h5,h6"))) {
+      if (/^ | $/.test(element.textContent ?? "")) element.setAttribute("data-page-whitespace", "true")
+    }
     return container.innerHTML
   } finally {
     window.close()
@@ -151,10 +155,16 @@ const serializer = new MarkdownSerializer({
   blockquote: commonNodes.blockquote,
   paragraph: (state, node) => {
     if (node.childCount === 0) state.write("<p></p>")
+    else if (/^ | $/.test(node.textContent)) state.write(nodeToHtml(node))
     else state.renderInline(node)
     state.closeBlock(node)
   },
-  heading: commonNodes.heading,
+  heading: (state, node, parent, index) => {
+    if (/^ | $/.test(node.textContent)) {
+      state.write(nodeToHtml(node))
+      state.closeBlock(node)
+    } else commonNodes.heading(state, node, parent, index)
+  },
   text: commonNodes.text,
   horizontalRule: commonNodes.horizontal_rule,
   bulletList: commonNodes.bullet_list,
