@@ -14,15 +14,17 @@ A lightweight, feature-rich React wrapper around [Tiptap](https://tiptap.dev) wi
 - 💬 **Bubble menus** - Context-aware formatting menus
 - 🧩 **Expandable menus** - Add your own controls to the text or image menus
 - 🎯 **TypeScript** - Full TypeScript support with type definitions
+- 🎨 **Syntax highlighting** - Code blocks with highlight.js support
+- 🔗 **Link management** - Easy link insertion and editing
+- 📦 **Lightweight** - Minimal bundle size with tree-shaking support
 
 ## Page collaboration codec preview
 
 `neuphlo-editor/codec` is a React-free, versioned conversion boundary for Page content. It is a local foundation, not yet wired to the live Page editor or a published package release. It accepts Markdown or ProseMirror JSON, validates the v1 schema, and converts validated JSON to and from a Yjs document using the `body` field. Each operation returns `{ ok: true, value, version: 1 }` or `{ ok: false, error: { code, detail } }`; callers must not treat an error as empty content.
 
-V1 supports paragraphs, headings, blockquotes, horizontal rules, bullet and ordered lists, code blocks, hard breaks, bold, italic, strike, inline code, and links. This is a supported subset of the current editor schema, not an equivalent full editor schema. It rejects unsupported Markdown tokens and JSON nodes, marks, or attributes. In particular, task lists, images, video, tables, mentions, references, underline, and media width/alignment are not yet safe to import into this codec. The current editor's full rich-content fixture is expected to be rejected, not flattened. Existing editor content containing any of these must stay on its current path until a later codec version supports it. This codec does not use `./headless`, whose Markdown path has browser dependencies and fallback behavior unsuitable for canonical Page storage.
-- 🎨 **Syntax highlighting** - Code blocks with highlight.js support
-- 🔗 **Link management** - Easy link insertion and editing
-- 📦 **Lightweight** - Minimal bundle size with tree-shaking support
+The local v1 codec covers the installed Page editor's default node and mark schema, including tasks, tables and resized cells, images, video, underline, links, and ordinary formatting. `markdownToPageYjsState` imports Markdown into exact Yjs bytes; `pageYjsStateToMarkdown` derives a Markdown projection from those bytes. Both enforce the server's Markdown and binary size limits and reject content they cannot round-trip. Tables and media may use HTML in the derived Markdown. Optional mention/reference extensions are not part of the default Page editor schema and remain unsupported. Unknown nodes, attributes, unsafe HTML, or non-round-trippable content fail closed; affected Pages must remain on legacy autosave.
+
+The codec runs without a browser or React. It uses a fresh, pinned Happy DOM window for each conversion, with script evaluation and resource loading disabled. This package branch is not published or wired into the active Page editor. It does not grant collaboration access, initialize a Page body from a browser, or prove durable collaboration; the service must authorize and persist canonical Yjs state before activation.
 
 ## Installation
 

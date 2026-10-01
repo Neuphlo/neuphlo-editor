@@ -20,13 +20,15 @@ describe("Page codec compatibility boundary", () => {
     if (parsed.ok && fromMarkdown.ok) expect(parsed.value.toJSON()).toEqual(fromMarkdown.value.toJSON())
   })
 
-  it("rejects current editor media rather than flattening it", () => {
+  it("preserves current editor media instead of flattening it", () => {
     const editor = new Editor({
       extensions: ExtensionKit({ slashCommand: false, dragHandle: false }),
       content: markdownToHtml("[▶ Video](https://youtu.be/abc123)"),
     })
     const editorJSON = editor.getJSON()
     editor.destroy()
-    expect(parsePageJSON(editorJSON, PAGE_CODEC_VERSION)).toMatchObject({ ok: false, error: { code: "unsupported_content" } })
+    const parsed = parsePageJSON(editorJSON, PAGE_CODEC_VERSION)
+    expect(parsed.ok).toBe(true)
+    if (parsed.ok) expect(parsed.value.toJSON()).toEqual(editorJSON)
   })
 })
