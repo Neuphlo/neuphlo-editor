@@ -1,27 +1,13 @@
 {
   "name": "neuphlo-editor",
-  "version": "2.7.3",
+  "version": "2.7.4",
   "private": false,
   "description": "A lightweight React wrapper around Tiptap with sensible defaults and image upload support.",
   "type": "module",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
   "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
-    },
     "./react": {
       "types": "./dist/react/index.d.ts",
-      "import": "./dist/react/index.js",
-      "require": "./dist/react/index.cjs"
-    },
-    "./react/core": {
-      "types": "./dist/react/core.d.ts",
-      "import": "./dist/react/core.js",
-      "require": "./dist/react/core.cjs"
+      "import": "./dist/react/index.js"
     },
     "./headless": {
       "types": "./dist/headless/index.d.ts",
@@ -45,8 +31,8 @@
     "README.md"
   ],
   "scripts": {
-    "build": "rm -rf dist && tsup src/index.ts src/react/index.ts src/react/core.ts src/headless/index.ts src/codec/index.ts --format esm,cjs --dts --sourcemap && pnpm run copy:css",
-    "dev": "tsup src/index.ts src/react/index.ts src/react/core.ts src/headless/index.ts src/codec/index.ts --format esm,cjs --dts --sourcemap --watch",
+    "build": "rm -rf dist && tsup src/react/index.ts src/headless/index.ts src/codec/index.ts --format esm,cjs --dts --sourcemap && pnpm run copy:css",
+    "dev": "tsup src/react/index.ts src/headless/index.ts src/codec/index.ts --format esm,cjs --dts --sourcemap --watch",
     "copy:css": "mkdir -p dist && cp src/styles.css dist/styles.css && cp src/highlight.css dist/highlight.css",
     "prepack": "pnpm run build",
     "prepare": "pnpm run build",

@@ -47,7 +47,7 @@ npm install react react-dom @tiptap/react @tiptap/pm
 ## Quick Start
 
 ```tsx
-import { Editor } from 'neuphlo-editor'
+import { Editor } from 'neuphlo-editor/react'
 import 'neuphlo-editor/styles.css'
 
 function MyApp() {
@@ -60,7 +60,7 @@ function MyApp() {
 Neuphlo Editor makes it easy to add image upload functionality with your own backend:
 
 ```tsx
-import { Editor } from 'neuphlo-editor'
+import { Editor } from 'neuphlo-editor/react'
 import 'neuphlo-editor/styles.css'
 
 function MyApp() {
@@ -422,7 +422,7 @@ Type `/` to open the command menu:
 Add your own Tiptap extensions:
 
 ```tsx
-import { Editor } from 'neuphlo-editor'
+import { Editor } from 'neuphlo-editor/react'
 import { Underline } from '@tiptap/extension-underline'
 
 <Editor
@@ -435,7 +435,7 @@ import { Underline } from '@tiptap/extension-underline'
 
 ```tsx
 import { useRef } from 'react'
-import { Editor } from 'neuphlo-editor'
+import { Editor } from 'neuphlo-editor/react'
 
 function MyApp() {
   const editorRef = useRef(null)
@@ -466,7 +466,7 @@ function MyApp() {
 
 ```tsx
 import { useState } from 'react'
-import { Editor } from 'neuphlo-editor'
+import { Editor } from 'neuphlo-editor/react'
 
 function MyApp() {
   const [content, setContent] = useState('<p>Initial content</p>')
@@ -528,7 +528,7 @@ The package is fully typed with TypeScript:
 
 ```tsx
 import type { Editor as TiptapEditor } from '@tiptap/core'
-import { Editor } from 'neuphlo-editor'
+import { Editor } from 'neuphlo-editor/react'
 
 type UploadImageFn = (file: File) => Promise<string>
 

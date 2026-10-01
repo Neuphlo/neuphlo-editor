@@ -34,7 +34,7 @@ yarn add neuphlo-editor
 ## 🚀 Quick Start
 
 ```tsx
-import { Editor } from 'neuphlo-editor'
+import { Editor } from 'neuphlo-editor/react'
 import 'neuphlo-editor/styles.css'
 
 function App() {
@@ -47,7 +47,7 @@ function App() {
 One of the most powerful features is the built-in image upload system that works with **any backend**:
 
 ```tsx
-import { Editor } from 'neuphlo-editor'
+import { Editor } from 'neuphlo-editor/react'
 import 'neuphlo-editor/styles.css'
 
 function App() {
