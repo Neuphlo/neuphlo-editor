@@ -1,8 +1,12 @@
-import { ReactRenderer, ReactNodeViewRenderer } from "@tiptap/react"
+import {
+  ReactRenderer,
+  ReactNodeViewRenderer,
+  type ReactNodeViewProps,
+} from "@tiptap/react"
 import Suggestion from "@tiptap/suggestion"
 import Mention from "@tiptap/extension-mention"
 import type { SuggestionOptions } from "@tiptap/suggestion"
-import type { RefObject } from "react"
+import type { ComponentType, RefObject } from "react"
 import { MentionCommand } from "./mention-command"
 import { MentionNodeView } from "./mention-node-view"
 
@@ -10,6 +14,7 @@ export interface MentionItem {
   id: string
   label: string
   avatar?: string
+  metadata?: Record<string, unknown>
   email?: string
   type?: "node" | "article" // For reference mentions
   nodeId?: string // For node references (user-facing ID like "TSK-1")
@@ -26,6 +31,8 @@ export interface MentionOptions {
    * Custom render function for mention nodes
    */
   renderLabel?: (props: { node: any; options: any }) => string
+
+  nodeView?: ComponentType<ReactNodeViewProps<HTMLElement>>
 
   /**
    * Character that triggers the mention autocomplete (default: @)
@@ -84,6 +91,26 @@ export const createMentionExtension = (options?: MentionOptions) => {
             }
           },
         },
+        metadata: {
+          default: null,
+          parseHTML: (element) => {
+            const value = element.getAttribute("data-metadata")
+            if (!value) return null
+            try {
+              return JSON.parse(value)
+            } catch {
+              return null
+            }
+          },
+          renderHTML: (attributes) => {
+            if (!attributes.metadata) {
+              return {}
+            }
+            return {
+              "data-metadata": JSON.stringify(attributes.metadata),
+            }
+          },
+        },
         type: {
           default: null,
           parseHTML: (element) => element.getAttribute("data-ref-type"),
@@ -123,7 +150,7 @@ export const createMentionExtension = (options?: MentionOptions) => {
       }
     },
     addNodeView() {
-      return ReactNodeViewRenderer(MentionNodeView)
+      return ReactNodeViewRenderer(options?.nodeView ?? MentionNodeView)
     },
   }).configure({
     HTMLAttributes: {
@@ -147,6 +174,7 @@ export const createMentionExtension = (options?: MentionOptions) => {
                 id: item.id,
                 label: item.label,
                 avatar: item.avatar,
+                metadata: item.metadata,
                 type: item.type,
                 nodeId: item.nodeId,
                 slug: item.slug,
