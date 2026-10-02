@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest"
 import * as Y from "yjs"
-import { PAGE_CODEC_VERSION, PAGE_MAX_MARKDOWN_LENGTH, PAGE_MAX_STATE_BYTES, PAGE_YJS_FIELD, markdownToPageYjsState, pageJSONToYDoc, pageYDocToJSON, pageYjsStateToMarkdown, parsePageJSON, parsePageMarkdown, serializePageMarkdown } from "./index"
+import { prosemirrorJSONToYDoc } from "@tiptap/y-tiptap"
+import { PAGE_CODEC_VERSION, PAGE_MAX_MARKDOWN_LENGTH, PAGE_MAX_STATE_BYTES, PAGE_YJS_FIELD, markdownToPageYjsState, pageJSONToYDoc, pageYDocToJSON, pageYjsStateToMarkdown, pageSchema, parsePageJSON, parsePageMarkdown, serializePageMarkdown } from "./index"
 
 const examples = [
   "# Project plan\n\nA **bold** and *italic* [link](https://example.com) with ~~old~~ text.",
@@ -54,6 +55,47 @@ describe("Page codec v1", () => {
     const expected = parsePageMarkdown(markdown)
     const actual = parsePageMarkdown(restored.value)
     expect(actual.ok && actual.value.toJSON()).toEqual(expected.ok && expected.value.toJSON())
+  })
+
+  it.each(["*first\\\nsecond*", "**first\\\nsecond**", "<em>first<br>second</em>"])("normalizes formatting marks on hard breaks without changing adjacent text", markdown => {
+    const parsed = parsePageMarkdown(markdown)
+    expect(parsed.ok).toBe(true)
+    if (!parsed.ok) return
+    const paragraph = parsed.value.toJSON().content[0]
+    expect(paragraph.content[0].marks).toBeDefined()
+    expect(paragraph.content[1]).toEqual({ type: "hardBreak" })
+    expect(paragraph.content[2].marks).toEqual(paragraph.content[0].marks)
+    const encoded = markdownToPageYjsState(markdown)
+    expect(encoded.ok).toBe(true)
+    if (!encoded.ok) return
+    const projected = pageYjsStateToMarkdown(encoded.value, PAGE_CODEC_VERSION)
+    expect(projected.ok).toBe(true)
+    if (!projected.ok) return
+    const restored = parsePageMarkdown(projected.value)
+    expect(restored.ok && restored.value.toJSON()).toEqual(parsed.value.toJSON())
+  })
+
+  it("rejects invalid hard-break marks before normalization", () => {
+    const invalid = { type: "doc", content: [{ type: "paragraph", content: [{ type: "hardBreak", marks: [{ type: "unknownMark" }] }] }] }
+    expect(parsePageJSON(invalid, PAGE_CODEC_VERSION)).toMatchObject({ ok: false, error: { code: "unsupported_content" } })
+  })
+
+  it("projects a live Yjs document containing a marked hard break", () => {
+    const json = { type: "doc", content: [{ type: "paragraph", content: [{ type: "text", text: "first", marks: [{ type: "italic" }] }, { type: "hardBreak", marks: [{ type: "italic" }] }, { type: "text", text: "second", marks: [{ type: "italic" }] }] }] }
+    const doc = prosemirrorJSONToYDoc(pageSchema, json, PAGE_YJS_FIELD)
+    try {
+      const projected = pageYjsStateToMarkdown(Y.encodeStateAsUpdate(doc), PAGE_CODEC_VERSION)
+      expect(projected.ok).toBe(true)
+      if (!projected.ok) return
+      const restored = parsePageMarkdown(projected.value)
+      expect(restored.ok && restored.value.toJSON().content[0].content).toEqual([
+        { type: "text", marks: [{ type: "italic" }], text: "first" },
+        { type: "hardBreak" },
+        { type: "text", marks: [{ type: "italic" }], text: "second" },
+      ])
+    } finally {
+      doc.destroy()
+    }
   })
 
   it("preserves each typed boundary space before the next letter", () => {

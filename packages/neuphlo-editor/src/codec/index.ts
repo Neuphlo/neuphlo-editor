@@ -328,6 +328,23 @@ function failure(code: PageCodecError["code"], detail: string): PageCodecResult<
   return { ok: false, error: { code, detail } }
 }
 
+function normalizeHardBreakMarks(doc: ProseMirrorNode): ProseMirrorNode {
+  const json = doc.toJSON()
+  let changed = false
+  type PageJSON = { type: string; marks?: unknown; content?: PageJSON[]; [key: string]: unknown }
+  const normalize = (node: PageJSON): PageJSON => {
+    const result = { ...node }
+    if (result.type === "hardBreak" && result.marks !== undefined) {
+      delete result.marks
+      changed = true
+    }
+    if (Array.isArray(result.content)) result.content = result.content.map(child => normalize(child))
+    return result
+  }
+  const normalized = normalize(json)
+  return changed ? pageSchema.nodeFromJSON(normalized) : doc
+}
+
 export function parsePageMarkdown(markdown: string): PageCodecResult<ProseMirrorNode> {
   if (markdown.length > PAGE_MAX_MARKDOWN_LENGTH) return failure("invalid_document", "markdown:too_large")
   const window = createCodecWindow()
@@ -339,7 +356,7 @@ export function parsePageMarkdown(markdown: string): PageCodecResult<ProseMirror
     }
     const doc = DOMParser.fromSchema(pageSchema).parse(window.document.body as unknown as HTMLElement)
     const error = validDocument(doc)
-    return error ? { ok: false, error } : result(doc)
+    return error ? { ok: false, error } : result(normalizeHardBreakMarks(doc))
   } catch (cause) {
     return failure("invalid_document", String(cause))
   } finally {
@@ -355,7 +372,7 @@ export function parsePageJSON(json: unknown, version: number): PageCodecResult<P
     const doc = pageSchema.nodeFromJSON(json)
     doc.check()
     const error = validDocument(doc)
-    return error ? { ok: false, error } : result(doc)
+    return error ? { ok: false, error } : result(normalizeHardBreakMarks(doc))
   } catch (cause) {
     return failure("invalid_document", String(cause))
   }
