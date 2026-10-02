@@ -98,6 +98,19 @@ describe("Page codec v1", () => {
     }
   })
 
+  it("preserves marked spaces next to a hard break", () => {
+    const markdown = '<p data-page-whitespace="true"><strong><em>Step:</em></strong> <em>Next sentence. </em><br><em>More <u>under line</u> end.</em></p>'
+    const encoded = markdownToPageYjsState(markdown)
+    expect(encoded.ok).toBe(true)
+    if (!encoded.ok) return
+    const projected = pageYjsStateToMarkdown(encoded.value, PAGE_CODEC_VERSION)
+    expect(projected.ok).toBe(true)
+    if (!projected.ok) return
+    const expected = parsePageMarkdown(markdown)
+    const restored = parsePageMarkdown(projected.value)
+    expect(restored.ok && restored.value.toJSON()).toEqual(expected.ok && expected.value.toJSON())
+  })
+
   it("preserves each typed boundary space before the next letter", () => {
     const encoded = pageJSONToYDoc({ type: "doc", content: [{ type: "paragraph" }] }, PAGE_CODEC_VERSION)
     expect(encoded.ok).toBe(true)

@@ -140,7 +140,7 @@ function nodeToHtml(node: ProseMirrorNode): string {
     const fragment = DOMSerializer.fromSchema(pageSchema).serializeNode(node, { document: window.document as unknown as Document })
     container.appendChild(fragment as unknown as Parameters<typeof container.appendChild>[0])
     for (const element of Array.from(container.querySelectorAll("p,h1,h2,h3,h4,h5,h6"))) {
-      if (/^ | $/.test(element.textContent ?? "")) element.setAttribute("data-page-whitespace", "true")
+      if (/^ | $/.test(element.textContent ?? "") || element.querySelector("br")) element.setAttribute("data-page-whitespace", "true")
     }
     return container.innerHTML
   } finally {
@@ -155,7 +155,7 @@ const serializer = new MarkdownSerializer({
   blockquote: commonNodes.blockquote,
   paragraph: (state, node) => {
     if (node.childCount === 0) state.write("<p></p>")
-    else if (/^ | $/.test(node.textContent)) state.write(nodeToHtml(node))
+    else if (/^ | $/.test(node.textContent) || node.content.content.some(child => child.type === pageSchema.nodes.hardBreak)) state.write(nodeToHtml(node))
     else state.renderInline(node)
     state.closeBlock(node)
   },
