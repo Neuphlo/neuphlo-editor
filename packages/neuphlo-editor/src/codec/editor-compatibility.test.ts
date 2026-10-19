@@ -1,8 +1,9 @@
 import { Editor } from "@tiptap/core"
 import { describe, expect, it } from "vitest"
+import * as Y from "yjs"
 import { ExtensionKit } from "../headless/extensions/extension-kit"
 import { markdownToHtml } from "../headless/extensions/Markdown"
-import { PAGE_CODEC_VERSION, pageJSONToYDoc, pageSchema, pageYDocToJSON, parsePageJSON, parsePageMarkdown, serializePageMarkdown } from "./index"
+import { PAGE_CODEC_VERSION, pageJSONToYDoc, pageSchema, pageYDocToJSON, pageYjsStateToMarkdown, parsePageJSON, parsePageMarkdown, serializePageMarkdown } from "./index"
 
 const supportedMarkdown = [
   "# Heading\n\nA **bold** and *italic* [link](https://example.com) with ~~strike~~ and `code`.",
@@ -58,6 +59,34 @@ describe("Page codec compatibility with the installed editor", () => {
       if (!decoded.ok) return
       const rendered = serializePageMarkdown(decoded.value, PAGE_CODEC_VERSION)
       expect(rendered, JSON.stringify({ json, rendered })).toMatchObject({ ok: true })
+    } finally {
+      editor.destroy()
+    }
+  })
+
+  it("projects pasted mixed emphasis from editor JSON through Yjs without losing marked spaces or links", () => {
+    const markdown = "> ***Transaction details → Log** showing activity for one signer or recipient.*\n\n> ***Signing details → Log** showing activity for the complete transaction.*\n\n[Support article](https://support.addosign.net/en/articles/355127-how-to-navigate-the-overview-in-addo-sign)"
+    const editor = new Editor({
+      extensions: ExtensionKit({ slashCommand: false, dragHandle: false }),
+      content: markdownToHtml(markdown),
+    })
+    try {
+      const json = editor.getJSON()
+      const encoded = pageJSONToYDoc(json, PAGE_CODEC_VERSION)
+      expect(encoded).toMatchObject({ ok: true })
+      if (!encoded.ok) return
+      try {
+        const projected = pageYjsStateToMarkdown(Y.encodeStateAsUpdate(encoded.value), PAGE_CODEC_VERSION)
+        expect(projected).toMatchObject({ ok: true })
+        if (!projected.ok) return
+        const restored = parsePageMarkdown(projected.value)
+        expect(restored.ok && restored.value.toJSON()).toEqual(json)
+        expect(projected.value).toContain("<strong><em>Transaction details → Log</em></strong>")
+        expect(projected.value).toContain("<strong><em>Signing details → Log</em></strong>")
+        expect(projected.value).toContain("https://support.addosign.net/en/articles/355127-how-to-navigate-the-overview-in-addo-sign")
+      } finally {
+        encoded.value.destroy()
+      }
     } finally {
       editor.destroy()
     }
