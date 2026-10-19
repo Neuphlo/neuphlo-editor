@@ -57,6 +57,24 @@ describe("Page codec v1", () => {
     expect(actual.ok && actual.value.toJSON()).toEqual(expected.ok && expected.value.toJSON())
   })
 
+  it.each([
+    "> ***Transaction details → Log** showing activity for one signer or recipient.*",
+    "- ***Action** continues in italic.*",
+    "# ***Heading** continues in italic.*",
+  ])("preserves a marked space after mixed bold and italic text", markdown => {
+    const original = parsePageMarkdown(markdown)
+    expect(original.ok).toBe(true)
+    if (!original.ok) return
+    const encoded = markdownToPageYjsState(markdown)
+    expect(encoded.ok).toBe(true)
+    if (!encoded.ok) return
+    const projected = pageYjsStateToMarkdown(encoded.value, PAGE_CODEC_VERSION)
+    expect(projected.ok).toBe(true)
+    if (!projected.ok) return
+    const restored = parsePageMarkdown(projected.value)
+    expect(restored.ok && restored.value.toJSON()).toEqual(original.value.toJSON())
+  })
+
   it.each(["*first\\\nsecond*", "**first\\\nsecond**", "<em>first<br>second</em>"])("normalizes formatting marks on hard breaks without changing adjacent text", markdown => {
     const parsed = parsePageMarkdown(markdown)
     expect(parsed.ok).toBe(true)

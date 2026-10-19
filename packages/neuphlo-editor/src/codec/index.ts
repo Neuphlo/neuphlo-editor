@@ -151,16 +151,20 @@ function nodeToHtml(node: ProseMirrorNode): string {
 const commonNodes = defaultMarkdownSerializer.nodes
 const commonMarks = defaultMarkdownSerializer.marks
 
+function hasMarkedBoundaryWhitespace(node: ProseMirrorNode): boolean {
+  return node.content.content.some(child => child.isText && child.marks.length > 0 && /(^\s|\s$)/.test(child.text ?? ""))
+}
+
 const serializer = new MarkdownSerializer({
   blockquote: commonNodes.blockquote,
   paragraph: (state, node) => {
     if (node.childCount === 0) state.write("<p></p>")
-    else if (/^ | $/.test(node.textContent) || node.content.content.some(child => child.type === pageSchema.nodes.hardBreak)) state.write(nodeToHtml(node))
+    else if (/^ | $/.test(node.textContent) || hasMarkedBoundaryWhitespace(node) || node.content.content.some(child => child.type === pageSchema.nodes.hardBreak)) state.write(nodeToHtml(node))
     else state.renderInline(node)
     state.closeBlock(node)
   },
   heading: (state, node, parent, index) => {
-    if (/^ | $/.test(node.textContent)) {
+    if (/^ | $/.test(node.textContent) || hasMarkedBoundaryWhitespace(node)) {
       state.write(nodeToHtml(node))
       state.closeBlock(node)
     } else commonNodes.heading(state, node, parent, index)
