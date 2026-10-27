@@ -2,7 +2,7 @@ import { Extension } from "@tiptap/core"
 import { MarkdownSerializer } from "prosemirror-markdown"
 import { DOMSerializer, type Node as PMNode, type Schema } from "@tiptap/pm/model"
 import MarkdownIt from "markdown-it"
-import type Token from "markdown-it/lib/token.mjs"
+import Token from "markdown-it/lib/token.mjs"
 
 const VIDEO_LINK_LINE = /^\[▶[^\]]*\]\(([^)\s]*)\)[^\S\n]*$/gm
 const TASK_MARKER = /^\[([ xX])\]\s+/
@@ -60,26 +60,46 @@ function stripTaskMarker(inline: Token): void {
   }
 }
 
+function cloneListToken(token: Token): Token {
+  return Object.assign(new Token(token.type, token.tag, token.nesting), token, {
+    attrs: token.attrs?.map(([name, value]) => [name, value]) ?? null,
+  })
+}
+
 function taskListPlugin(md: MarkdownIt): void {
   md.core.ruler.after("inline", "neuphlo_task_list", (state) => {
     const tokens = state.tokens as Token[]
-    for (let i = 0; i < tokens.length; i += 1) {
+    for (let i = tokens.length - 1; i >= 0; i -= 1) {
       if (tokens[i].type !== "bullet_list_open") continue
-      const { items } = collectDirectItems(tokens, i)
+      const { close, items } = collectDirectItems(tokens, i)
       if (items.length === 0) continue
       const inlineIdxs = items.map((itemIdx) =>
         itemParagraphInline(tokens, itemIdx),
       )
-      if (inlineIdxs.some((idx) => idx < 0)) continue
-      const markers = inlineIdxs.map((idx) => TASK_MARKER.exec(tokens[idx].content))
-      if (markers.some((marker) => marker === null)) continue
-      tokens[i].attrSet("data-type", "taskList")
+      const markers = inlineIdxs.map((idx) => {
+        if (idx < 0) return null
+        const inline = tokens[idx]
+        if (inline.children?.[0]?.type !== "text") return null
+        return TASK_MARKER.exec(inline.content)
+      })
+      if (markers.every((marker) => marker === null)) continue
       items.forEach((itemIdx, n) => {
-        const checked = markers[n]![1].toLowerCase() === "x"
+        if (!markers[n]) return
+        const checked = markers[n][1].toLowerCase() === "x"
         tokens[itemIdx].attrSet("data-type", "taskItem")
         tokens[itemIdx].attrSet("data-checked", checked ? "true" : "false")
         stripTaskMarker(tokens[inlineIdxs[n]])
       })
+      const replacement: Token[] = []
+      for (let start = 0; start < items.length;) {
+        let end = start + 1
+        while (end < items.length && Boolean(markers[end]) === Boolean(markers[start])) end += 1
+        const open = cloneListToken(tokens[i])
+        if (markers[start]) open.attrSet("data-type", "taskList")
+        replacement.push(open, ...tokens.slice(items[start], end < items.length ? items[end] : close), cloneListToken(tokens[close]))
+        start = end
+      }
+      tokens.splice(i, close - i + 1, ...replacement)
     }
   })
 }
