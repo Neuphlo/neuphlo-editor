@@ -109,6 +109,25 @@ describe("task list", () => {
     expect(html).not.toContain("taskList")
     expect(toMarkdown("- one\n- two")).toBe("- one\n- two")
   })
+
+  it("splits mixed bullets and tasks into their own list nodes", () => {
+    const input = "- Ordinary\n- [ ] Pending\n- [x] Finished\n- Final"
+    const json = toJSON(input)
+    expect(json.content?.map((node) => node.type)).toEqual(["bulletList", "taskList", "bulletList"])
+    expect(collectNodes(json, "taskItem").map((item) => item.attrs?.checked)).toEqual([false, true])
+    expect(toMarkdown(input)).toBe("- Ordinary\n\n- [ ] Pending\n- [x] Finished\n\n- Final")
+  })
+
+  it("preserves nested task lists and literal checkbox text", () => {
+    const input = "- Ordinary\n    - [ ] Nested\n- [x] Finished\n\n`[ ] code`\n\n- \\[ \\] Escaped"
+    const json = toJSON(input)
+    expect(collectNodes(json, "taskItem").map((item) => item.attrs?.checked)).toEqual([false, true])
+    expect(collectNodes(json, "codeBlock")).toHaveLength(0)
+    expect(toMarkdown(input)).toContain("- [ ] Nested")
+    expect(toMarkdown(input)).toContain("- [x] Finished")
+    expect(toMarkdown(input)).toContain("[ ] code")
+    expect(toMarkdown(input)).toContain("\\[ \\] Escaped")
+  })
 })
 
 describe("mixed document", () => {

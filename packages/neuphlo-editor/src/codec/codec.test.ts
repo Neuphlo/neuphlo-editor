@@ -8,6 +8,7 @@ const examples = [
   "> A note\n\n- One\n- Two\n\n1. First\n2. Second",
   "## Code\n\n```ts\nconst value = 2\n```\n\n---\n\nLine one\\\nline two",
   "- [ ] Task\n- [x] Done",
+  "- Ordinary\n- [ ] Pending\n- [x] Finished\n- Final",
   "| A | B |\n| --- | --- |\n| one | two |",
   "![Alt](https://example.com/a.png)",
   "[▶ Video](https://youtu.be/abc123)",
@@ -15,6 +16,24 @@ const examples = [
 ]
 
 describe("Page codec v1", () => {
+  it("stores mixed bullets and checkboxes as list and task nodes", () => {
+    const markdown = "- Ordinary\n- [ ] Pending\n- [x] Finished"
+    const encoded = markdownToPageYjsState(markdown)
+    expect(encoded.ok).toBe(true)
+    if (!encoded.ok) return
+    const restored = pageYjsStateToMarkdown(encoded.value, PAGE_CODEC_VERSION)
+    expect(restored.ok).toBe(true)
+    if (!restored.ok) return
+    const parsed = parsePageMarkdown(restored.value)
+    expect(parsed.ok).toBe(true)
+    if (!parsed.ok) return
+    expect(parsed.value.toJSON().content.map((node: { type: string }) => node.type)).toEqual(["bulletList", "taskList"])
+    expect(parsed.value.toJSON().content[1].content.map((item: { attrs: { checked: boolean } }) => item.attrs.checked)).toEqual([false, true])
+    expect(restored.value).toContain("- [ ] Pending")
+    expect(restored.value).toContain("- [x] Finished")
+    expect(restored.value).not.toContain("\\[ \\]")
+  })
+
   it.each(examples)("preserves rich Markdown through PM and Yjs", markdown => {
     const parsed = parsePageMarkdown(markdown)
     expect(parsed).toMatchObject({ ok: true, version: PAGE_CODEC_VERSION })
