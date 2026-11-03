@@ -110,6 +110,22 @@ const allowedHtmlAttributes: Record<string, string[]> = {
   th: ["colspan", "rowspan", "colwidth", "data-colwidth"], thead: [], tr: [], u: [], ul: ["data-type"],
 }
 
+let hasReportedCodecWindowCleanupFailure = false
+
+function reportCodecWindowCleanupFailure() {
+  if (hasReportedCodecWindowCleanupFailure) return
+  hasReportedCodecWindowCleanupFailure = true
+  console.error("neuphlo-editor codec Window cleanup failed")
+}
+
+function closeCodecWindow(window: Window) {
+  try {
+    void window.happyDOM.close().catch(reportCodecWindowCleanupFailure)
+  } catch {
+    reportCodecWindowCleanupFailure()
+  }
+}
+
 function invalidHtml(element: Element): string | null {
   const name = element.tagName.toLowerCase()
   const allowed = allowedHtmlAttributes[name]
@@ -144,7 +160,7 @@ function nodeToHtml(node: ProseMirrorNode): string {
     }
     return container.innerHTML
   } finally {
-    window.close()
+    closeCodecWindow(window)
   }
 }
 
@@ -364,7 +380,7 @@ export function parsePageMarkdown(markdown: string): PageCodecResult<ProseMirror
   } catch (cause) {
     return failure("invalid_document", String(cause))
   } finally {
-    window.close()
+    closeCodecWindow(window)
   }
 }
 

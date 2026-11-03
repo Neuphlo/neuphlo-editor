@@ -26,7 +26,7 @@ The local v1 codec covers the installed Page editor's default node and mark sche
 
 Markdown `- [ ]` and `- [x]` items import as editable task nodes and export with checkbox syntax. A list that mixes ordinary bullets and task items becomes adjacent bullet and task lists while keeping their order. Escaped checkbox text and code remain literal text.
 
-The codec runs without a browser or React. It uses a fresh, pinned Happy DOM window for each conversion, with script evaluation and resource loading disabled. This package branch is not published or wired into the active Page editor. It does not grant collaboration access, initialize a Page body from a browser, or prove durable collaboration; the service must authorize and persist canonical Yjs state before activation.
+The codec runs without a browser or React. It uses a fresh, pinned Happy DOM window for each conversion, with script evaluation, JavaScript loading and CSS loading disabled. Each temporary window is released through the supported `happyDOM.close()` API on success or rejection. Conversion results remain synchronous; asynchronous teardown failures produce a bounded diagnostic without content or error details. This package branch is not published or wired into the active Page editor. It does not grant collaboration access, initialize a Page body from a browser, or prove durable collaboration; the service must authorize and persist canonical Yjs state before activation.
 
 ## Installation
 
